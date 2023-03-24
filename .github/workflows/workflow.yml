@@ -6,9 +6,6 @@ on:
       - main
       - 'feature/**'
 
-permissions:
-  actions: write
-
 env:
   version: '0.1.${{ github.run_number }}'
 
@@ -43,6 +40,8 @@ jobs:
     needs: build
     runs-on: windows-latest
     environment: Release
+    permissions:
+        contents: write
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v3
