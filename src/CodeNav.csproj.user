@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <None Update="Templates\Menus\ItemContextMenu.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\Styles\BookmarkButtonStyle.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\Styles\ComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\Styles\PlusMinusExpanderStyles.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\ClassDataTemplate.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\ItemDataTemplate.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\NamespaceDataTemplate.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\RegionDataTemplate.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\UserControls\FilterToolbarUserControl.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Templates\UserControls\MainToolbarUserControl.xaml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+</Project>

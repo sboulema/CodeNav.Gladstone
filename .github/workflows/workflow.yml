@@ -1,0 +1,59 @@
+name: CodeNav
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+
+env:
+  version: '0.1.${{ github.run_number }}'
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Zip build
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          filename: 'release.zip'
+          path: 'src/bin/Release/net6.0-windows'
+
+      - name: Publish Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: CodeNav
+          path: src/bin/Release/**/*.zip
+
+  release:
+    name: Release
+    needs: build
+    runs-on: windows-latest
+    environment: Release
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+
+      - name: Tag release
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          custom_tag: '${{ env.version }}'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_release.outputs.new_tag }}
+          name: ${{ steps.tag_release.outputs.new_tag }}
+          body: ${{ steps.tag_release.outputs.changelog }}
+          artifacts: "**/*.zip"
