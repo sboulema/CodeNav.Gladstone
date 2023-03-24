@@ -28,6 +28,7 @@ Visual Studio extension to show the code structure of your current document
 - Top Margin
 - Toggle visibility by double-clicking the splitter bar
 - Show as an editor margin (left side / right side / top side / hidden) 
+- Visual studio 2017, 2019 support
 
 ## Language support
 - C#
@@ -51,8 +52,6 @@ Visual Studio extension to show the code structure of your current document
 
 ## Screenshots
 ![Preview](https://raw.githubusercontent.com/sboulema/CodeNav/main/Resources/Preview.png) ![Preview-Dark](https://raw.githubusercontent.com/sboulema/CodeNav/main/Resources/Preview-dark.png)
-
-![Top Margin](https://i.imgur.com/5ymPOxe.jpg)
 
 #### Filter window
 ![Filter window](https://raw.githubusercontent.com/sboulema/CodeNav/main/Resources/Filters.png) 

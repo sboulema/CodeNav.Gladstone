@@ -26,14 +26,14 @@ jobs:
       - name: Zip build
         uses: thedoctor0/zip-release@0.7.1
         with:
-          filename: 'release.zip'
+          filename: 'CodeNav.zip'
           path: 'src/bin/Release/net6.0-windows'
 
       - name: Publish Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: CodeNav
-          path: src/bin/Release/**/*.zip
+          path: '*.zip'
 
   release:
     name: Release
