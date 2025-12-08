@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.CodeAnalysis.Text;

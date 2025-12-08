@@ -63,7 +63,7 @@ public static class LogHelper
     private static string GetUserId()
     {
         var enc = Encoding.UTF8.GetBytes(Environment.UserName + Environment.MachineName);
-        var hash = MD5.Create().ComputeHash(enc);
+        var hash = MD5.HashData(enc);
         return Convert.ToBase64String(hash);
     }
 }

@@ -7,130 +7,128 @@ using CodeNav.Models;
 using Microsoft.VisualStudio.Extensibility.Editor;
 using Microsoft.VisualStudio.Extensibility.UI;
 
-namespace CodeNav.ViewModels
+namespace CodeNav.ViewModels;
+
+[DataContract]
+public class CodeDocumentViewModel : NotifyPropertyChangedObject
 {
-    [DataContract]
-    public class CodeDocumentViewModel : NotifyPropertyChangedObject
+    public CodeDocumentViewModel()
     {
-        public CodeDocumentViewModel()
-        {
-            SortCommand = Sort();
-        }
+        SortCommand = Sort();
+    }
 
-        private List<CodeItem> _codeDocument = new();
+    private List<CodeItem> _codeDocument = [];
 
-        [DataMember]
-        public List<CodeItem> CodeDocument
-        {
-            get => _codeDocument;
-            set => SetProperty(ref _codeDocument, value);
-        }
+    [DataMember]
+    public List<CodeItem> CodeDocument
+    {
+        get => _codeDocument;
+        set => SetProperty(ref _codeDocument, value);
+    }
 
-        public ITextViewSnapshot? TextView { get; set; }
+    public ITextViewSnapshot? TextView { get; set; }
 
-        public ITextDocumentSnapshot? TextDocumentSnapshot { get; set; }
+    public ITextDocumentSnapshot? TextDocumentSnapshot { get; set; }
 
-        public Configuration Configuration { get; set; } = new();
+    public Configuration Configuration { get; set; } = new();
 
-        public DocumentHelper? DocumentHelper { get; set; }
+    public DocumentHelper? DocumentHelper { get; set; }
 
-        public HistoryHelper? HistoryHelper { get; set; }
+    public HistoryHelper? HistoryHelper { get; set; }
 
-        public ConfigurationHelper? ConfigurationHelper { get; set; }
+    public ConfigurationHelper? ConfigurationHelper { get; set; }
 
-        public bool ShowFilterToolbar => Configuration.ShowFilterToolbar;
+    public bool ShowFilterToolbar => Configuration.ShowFilterToolbar;
 
-        public Visibility ShowFilterToolbarVisibility => Configuration.ShowFilterToolbar
+    public Visibility ShowFilterToolbarVisibility
+        => Configuration.ShowFilterToolbar
             ? Visibility.Visible
             : Visibility.Collapsed;
 
-        public SortOrderEnum SortOrder;
+    public SortOrderEnum SortOrder;
 
-        public Visibility BookmarksAvailable
-            => Bookmarks.Any() ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility BookmarksAvailable
+        => Bookmarks.Any() ? Visibility.Visible : Visibility.Collapsed;
 
-        public void AddBookmark(string id, int bookmarkStyleIndex)
+    public void AddBookmark(string id, int bookmarkStyleIndex)
+    {
+        Bookmarks.Remove(id);
+
+        Bookmarks.Add(id, bookmarkStyleIndex);
+
+        //NotifyPropertyChanged("BookmarksAvailable");
+    }
+
+    public void RemoveBookmark(string id)
+    {
+        Bookmarks.Remove(id);
+
+        //NotifyPropertyChanged("BookmarksAvailable");
+    }
+
+    public void ClearBookmarks()
+    {
+        BookmarkHelper.ClearBookmarks(this);
+
+        //NotifyPropertyChanged("BookmarksAvailable");
+    }
+
+    public Visibility ClearFilterVisibility
+        => string.IsNullOrEmpty(FilterText)
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+
+    private string _filterText = string.Empty;
+    public string FilterText
+    {
+        get => _filterText;
+        set
         {
-            if (Bookmarks.ContainsKey(id))
-            {
-                Bookmarks.Remove(id);
-            }
+            _filterText = value;
+            //NotifyPropertyChanged("ClearFilterVisibility");
+        }
+    }
 
-            Bookmarks.Add(id, bookmarkStyleIndex);
+    private Dictionary<string, int> _bookmarks = [];
 
+    [DataMember]
+    public Dictionary<string, int> Bookmarks
+    {
+        get => _bookmarks;
+        set
+        {
+            _bookmarks = value;
             //NotifyPropertyChanged("BookmarksAvailable");
         }
+    }
 
-        public void RemoveBookmark(string id)
+    public bool FilterOnBookmarks;
+
+    [DataMember]
+    public Uri? FilePath { get; set; }
+
+    [DataMember]
+    public List<BookmarkStyle> BookmarkStyles = [];
+
+    [DataMember]
+    public ObservableCollection<CodeItem> HistoryItems = [];
+
+    [DataMember]
+    public AsyncCommand SortCommand { get; }
+    public AsyncCommand Sort()
+    {
+        return new AsyncCommand(async (parameter, cancellationToken) =>
         {
-            Bookmarks.Remove(id);
-
-            //NotifyPropertyChanged("BookmarksAvailable");
-        }
-
-        public void ClearBookmarks()
-        {
-            BookmarkHelper.ClearBookmarks(this);
-
-            //NotifyPropertyChanged("BookmarksAvailable");
-        }
-
-        public Visibility ClearFilterVisibility =>
-            string.IsNullOrEmpty(FilterText) ?
-            Visibility.Collapsed : Visibility.Visible;
-
-        private string _filterText = string.Empty;
-        public string FilterText
-        {
-            get => _filterText;
-            set
+            if (parameter is not SortOrderEnum sortOrder)
             {
-                _filterText = value;
-                //NotifyPropertyChanged("ClearFilterVisibility");
+                return;
             }
-        }
 
-        private Dictionary<string, int> _bookmarks = new();
+            Configuration.SortOrder = sortOrder;
+            SortOrder = sortOrder;
+            SortHelper.Sort(this);
 
-        [DataMember]
-        public Dictionary<string, int> Bookmarks
-        {
-            get => _bookmarks;
-            set
-            {
-                _bookmarks = value;
-                //NotifyPropertyChanged("BookmarksAvailable");
-            }
-        }
-
-        public bool FilterOnBookmarks;
-
-        [DataMember]
-        public Uri? FilePath { get; set; }
-
-        [DataMember]
-        public List<BookmarkStyle> BookmarkStyles = new();
-
-        [DataMember]
-        public ObservableCollection<CodeItem> HistoryItems = new();
-
-        [DataMember]
-        public AsyncCommand SortCommand { get; }
-        public AsyncCommand Sort()
-        {
-            return new AsyncCommand(async (parameter, cancellationToken) =>
-            {
-                if (parameter is not SortOrderEnum sortOrder)
-                {
-                    return;
-                }
-
-                Configuration.SortOrder = sortOrder;
-                SortOrder = sortOrder;
-                SortHelper.Sort(this);
-
-                await ConfigurationHelper.SaveConfiguration(Configuration, cancellationToken);
-            });
-        }
+            await ConfigurationHelper.SaveConfiguration(Configuration, cancellationToken);
+        });
     }
 }

@@ -15,7 +15,7 @@ internal class DocumentMapper
     {
         var tree = CSharpSyntaxTree.ParseText(documentSnapshot.Text.CopyToString(), cancellationToken: cancellationToken);
         var msCorLib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-        var compilation = CSharpCompilation.Create("CodeNavCompilation", new[] { tree }, new[] { msCorLib });
+        var compilation = CSharpCompilation.Create("CodeNavCompilation", [tree], [msCorLib]);
         var semanticModel = compilation.GetSemanticModel(tree);
         var root = (CompilationUnitSyntax)await tree.GetRootAsync(cancellationToken);
 
@@ -33,7 +33,7 @@ internal class DocumentMapper
         try
         {
             var msCorLib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = CSharpCompilation.Create("CodeNavCompilation", new[] { tree }, new[] { msCorLib });
+            var compilation = CSharpCompilation.Create("CodeNavCompilation", [tree], [msCorLib]);
             semanticModel = compilation.GetSemanticModel(tree);
         }
         catch (ArgumentException)

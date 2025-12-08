@@ -8,15 +8,8 @@ using System.Windows;
 
 namespace CodeNav.Helpers;
 
-public class HistoryHelper
+public class HistoryHelper(ConfigurationHelper configurationHelper)
 {
-    private readonly ConfigurationHelper _configurationHelper;
-
-    public HistoryHelper(ConfigurationHelper configurationHelper)
-    {
-        _configurationHelper = configurationHelper;
-    }
-
     private const int MaxHistoryItems = 5;
 
     /// <summary>
@@ -147,6 +140,6 @@ public class HistoryHelper
 
         ConfigurationHelper.GetFileConfiguration(item.CodeDocumentViewModel.Configuration, item.FilePath).HistoryItems.Clear();
 
-        await _configurationHelper.SaveConfiguration(item.CodeDocumentViewModel.Configuration, cancellationToken);
+        await configurationHelper.SaveConfiguration(item.CodeDocumentViewModel.Configuration, cancellationToken);
     }
 }

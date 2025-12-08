@@ -7,24 +7,19 @@ using Microsoft.VisualStudio.RpcContracts.RemoteUI;
 
 namespace CodeNav;
 
+/// <summary>
+/// Initializes a new instance of the <see cref="TextViewMarginProvider"/> class.
+/// </summary>
+/// <param name="extension">Extension instance.</param>
+/// <param name="extensibility">Extensibility object.</param>
 [VisualStudioContribution]
-internal class TextViewMarginProvider : ExtensionPart, ITextViewMarginProvider, ITextViewOpenClosedListener, ITextViewChangedListener
+internal class TextViewMarginProvider(
+    Extension extension,
+    VisualStudioExtensibility extensibility,
+    DocumentHelper documentHelper)
+    : ExtensionPart(extension, extensibility), ITextViewMarginProvider, ITextViewOpenClosedListener, ITextViewChangedListener
 {
-    private readonly DocumentHelper _documentHelper;
-    
-    private readonly Dictionary<Uri, CodeDocumentViewModel> documentModels = new();
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TextViewMarginProvider"/> class.
-    /// </summary>
-    /// <param name="extension">Extension instance.</param>
-    /// <param name="extensibility">Extensibility object.</param>
-    public TextViewMarginProvider(Extension extension, VisualStudioExtensibility extensibility,
-        DocumentHelper documentHelper)
-        : base(extension, extensibility)
-    {
-        _documentHelper = documentHelper;
-    }
+    private readonly Dictionary<Uri, CodeDocumentViewModel> documentModels = [];
 
     /// <summary>
     /// Configures this extension part to be applied to any code view.
@@ -32,10 +27,10 @@ internal class TextViewMarginProvider : ExtensionPart, ITextViewMarginProvider, 
     public TextViewExtensionConfiguration TextViewExtensionConfiguration
         => new()
         {
-            AppliesTo = new[]
-            {
+            AppliesTo =
+            [
                 DocumentFilter.FromDocumentType(DocumentType.KnownValues.Text),
-            },
+            ],
         };
 
     /// <summary>
@@ -53,7 +48,7 @@ internal class TextViewMarginProvider : ExtensionPart, ITextViewMarginProvider, 
     /// </summary>
     public async Task<IRemoteUserControl> CreateVisualElementAsync(ITextViewSnapshot textView, CancellationToken cancellationToken)
     {
-        var model = await _documentHelper.UpdateDocument(textView, cancellationToken);
+        var model = await documentHelper.UpdateDocument(textView, cancellationToken);
 
         documentModels[textView.Uri] = model;
 
@@ -63,7 +58,7 @@ internal class TextViewMarginProvider : ExtensionPart, ITextViewMarginProvider, 
     /// <inheritdoc />
     public async Task TextViewChangedAsync(TextViewChangedArgs args, CancellationToken cancellationToken)
     {
-        var model = await _documentHelper.UpdateDocument(args.AfterTextView, cancellationToken);
+        var model = await documentHelper.UpdateDocument(args.AfterTextView, cancellationToken);
         documentModels[args.AfterTextView.Uri] = model;
     }
 

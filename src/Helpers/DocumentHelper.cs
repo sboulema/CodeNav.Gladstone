@@ -68,10 +68,10 @@ public class DocumentHelper(
             await extensibility.Editor().EditAsync(
                 batch =>
                 {
-                    codeItem.CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(new List<Selection> 
-                    { 
-                        new Selection(new TextRange(new TextPosition(documentSnapshot, position), 0))
-                    });
+                    codeItem.CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(
+                    [
+                        new(new TextRange(new TextPosition(documentSnapshot, position), 0))
+                    ]);
                 },
                 cancellationToken);
         }
@@ -98,12 +98,12 @@ public class DocumentHelper(
             await extensibility.Editor().EditAsync(
                 batch =>
                 {
-                    codeItem.CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(new List<Selection>
-                    {
-                        new Selection(new TextRange(
+                    codeItem.CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(
+                    [
+                        new(new TextRange(
                             new TextPosition(documentSnapshot, codeItem.Span.Start),
                             new TextPosition(documentSnapshot, codeItem.Span.End)))
-                    });
+                    ]);
                 },
                 cancellationToken);
         }
