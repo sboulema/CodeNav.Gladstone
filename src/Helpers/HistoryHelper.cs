@@ -1,8 +1,8 @@
 ﻿using CodeNav.Extensions;
 using CodeNav.Interfaces;
 using CodeNav.ViewModels;
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Imaging;
-using Microsoft.VisualStudio.Text;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -25,7 +25,7 @@ public class HistoryHelper
     /// <remarks>Used when adding item to history based on text changes</remarks>
     /// <param name="model">Document holding all code items</param>
     /// <param name="span">Span containing the text changes</param>
-    public static void AddItemToHistory(CodeDocumentViewModel model, Span span)
+    public static void AddItemToHistory(CodeDocumentViewModel model, TextSpan span)
     {
         try
         {

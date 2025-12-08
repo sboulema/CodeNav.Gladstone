@@ -5,40 +5,27 @@ using Microsoft.VisualStudio.Extensibility.Editor;
 
 namespace CodeNav.Helpers;
 
-public class DocumentHelper
+public class DocumentHelper(
+    ConfigurationHelper configurationHelper,
+    HistoryHelper historyHelper,
+    VisualStudioExtensibility extensibility)
 {
-    private readonly ConfigurationHelper _configurationHelper;
-    private readonly HistoryHelper _historyHelper;
-    
-    private readonly VisualStudioExtensibility _extensibility;
-
-    public DocumentHelper(ConfigurationHelper configurationHelper,
-        HistoryHelper historyHelper,
-        VisualStudioExtensibility extensibility)
-    {
-        _configurationHelper = configurationHelper;
-        _historyHelper = historyHelper;
-        _extensibility = extensibility;
-    }
-
     public async Task<CodeDocumentViewModel> UpdateDocument(ITextViewSnapshot textView,
         CancellationToken cancellationToken)
     {
-        var documentSnapshot = await textView.GetTextDocumentAsync(cancellationToken);
+        var configuration = await configurationHelper.GetConfiguration();
 
-        var configuration = await _configurationHelper.GetConfiguration();
-
-        var codeItems = await DocumentMapper.MapDocument(documentSnapshot, configuration, cancellationToken);
+        var codeItems = await DocumentMapper.MapDocument(textView.Document, configuration, cancellationToken);
 
         var codeDocumentViewModel = new CodeDocumentViewModel
         {
-            TextDocumentSnapshot = documentSnapshot,
+            TextDocumentSnapshot = textView.Document,
             Configuration = configuration,
-            CodeDocument = codeItems.ToList(),
+            CodeDocument = [.. codeItems],
             SortOrder = configuration.SortOrder,
             DocumentHelper = this,
-            HistoryHelper = _historyHelper,
-            ConfigurationHelper = _configurationHelper
+            HistoryHelper = historyHelper,
+            ConfigurationHelper = configurationHelper
         };
 
         // set codedocument viewmodel on all codeitems
@@ -75,10 +62,10 @@ public class DocumentHelper
             if (codeItem.FilePath != null &&
                 documentSnapshot?.Uri != codeItem.FilePath)
             {
-                documentSnapshot = await _extensibility.Documents().OpenTextDocumentAsync(codeItem.FilePath, cancellationToken);
+                documentSnapshot = await extensibility.Documents().OpenTextDocumentAsync(codeItem.FilePath, cancellationToken);
             }
 
-            await _extensibility.Editor().EditAsync(
+            await extensibility.Editor().EditAsync(
                 batch =>
                 {
                     codeItem.CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(new List<Selection> 
@@ -105,10 +92,10 @@ public class DocumentHelper
             if (codeItem.FilePath != null &&
                 documentSnapshot?.Uri != codeItem.FilePath)
             {
-                documentSnapshot = await _extensibility.Documents().OpenTextDocumentAsync(codeItem.FilePath, cancellationToken);
+                documentSnapshot = await extensibility.Documents().OpenTextDocumentAsync(codeItem.FilePath, cancellationToken);
             }
 
-            await _extensibility.Editor().EditAsync(
+            await extensibility.Editor().EditAsync(
                 batch =>
                 {
                     codeItem.CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(new List<Selection>
