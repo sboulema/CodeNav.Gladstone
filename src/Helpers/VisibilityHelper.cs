@@ -1,10 +1,10 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using CodeNav.Constants;
 using CodeNav.Interfaces;
 using CodeNav.Models;
 using CodeNav.ViewModels;
-using Microsoft.VisualStudio.Shell;
 
 namespace CodeNav.Helpers;
 
@@ -26,7 +26,7 @@ public static class VisibilityHelper
         if (document?.Any() != true)
         {
             // No code items have been found to filter on by name
-            return new List<CodeItem>();
+            return [];
         }
 
         try
@@ -205,11 +205,6 @@ public static class VisibilityHelper
         }
 
         return filterRule.Ignore ? Visibility.Collapsed : Visibility.Visible;
-    }
-
-    private static bool Contains(this string source, string toCheck, StringComparison comp)
-    {
-        return source != null && toCheck != null && source.IndexOf(toCheck, comp) >= 0;
     }
 
     private static FilterRule? GetFilterRule(CodeItem item)

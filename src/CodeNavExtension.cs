@@ -1,4 +1,5 @@
 ﻿using CodeNav.Helpers;
+using CodeNav.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.Extensibility;
 
@@ -36,7 +37,10 @@ internal class CodeNavExtension : Extension
     {
         base.InitializeServices(serviceCollection);
 
-        // You can configure dependency injection here by adding services to the serviceCollection.
+        // As of now, any instance that ingests VisualStudioExtensibility is required to be added as a scoped
+        // service.
+        serviceCollection.AddScoped<CodeDocumentService>();
+
         serviceCollection.AddSingleton<DocumentHelper>();
         serviceCollection.AddSingleton<ConfigurationHelper>();
         serviceCollection.AddSingleton<BookmarkHelper>();

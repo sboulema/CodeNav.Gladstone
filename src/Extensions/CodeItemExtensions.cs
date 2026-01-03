@@ -13,7 +13,9 @@ public static class CodeItemExtensions
     public static IEnumerable<CodeItem> Flatten(this IEnumerable<CodeItem> codeDocument) 
         => codeDocument
             .SelectMany(codeItem => codeItem is IMembers codeMembersItem
-                ? Flatten(codeMembersItem.Members) : new[] { codeItem }).Concat(codeDocument);
+                ? Flatten(codeMembersItem.Members)
+                : [codeItem])
+            .Concat(codeDocument);
 
     /// <summary>
     /// Delete null items from a flat list of CodeItems
@@ -31,7 +33,7 @@ public static class CodeItemExtensions
     {
         if (items == null)
         {
-            return new List<CodeItem>();
+            return [];
         }
 
         items.RemoveAll(item => item == null);
@@ -40,11 +42,11 @@ public static class CodeItemExtensions
         {
             if (item is IMembers memberItem)
             {
-                FilterNullItems(memberItem.Members.Cast<CodeItem?>().ToList());
+                FilterNullItems([.. memberItem.Members.Cast<CodeItem?>()]);
             }
         }
 
-        return items.Cast<CodeItem>().ToList();
+        return [.. items.Cast<CodeItem>()];
     }
 
     public static void AddIfNotNull(this List<CodeItem> items, CodeItem? item)

@@ -7,6 +7,7 @@ using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers;
@@ -92,7 +93,7 @@ public class ClassMapper
     }
 
     private static void MapMembersFromBaseClass(ClassDeclarationSyntax member,
-        List<CodeRegionItem> regions, SemanticModel semanticModel, Configuration configuration)
+        ObservableCollection<CodeRegionItem> regions, SemanticModel semanticModel, Configuration configuration)
     {
         var classSymbol = semanticModel.GetDeclaredSymbol(member);
         var baseType = classSymbol?.BaseType;

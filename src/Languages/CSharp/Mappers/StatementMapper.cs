@@ -7,6 +7,7 @@ using CodeNav.Constants;
 using CodeNav.Models;
 using CodeNav.Mappers;
 using CodeNav.Extensions;
+using System.Collections.ObjectModel;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
@@ -20,7 +21,7 @@ public static class StatementMapper
     {
         if (statement == null)
         {
-            return new List<CodeItem>();
+            return [];
         }
 
         CodeItem? item;
@@ -29,31 +30,35 @@ public static class StatementMapper
         {
             case SyntaxKind.SwitchStatement:
                 item = MapSwitch(statement as SwitchStatementSyntax, semanticModel, configuration);
-                return item != null ? new List<CodeItem> { item } : new List<CodeItem>();
+                return item != null
+                    ? [item]
+                    : [];
             case SyntaxKind.Block:
                 if (statement is not BlockSyntax blockSyntax)
                 {
-                    return new List<CodeItem>();
+                    return [];
                 }
 
                 return MapStatements(blockSyntax.Statements, semanticModel, configuration);
             case SyntaxKind.TryStatement:
                 if (statement is not TryStatementSyntax trySyntax)
                 {
-                    return new List<CodeItem>();
+                    return [];
                 }
 
                 return MapStatement(trySyntax.Block, semanticModel, configuration);
             case SyntaxKind.LocalFunctionStatement:
                 if (statement is not LocalFunctionStatementSyntax syntax)
                 {
-                    return new List<CodeItem>();
+                    return [];
                 }
 
                 item = MethodMapper.MapMethod(syntax, semanticModel, configuration);
-                return item != null ? new List<CodeItem> { item } : new List<CodeItem>();
+                return item != null
+                    ? [item]
+                    : [];
             default:
-                return new List<CodeItem>();
+                return [];
         }
     }
 

@@ -18,7 +18,7 @@ public static class SortHelper
 
     private static List<CodeItem> SortByName(List<CodeItem> document)
     {
-        document = document.OrderBy(c => c.Name).ToList();
+        document = [.. document.OrderBy(c => c.Name)];
 
         foreach (var item in document)
         {
@@ -37,7 +37,7 @@ public static class SortHelper
 
     private static List<CodeItem> SortByFile(List<CodeItem> document)
     {
-        document = document.OrderBy(c => c.StartLine).ToList();
+        document = [.. document.OrderBy(c => c.StartLine)];
 
         foreach (var item in document)
         {

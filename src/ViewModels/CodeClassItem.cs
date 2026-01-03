@@ -6,7 +6,8 @@ namespace CodeNav.ViewModels;
 
 public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
 {
-    public List<CodeItem> Members { get; set; } = new();
+    [DataMember]
+    public List<CodeItem> Members { get; set; } = [];
 
     public string Parameters { get; set; } = string.Empty;
 

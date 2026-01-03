@@ -29,11 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Templates\CodeNavMarginDataTemplate.xaml" />
+    <None Remove="ToolWindows\CodeNavToolWindowControl.xaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Templates\CodeNavMarginDataTemplate.xaml">
+    <EmbeddedResource Include="ToolWindows\CodeNavToolWindowControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
