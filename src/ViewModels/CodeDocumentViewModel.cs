@@ -4,6 +4,8 @@ using System.Windows;
 using CodeNav.Constants;
 using CodeNav.Helpers;
 using CodeNav.Models;
+using CodeNav.Services;
+using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Editor;
 using Microsoft.VisualStudio.Extensibility.UI;
 
@@ -24,9 +26,11 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
 
     public ITextDocumentSnapshot? TextDocumentSnapshot { get; set; }
 
-    public Configuration Configuration { get; set; } = new();
+    public VisualStudioExtensibility Extensibility { get; set; }
 
-    public DocumentHelper? DocumentHelper { get; set; }
+    public CodeDocumentService CodeDocumentService { get; set; }
+
+    public Configuration Configuration { get; set; } = new();
 
     public HistoryHelper? HistoryHelper { get; set; }
 

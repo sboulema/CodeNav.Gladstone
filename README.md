@@ -9,7 +9,7 @@ Visual Studio extension to show the code structure of your current document
 ## Features
 - Quickly see all the important methods and properties in your document.
 - Never get lost during a refactoring of a super long document.
-- Show as an editor margin
+- Show/Dock as a separate tool window.
 
 ## Features broken
 - Clicking on an item in the list will take you to that location in the document.
@@ -47,9 +47,6 @@ Visual Studio extension to show the code structure of your current document
 - Remote UI doesn't allow referencing your own custom controls.
 - A Remote user control is fully defined in a single XAML file which references a single (but potentially complex and nested) data context object.
 - A Remote user control is actually instantiated in the Visual Studio process, not the process hosting the extension: the XAML cannot reference types and assemblies from the extension but can reference types and assemblies from the Visual Studio process.
-
-### [Installation](https://github.com/microsoft/VSExtensibility/issues/128)
-- No way to generate a vsix
 
 ## Screenshots
 ![Preview](https://raw.githubusercontent.com/sboulema/CodeNav/main/Resources/Preview.png) ![Preview-Dark](https://raw.githubusercontent.com/sboulema/CodeNav/main/Resources/Preview-dark.png)

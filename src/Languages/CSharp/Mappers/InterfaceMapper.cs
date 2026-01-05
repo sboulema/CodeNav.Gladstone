@@ -5,7 +5,6 @@ using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Extensibility;
-using Microsoft.VisualStudio.Imaging;
 using System.Collections.Immutable;
 using System.Windows.Media;
 
@@ -20,7 +19,7 @@ public static class InterfaceMapper
     }
 
     public static List<CodeImplementedInterfaceItem> MapImplementedInterfaces(SyntaxNode member,
-        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration)
+        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         var implementedInterfaces = new List<CodeImplementedInterfaceItem>();
 
@@ -45,7 +44,7 @@ public static class InterfaceMapper
         foreach (INamedTypeSymbol implementedInterface in interfacesList.Distinct())
         {
             implementedInterfaces.Add(MapImplementedInterface(implementedInterface.Name,
-                implementedInterface.GetMembers(), classSymbol, member, semanticModel, tree, configuration));
+                implementedInterface.GetMembers(), classSymbol, member, semanticModel, tree, configuration, codeDocumentViewModel));
         }
 
         return implementedInterfaces;
@@ -68,7 +67,7 @@ public static class InterfaceMapper
 
     public static CodeImplementedInterfaceItem MapImplementedInterface(string name,
         ImmutableArray<ISymbol> members, INamedTypeSymbol implementingClass, SyntaxNode currentClass,
-        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration)
+        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         var item = new CodeImplementedInterfaceItem
         {
@@ -112,7 +111,7 @@ public static class InterfaceMapper
                 continue;
             }
 
-            var interfaceMember = DocumentMapper.MapMember(memberDeclaration, tree, semanticModel, configuration);
+            var interfaceMember = DocumentMapper.MapMember(memberDeclaration, tree, semanticModel, configuration, codeDocumentViewModel);
             if (interfaceMember == null)
             {
                 continue;
@@ -132,10 +131,10 @@ public static class InterfaceMapper
     }
 
     public static CodeInterfaceItem MapInterface(InterfaceDeclarationSyntax? member,
-        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration)
+        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         var item = BaseMapper.MapBase<CodeInterfaceItem>(member, member.Identifier,
-            member.Modifiers, semanticModel, configuration);
+            member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
 
         item.Kind = CodeItemKindEnum.Interface;
         item.BorderColor = Colors.DarkGray.ToString();
@@ -151,7 +150,7 @@ public static class InterfaceMapper
 
         foreach (var interfaceMember in member.Members)
         {
-            var memberItem = DocumentMapper.MapMember(interfaceMember, tree, semanticModel, configuration);
+            var memberItem = DocumentMapper.MapMember(interfaceMember, tree, semanticModel, configuration, codeDocumentViewModel);
             if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
             {
                 item.Members.Add(memberItem);

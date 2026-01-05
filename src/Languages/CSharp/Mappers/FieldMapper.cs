@@ -11,10 +11,10 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public static class FieldMapper
 {
     public static CodeItem MapField(FieldDeclarationSyntax member, SemanticModel semanticModel,
-        Configuration configuration)
+        Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         var item = BaseMapper.MapBase<CodeItem>(member, member.Declaration.Variables.First().Identifier,
-            member.Modifiers, semanticModel, configuration);
+            member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
 
         item.Kind = IsConstant(member.Modifiers)
             ? CodeItemKindEnum.Constant

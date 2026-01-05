@@ -14,9 +14,10 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public class ClassMapper
 {
     public static CodeClassItem MapClass(ClassDeclarationSyntax member,
-        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, bool mapBaseClass)
+        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel,
+        bool mapBaseClass)
     {
-        var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration);
+        var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Class;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.Parameters = MapInheritance(member);
@@ -30,18 +31,18 @@ public class ClassMapper
         }
 
         var regions = RegionMapper.MapRegions(tree, member.Span, configuration);
-        var implementedInterfaces = InterfaceMapper.MapImplementedInterfaces(member, semanticModel, tree, configuration);
+        var implementedInterfaces = InterfaceMapper.MapImplementedInterfaces(member, semanticModel, tree, configuration, codeDocumentViewModel);
 
         // Map members from the base class
         if (mapBaseClass)
         {
-            MapMembersFromBaseClass(member, regions, semanticModel, configuration);
+            MapMembersFromBaseClass(member, regions, semanticModel, configuration, codeDocumentViewModel);
         }
 
         // Map class members
         foreach (var classMember in member.Members)
         {
-            var memberItem = DocumentMapper.MapMember(classMember, tree, semanticModel, configuration);
+            var memberItem = DocumentMapper.MapMember(classMember, tree, semanticModel, configuration, codeDocumentViewModel);
             if (memberItem != null && !InterfaceMapper.IsPartOfImplementedInterface(implementedInterfaces, memberItem)
                 && !RegionMapper.AddToRegion(regions, memberItem))
             {
@@ -92,7 +93,8 @@ public class ClassMapper
     }
 
     private static void MapMembersFromBaseClass(ClassDeclarationSyntax member,
-        ObservableCollection<CodeRegionItem> regions, SemanticModel semanticModel, Configuration configuration)
+        ObservableCollection<CodeRegionItem> regions, SemanticModel semanticModel, Configuration configuration,
+        CodeDocumentViewModel codeDocumentViewModel)
     {
         var classSymbol = semanticModel.GetDeclaredSymbol(member);
         var baseType = classSymbol?.BaseType;
@@ -153,7 +155,7 @@ public class ClassMapper
             }
 
             var memberItem = DocumentMapper.MapMember(syntaxNode, syntaxNode.SyntaxTree,
-                baseSemanticModel, configuration, mapBaseClass: false);
+                baseSemanticModel, configuration, codeDocumentViewModel, mapBaseClass: false);
 
             baseRegion.Members.AddIfNotNull(memberItem);
         }

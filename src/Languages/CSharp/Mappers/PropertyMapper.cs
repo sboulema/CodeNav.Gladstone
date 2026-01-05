@@ -11,9 +11,9 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public class PropertyMapper
 {
     public static CodePropertyItem MapProperty(PropertyDeclarationSyntax member,
-        SemanticModel semanticModel, Configuration configuration)
+        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodePropertyItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration);
+        var item = BaseMapper.MapBase<CodePropertyItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
         item.ReturnType = TypeMapper.Map(member.Type);
 
         if (member.AccessorList != null)

@@ -71,7 +71,6 @@ public static class RegionMapper
             }
 
             region.EndLine = GetEndLine(endRegionDirective);
-            region.EndLinePosition = GetEndLinePosition(endRegionDirective);
         }
 
         var regions = ToHierarchy(regionList, int.MinValue, int.MaxValue);
@@ -116,7 +115,6 @@ public static class RegionMapper
             Id = name,
             Tooltip = name,
             StartLine = GetStartLine(source),
-            StartLinePosition = GetStartLinePosition(source),
             ForegroundColor = Colors.Black.ToString(),
             BorderColor = Colors.DarkGray.ToString(),
             FontSize = configuration.FontSize - 2,

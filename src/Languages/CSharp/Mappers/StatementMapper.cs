@@ -17,7 +17,7 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public static class StatementMapper
 {
     public static ObservableList<CodeItem> MapStatement(StatementSyntax? statement,
-        SemanticModel semanticModel, Configuration configuration)
+        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         if (statement == null)
         {
@@ -29,7 +29,7 @@ public static class StatementMapper
         switch (statement.Kind())
         {
             case SyntaxKind.SwitchStatement:
-                item = MapSwitch(statement as SwitchStatementSyntax, semanticModel, configuration);
+                item = MapSwitch(statement as SwitchStatementSyntax, semanticModel, configuration, codeDocumentViewModel);
                 return item != null
                     ? [item]
                     : [];
@@ -39,21 +39,21 @@ public static class StatementMapper
                     return [];
                 }
 
-                return MapStatements(blockSyntax.Statements, semanticModel, configuration);
+                return MapStatements(blockSyntax.Statements, semanticModel, configuration, codeDocumentViewModel);
             case SyntaxKind.TryStatement:
                 if (statement is not TryStatementSyntax trySyntax)
                 {
                     return [];
                 }
 
-                return MapStatement(trySyntax.Block, semanticModel, configuration);
+                return MapStatement(trySyntax.Block, semanticModel, configuration, codeDocumentViewModel);
             case SyntaxKind.LocalFunctionStatement:
                 if (statement is not LocalFunctionStatementSyntax syntax)
                 {
                     return [];
                 }
 
-                item = MethodMapper.MapMethod(syntax, semanticModel, configuration);
+                item = MethodMapper.MapMethod(syntax, semanticModel, configuration, codeDocumentViewModel);
                 return item != null
                     ? [item]
                     : [];
@@ -62,11 +62,11 @@ public static class StatementMapper
         }
     }
 
-    public static ObservableList<CodeItem> MapStatement(BlockSyntax? statement, SemanticModel semanticModel, Configuration configuration) 
-        => MapStatement(statement as StatementSyntax, semanticModel, configuration);
+    public static ObservableList<CodeItem> MapStatement(BlockSyntax? statement, SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel) 
+        => MapStatement(statement as StatementSyntax, semanticModel, configuration, codeDocumentViewModel);
 
     public static ObservableList<CodeItem> MapStatements(SyntaxList<StatementSyntax> statements,
-        SemanticModel semanticModel, Configuration configuration)
+        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         var list = new ObservableList<CodeItem>();
 
@@ -77,7 +77,7 @@ public static class StatementMapper
 
         foreach (var statement in statements)
         {
-            list.AddRange(MapStatement(statement, semanticModel, configuration));
+            list.AddRange(MapStatement(statement, semanticModel, configuration, codeDocumentViewModel));
         }
 
         return list;
@@ -90,15 +90,15 @@ public static class StatementMapper
     /// <param name="control"></param>
     /// <param name="semanticModel"></param>
     /// <returns></returns>
-    private static CodeItem? MapSwitch(SwitchStatementSyntax? statement,
-        SemanticModel semanticModel, Configuration configuration)
+    private static CodeClassItem? MapSwitch(SwitchStatementSyntax? statement,
+        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         if (statement == null)
         {
             return null;
         }
 
-        var item = BaseMapper.MapBase<CodeClassItem>(statement, statement.Expression.ToString(), semanticModel, configuration);
+        var item = BaseMapper.MapBase<CodeClassItem>(statement, statement.Expression.ToString(), semanticModel, configuration, codeDocumentViewModel);
         item.Name = $"Switch {item.Name}";
         item.Kind = CodeItemKindEnum.Switch;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -108,7 +108,7 @@ public static class StatementMapper
         // Map switch cases
         foreach (var section in statement.Sections)
         {
-            item.Members.AddIfNotNull(MapSwitchSection(section, semanticModel, configuration));
+            item.Members.AddIfNotNull(MapSwitchSection(section, semanticModel, configuration, codeDocumentViewModel));
         }
 
         return item;
@@ -121,15 +121,15 @@ public static class StatementMapper
     /// <param name="control"></param>
     /// <param name="semanticModel"></param>
     /// <returns></returns>
-    private static CodeItem? MapSwitchSection(SwitchSectionSyntax? section,
-        SemanticModel semanticModel, Configuration configuration)
+    private static CodePropertyItem? MapSwitchSection(SwitchSectionSyntax? section,
+        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         if (section == null)
         {
             return null;
         }
 
-        var item = BaseMapper.MapBase<CodePropertyItem>(section, section.Labels.First().ToString(), semanticModel, configuration);
+        var item = BaseMapper.MapBase<CodePropertyItem>(section, section.Labels.First().ToString(), semanticModel, configuration, codeDocumentViewModel);
         item.Tooltip = TooltipMapper.Map(item.Access, item.ReturnType, item.Name, string.Empty);
         item.Id = item.FullName;
         item.Kind = CodeItemKindEnum.SwitchSection;

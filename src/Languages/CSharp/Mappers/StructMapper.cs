@@ -12,9 +12,9 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public static class StructMapper
 {
     public static CodeClassItem MapStruct(StructDeclarationSyntax member,
-        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration)
+        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration);
+        var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Struct;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.BorderColor = Colors.DarkGray.ToString();
@@ -27,7 +27,7 @@ public static class StructMapper
 
         foreach (var structMember in member.Members)
         {
-            item.Members.AddIfNotNull(DocumentMapper.MapMember(structMember, tree, semanticModel, configuration));
+            item.Members.AddIfNotNull(DocumentMapper.MapMember(structMember, tree, semanticModel, configuration, codeDocumentViewModel));
         }
 
         return item;

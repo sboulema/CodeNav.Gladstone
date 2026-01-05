@@ -1,60 +1,61 @@
 ﻿using CodeNav.Helpers;
 using CodeNav.Languages.CSharp.Mappers;
 using CodeNav.ViewModels;
+using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Editor;
 
 namespace CodeNav.Services;
 
-internal class CodeDocumentService(
+public class CodeDocumentService(
     ConfigurationHelper configurationHelper)
 {
-    private readonly Dictionary<Uri, CodeDocumentViewModel> codeDocumentViewModels = [];
-
     /// <summary>
     /// DataContext for the tool window.
     /// </summary>
     public CodeDocumentViewModel CodeDocumentViewModel { get; set; } = new();
 
-    public async Task UpdateCodeDocumentViewModel(
+    public async Task<CodeDocumentViewModel> UpdateCodeDocumentViewModel(
+        VisualStudioExtensibility extensibility,
         ITextViewSnapshot textView,
         CancellationToken cancellationToken)
     {
         var configuration = await configurationHelper.GetConfiguration();
 
-        var codeItems = await DocumentMapper.MapDocument(textView.Document, configuration, cancellationToken);
-
-        var codeDocumentViewModel = GetViewModel(textView.Uri);
-
-        codeDocumentViewModel.CodeDocument = [.. codeItems];
+        var codeItems = await DocumentMapper.MapDocument(textView.Document, configuration, CodeDocumentViewModel, cancellationToken);
 
         // Update the DataContext for the tool window.
-        //CodeDocumentViewModel.CodeDocument.Clear();
+        CodeDocumentViewModel.TextDocumentSnapshot = textView.Document;
+        CodeDocumentViewModel.Configuration = configuration;
+        CodeDocumentViewModel.SortOrder = configuration.SortOrder;
+        //CodeDocumentViewModel.HistoryHelper = historyHelper;
+        CodeDocumentViewModel.ConfigurationHelper = configurationHelper;
+        CodeDocumentViewModel.Extensibility = extensibility;
+        CodeDocumentViewModel.CodeDocumentService = this;
+
+        CodeDocumentViewModel.CodeDocument.Clear();
 
         foreach (var item in codeItems)
         {
             CodeDocumentViewModel.CodeDocument.Add(item);
         }
 
-        CodeDocumentViewModel.CodeDocument.Add(new()
-        {
-            Name = "test"
-        });
+        // Sort items
+        SortHelper.Sort(CodeDocumentViewModel);
 
-        CodeDocumentViewModel.CodeDocument.Add(new CodeNamespaceItem
-        {
-            Name = "namespace"
-        });
+        // Apply highlights
+        HighlightHelper.UnHighlight(CodeDocumentViewModel);
+
+        // Apply current visibility settings to the document
+        VisibilityHelper.SetCodeItemVisibility(CodeDocumentViewModel);
+
+        // Apply bookmarks
+        CodeDocumentViewModel.Bookmarks = ConfigurationHelper.GetFileConfiguration(CodeDocumentViewModel.Configuration, textView.Uri).Bookmarks;
+        BookmarkHelper.ApplyBookmarks(CodeDocumentViewModel);
+
+        // Apply history items
+        CodeDocumentViewModel.HistoryItems = new(ConfigurationHelper.GetFileConfiguration(CodeDocumentViewModel.Configuration, textView.Uri).HistoryItems);
+        HistoryHelper.ApplyHistoryIndicator(CodeDocumentViewModel);
+
+        return CodeDocumentViewModel;
     }
-
-    private CodeDocumentViewModel GetViewModel(Uri uri)
-    {
-        codeDocumentViewModels.TryGetValue(uri, out var viewModel);
-
-        viewModel ??= new CodeDocumentViewModel();
-
-        return viewModel;
-    }
-
-    public bool RemoveViewModel(Uri uri)
-        => codeDocumentViewModels.Remove(uri);
 }

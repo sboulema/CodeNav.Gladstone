@@ -13,9 +13,9 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public static class NamespaceMapper
 {
     public static CodeNamespaceItem MapNamespace(NamespaceDeclarationSyntax member,
-        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration)
+        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, configuration);
+        var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, configuration, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Namespace;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.BorderColor = Colors.DarkGray.ToString();
@@ -31,7 +31,7 @@ public static class NamespaceMapper
 
         foreach (var namespaceMember in member.Members)
         {
-            var memberItem = DocumentMapper.MapMember(namespaceMember, tree, semanticModel, configuration);
+            var memberItem = DocumentMapper.MapMember(namespaceMember, tree, semanticModel, configuration, codeDocumentViewModel);
             if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
             {
                 item.Members.AddIfNotNull(memberItem);
@@ -54,9 +54,9 @@ public static class NamespaceMapper
     }
 
     public static CodeNamespaceItem MapNamespace(BaseNamespaceDeclarationSyntax member,
-        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration)
+        SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, configuration);
+        var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, configuration, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Namespace;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.BorderColor = Colors.DarkGray.ToString();
@@ -72,7 +72,7 @@ public static class NamespaceMapper
 
         foreach (var namespaceMember in member.Members)
         {
-            var memberItem = DocumentMapper.MapMember(namespaceMember, tree, semanticModel, configuration);
+            var memberItem = DocumentMapper.MapMember(namespaceMember, tree, semanticModel, configuration, codeDocumentViewModel);
             if (memberItem != null && !RegionMapper.AddToRegion(regions, memberItem))
             {
                 item.Members.AddIfNotNull(memberItem);

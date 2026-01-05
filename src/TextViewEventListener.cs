@@ -1,4 +1,5 @@
-﻿using CodeNav.Services;
+﻿using CodeNav.Helpers;
+using CodeNav.Services;
 using Microsoft;
 using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Editor;
@@ -34,13 +35,33 @@ internal class TextViewEventListener(
 
     /// <inheritdoc />
     public Task TextViewChangedAsync(TextViewChangedArgs args, CancellationToken cancellationToken)
-        => codeDocumentService.UpdateCodeDocumentViewModel(args.AfterTextView, cancellationToken);
+    {
+        // Document changed - Update CodeNav view
+        if (args.Edits.Any())
+        {
+            return codeDocumentService.UpdateCodeDocumentViewModel(extensibility, args.AfterTextView, cancellationToken);
+        }
+
+        // Selection changed - Update highlights
+        if (args.BeforeTextView.Selection.ActivePosition.GetContainingLine().LineNumber !=
+            args.AfterTextView.Selection.ActivePosition.GetContainingLine().LineNumber)
+        {
+            HighlightHelper.HighlightCurrentItem(
+                codeDocumentService.CodeDocumentViewModel,
+                "red",
+                args.AfterTextView.Selection.ActivePosition.GetContainingLine().LineNumber);
+        }
+
+        return Task.CompletedTask;
+    }
 
     /// <inheritdoc />
     public async Task TextViewClosedAsync(ITextViewSnapshot textViewSnapshot, CancellationToken cancellationToken)
-        => codeDocumentService.RemoveViewModel(textViewSnapshot.Uri);
+    {
+        return;
+    }
 
     /// <inheritdoc />
     public Task TextViewOpenedAsync(ITextViewSnapshot textViewSnapshot, CancellationToken cancellationToken)
-        => codeDocumentService.UpdateCodeDocumentViewModel(textViewSnapshot, cancellationToken);
+        => codeDocumentService.UpdateCodeDocumentViewModel(extensibility, textViewSnapshot, cancellationToken);
 }

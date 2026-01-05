@@ -2,6 +2,7 @@
 using CodeNav.Helpers;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Extensibility;
+using Microsoft.VisualStudio.Extensibility.Editor;
 using Microsoft.VisualStudio.Extensibility.UI;
 using System.Runtime.Serialization;
 using System.Windows;
@@ -33,10 +34,6 @@ public class CodeItem : NotifyPropertyChangedObject
     /// </summary>
     [DataMember]
     public string DataTemplateType { get; set; } = string.Empty;
-
-    public LinePosition? StartLinePosition { get; set; }
-
-    public LinePosition? EndLinePosition { get; set; }
 
     public int? StartLine { get; set; }
 
@@ -241,7 +238,7 @@ public class CodeItem : NotifyPropertyChangedObject
         return new AsyncCommand(async (parameter, cancellationToken) =>
         {
             HistoryHelper.AddItemToHistory(this);
-            await CodeDocumentViewModel!.DocumentHelper!.ScrollToLine(this, Span.Start, cancellationToken);
+            await ScrollToLine(Span.Start, cancellationToken);
         });
     }
 
@@ -251,7 +248,7 @@ public class CodeItem : NotifyPropertyChangedObject
     {
         return new AsyncCommand(async (parameter, cancellationToken) =>
         {
-            await CodeDocumentViewModel!.DocumentHelper!.ScrollToLine(this, Span.Start, cancellationToken);
+            await ScrollToLine(Span.Start, cancellationToken);
         });
     }
 
@@ -271,7 +268,7 @@ public class CodeItem : NotifyPropertyChangedObject
     {
         return new AsyncCommand(async (parameter, cancellationToken) =>
         {
-            await CodeDocumentViewModel!.DocumentHelper!.ScrollToLine(this, Span.End, cancellationToken);
+            await ScrollToLine(Span.End, cancellationToken);
         });
     }
 
@@ -281,7 +278,7 @@ public class CodeItem : NotifyPropertyChangedObject
     {
         return new AsyncCommand(async (parameter, cancellationToken) =>
         {
-            await CodeDocumentViewModel!.DocumentHelper!.SelectLines(this, cancellationToken);
+            await SelectLines(cancellationToken);
         });
     }
 
@@ -300,7 +297,9 @@ public class CodeItem : NotifyPropertyChangedObject
     {
         return new AsyncCommand(async (parameter, cancellationToken) =>
         {
-            await CodeDocumentViewModel!.DocumentHelper!.UpdateDocument(CodeDocumentViewModel.TextView, cancellationToken);
+            await CodeDocumentViewModel!
+                .CodeDocumentService!
+                .UpdateCodeDocumentViewModel(CodeDocumentViewModel.Extensibility, CodeDocumentViewModel.TextView, cancellationToken);
         });
     }
 
@@ -401,4 +400,80 @@ public class CodeItem : NotifyPropertyChangedObject
     //    BookmarkHelper.ApplyBookmarks(CodeDocumentViewModel);
     //}
     #endregion
+
+    private async Task ScrollToLine(
+        int position,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var documentSnapshot = CodeDocumentViewModel?.TextDocumentSnapshot;
+
+            // If the code item has a different file path, open that document
+            if (FilePath != null &&
+                documentSnapshot?.Uri != FilePath)
+            {
+                documentSnapshot = await CodeDocumentViewModel
+                    .Extensibility
+                    .Documents()
+                    .OpenTextDocumentAsync(FilePath, cancellationToken);
+            }
+
+            // Scroll to the requested line
+            await CodeDocumentViewModel
+                .Extensibility
+                .Editor()
+                .EditAsync(
+                    batch =>
+                    {
+                        CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(
+                        [
+                            new(new TextRange(new TextPosition(documentSnapshot, position), 0))
+                        ]);
+                    },
+                    cancellationToken);
+        }
+        catch (Exception)
+        {
+            // Ignore
+        }
+    }
+
+    private async Task SelectLines(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var documentSnapshot = CodeDocumentViewModel?.TextDocumentSnapshot;
+
+            // If the code item has a different file path, open that document
+            if (FilePath != null &&
+                documentSnapshot?.Uri != FilePath)
+            {
+                documentSnapshot = await CodeDocumentViewModel
+                    .Extensibility
+                    .Documents()
+                    .OpenTextDocumentAsync(FilePath, cancellationToken);
+            }
+
+            // Select all lines corresponding to the code item
+            await CodeDocumentViewModel
+                .Extensibility
+                .Editor()
+                .EditAsync(
+                    batch =>
+                    {
+                        CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(
+                        [
+                            new(new TextRange(
+                                new TextPosition(documentSnapshot, Span.Start),
+                                new TextPosition(documentSnapshot, Span.End)))
+                        ]);
+                    },
+                    cancellationToken);
+        }
+        catch (Exception)
+        {
+            // Ignore
+        }
+    }
 }
