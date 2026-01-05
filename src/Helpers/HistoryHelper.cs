@@ -2,7 +2,7 @@
 using CodeNav.Interfaces;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Extensibility;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -100,7 +100,7 @@ public class HistoryHelper(ConfigurationHelper configurationHelper)
     /// <param name="index">Index in history list</param>
     private static void ApplyHistoryIndicator(CodeItem item, int index = 0)
     {
-        item.StatusMoniker = KnownMonikers.History;
+        item.StatusMoniker = ImageMoniker.KnownValues.History;
         item.StatusMonikerVisibility = Visibility.Visible;
         item.StatusGrayscale = index > 0;
         item.StatusOpacity = GetOpacity(index);

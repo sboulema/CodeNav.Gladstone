@@ -4,6 +4,7 @@ using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Imaging;
 using System.Collections.Immutable;
 using System.Windows.Media;
@@ -117,7 +118,7 @@ public static class InterfaceMapper
                 continue;
             }
 
-            interfaceMember.OverlayMoniker = KnownMonikers.InterfacePublic;
+            interfaceMember.OverlayMoniker = ImageMoniker.KnownValues.InterfacePublic;
             item.Members.Add(interfaceMember);
         }
 

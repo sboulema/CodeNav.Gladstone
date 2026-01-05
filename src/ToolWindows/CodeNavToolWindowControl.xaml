@@ -10,7 +10,34 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Margin="0,0,3,0" Width="16" Height="16">
+                                <vs:Image Source="{Binding Moniker}" />
+                                <vs:Image Source="{Binding OverlayMoniker}" Width="8" Height="8" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                            </Grid>
+
+                            <TextBlock Grid.Column="1" FontFamily="{Binding FontFamily}" FontStyle="{Binding FontStyle}">
+                                <Run Text="{Binding Name}"       
+                                     FontSize="{Binding FontSize}"          
+                                     Foreground="{Binding ForegroundBrush}"
+                                     Background="{Binding NameBackgroundBrush}"
+                                     FontWeight="{Binding FontWeight}" 
+                                     x:Name="ItemName"/>
+                                <Run Text="{Binding ReturnType}" FontSize="{Binding ParameterFontSize}" Foreground="DarkGray" />
+                                <Run Text="{Binding Parameters}" FontSize="{Binding ParameterFontSize}" Foreground="DarkGray" />
+                            </TextBlock>
+
+                            <vs:Image Grid.Column="2" Source="{Binding StatusMoniker}" Margin="3,0,0,0" Width="10" Height="10" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Visibility="{Binding StatusMonikerVisibility}" 
+								Grayscale="{Binding StatusGrayscale}" Opacity="{Binding StatusOpacity}" />
+                        </Grid>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>

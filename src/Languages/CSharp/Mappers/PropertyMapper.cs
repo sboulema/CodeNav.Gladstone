@@ -14,7 +14,7 @@ public class PropertyMapper
         SemanticModel semanticModel, Configuration configuration)
     {
         var item = BaseMapper.MapBase<CodePropertyItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration);
-        item.Type = TypeMapper.Map(member.Type);
+        item.ReturnType = TypeMapper.Map(member.Type);
 
         if (member.AccessorList != null)
         {
@@ -34,7 +34,7 @@ public class PropertyMapper
             }
         }
 
-        item.Tooltip = TooltipMapper.Map(item.Access, item.Type, item.Name, item.Parameters);
+        item.Tooltip = TooltipMapper.Map(item.Access, item.ReturnType, item.Name, item.Parameters);
         item.Kind = CodeItemKindEnum.Property;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
 

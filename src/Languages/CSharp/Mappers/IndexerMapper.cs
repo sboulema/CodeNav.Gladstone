@@ -13,9 +13,9 @@ public class IndexerMapper
         SemanticModel semanticModel, Configuration configuration)
     {
         var item = BaseMapper.MapBase<CodeFunctionItem>(member, member.ThisKeyword, member.Modifiers, semanticModel, configuration);
-        item.Type = TypeMapper.Map(member.Type);
+        item.ReturnType = TypeMapper.Map(member.Type);
         item.Parameters = ParameterMapper.MapParameters(member.ParameterList);
-        item.Tooltip = TooltipMapper.Map(item.Access, item.Type, item.Name, item.Parameters);
+        item.Tooltip = TooltipMapper.Map(item.Access, item.ReturnType, item.Name, item.Parameters);
         item.Kind = CodeItemKindEnum.Indexer;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
 

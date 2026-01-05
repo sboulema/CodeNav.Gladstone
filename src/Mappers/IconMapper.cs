@@ -1,7 +1,6 @@
 ﻿using CodeNav.Constants;
 using CodeNav.Extensions;
-using Microsoft.VisualStudio.Imaging;
-using Microsoft.VisualStudio.Imaging.Interop;
+using Microsoft.VisualStudio.Extensibility;
 
 namespace CodeNav.Mappers;
 
@@ -35,7 +34,7 @@ public static class IconMapper
             _ => $"Property{accessString}",
         };
 
-        var monikers = typeof(KnownMonikers).GetProperties();
+        var monikers = typeof(ImageMoniker.KnownValues).GetProperties();
 
         var imageMoniker = monikers.FirstOrDefault(m => monikerString.Equals(m.Name))?.GetValue(null, null);
 
@@ -44,6 +43,6 @@ public static class IconMapper
             return (ImageMoniker)imageMoniker;
         }
 
-        return KnownMonikers.QuestionMark;
+        return ImageMoniker.KnownValues.QuestionMark;
     }
 }

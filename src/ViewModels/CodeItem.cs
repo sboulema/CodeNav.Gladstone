@@ -1,11 +1,11 @@
-﻿using System.Windows;
-using System.Windows.Media;
-using Microsoft.VisualStudio.Imaging.Interop;
-using Microsoft.CodeAnalysis.Text;
+﻿using CodeNav.Constants;
 using CodeNav.Helpers;
-using System.Runtime.Serialization;
+using Microsoft.CodeAnalysis.Text;
+using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.UI;
-using CodeNav.Constants;
+using System.Runtime.Serialization;
+using System.Windows;
+using System.Windows.Media;
 
 namespace CodeNav.ViewModels;
 
@@ -28,6 +28,9 @@ public class CodeItem : NotifyPropertyChangedObject
     [DataMember]
     public string Name { get; set; } = string.Empty;
 
+    /// <summary>
+    /// The type name of the data template to use for rendering the associated data.
+    /// </summary>
     [DataMember]
     public string DataTemplateType { get; set; } = string.Empty;
 
@@ -41,8 +44,16 @@ public class CodeItem : NotifyPropertyChangedObject
 
     public TextSpan Span { get; set; }
 
+    /// <summary>
+    /// Icon showing the type (class, namespace, etc.) of the code item
+    /// </summary>
+    [DataMember]
     public ImageMoniker Moniker { get; set; }
 
+    /// <summary>
+    /// Icon showing the access (public, private, etc.) of the code item
+    /// </summary>
+    [DataMember]
     public ImageMoniker OverlayMoniker { get; set; }
 
     [DataMember]
@@ -72,6 +83,8 @@ public class CodeItem : NotifyPropertyChangedObject
 
     #region Status Image
     private ImageMoniker _statusMoniker;
+
+    [DataMember]
     public ImageMoniker StatusMoniker
     {
         get => _statusMoniker;
@@ -79,6 +92,8 @@ public class CodeItem : NotifyPropertyChangedObject
     }
 
     private Visibility _statusMonikerVisibility = Visibility.Collapsed;
+
+    [DataMember]
     public Visibility StatusMonikerVisibility
     {
         get => _statusMonikerVisibility;
@@ -86,6 +101,8 @@ public class CodeItem : NotifyPropertyChangedObject
     }
 
     private bool _statusGrayscale;
+
+    [DataMember]
     public bool StatusGrayscale
     {
         get => _statusGrayscale;
@@ -93,6 +110,8 @@ public class CodeItem : NotifyPropertyChangedObject
     }
 
     private double _statusOpacity;
+
+    [DataMember]
     public double StatusOpacity
     {
         get => _statusOpacity;

@@ -19,9 +19,9 @@ public class Configuration
 
     public SortOrderEnum SortOrder { get; set; }
 
-    public List<FilterRule> FilterRules { get; set; } = new();
+    public List<FilterRule> FilterRules { get; set; } = [];
 
-    public List<BookmarkStyle> BookmarkStyles { get; set; } = new();
+    public List<BookmarkStyle> BookmarkStyles { get; set; } = [];
 
-    public Dictionary<Uri, FileConfiguration> FileConfigurations { get; set; } = new();
+    public Dictionary<Uri, FileConfiguration> FileConfigurations { get; set; } = [];
 }

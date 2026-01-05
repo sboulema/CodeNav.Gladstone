@@ -1,11 +1,11 @@
 ﻿using CodeNav.Constants;
-using CodeNav.Extensions;
 using CodeNav.Helpers;
 using CodeNav.Mappers;
 using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Imaging;
 using System.Windows;
 using System.Windows.Media;
@@ -48,9 +48,9 @@ public static class MethodMapper
         {
             // Map method as single item
             item = BaseMapper.MapBase<CodeFunctionItem>(node, identifier, modifiers, semanticModel, configuration);
-            ((CodeFunctionItem)item).Type = TypeMapper.Map(returnType);
+            ((CodeFunctionItem)item).ReturnType = TypeMapper.Map(returnType);
             ((CodeFunctionItem)item).Parameters = ParameterMapper.MapParameters(parameterList);
-            item.Tooltip = TooltipMapper.Map(item.Access, ((CodeFunctionItem)item).Type, item.Name, parameterList);
+            item.Tooltip = TooltipMapper.Map(item.Access, ((CodeFunctionItem)item).ReturnType, item.Name, parameterList);
         }
 
         item.Id = IdMapper.MapId(item.FullName, parameterList);
@@ -73,11 +73,11 @@ public static class MethodMapper
     {
         var item = BaseMapper.MapBase<CodeFunctionItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration);
         item.Parameters = ParameterMapper.MapParameters(member.ParameterList);
-        item.Tooltip = TooltipMapper.Map(item.Access, item.Type, item.Name, member.ParameterList);
+        item.Tooltip = TooltipMapper.Map(item.Access, item.ReturnType, item.Name, member.ParameterList);
         item.Id = IdMapper.MapId(member.Identifier, member.ParameterList);
         item.Kind = CodeItemKindEnum.Constructor;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
-        item.OverlayMoniker = KnownMonikers.Add;
+        item.OverlayMoniker = ImageMoniker.KnownValues.Add;
 
         return item;
     }

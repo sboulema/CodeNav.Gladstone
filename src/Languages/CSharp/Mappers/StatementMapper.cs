@@ -130,7 +130,7 @@ public static class StatementMapper
         }
 
         var item = BaseMapper.MapBase<CodePropertyItem>(section, section.Labels.First().ToString(), semanticModel, configuration);
-        item.Tooltip = TooltipMapper.Map(item.Access, item.Type, item.Name, string.Empty);
+        item.Tooltip = TooltipMapper.Map(item.Access, item.ReturnType, item.Name, string.Empty);
         item.Id = item.FullName;
         item.Kind = CodeItemKindEnum.SwitchSection;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
