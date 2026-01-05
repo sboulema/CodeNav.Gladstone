@@ -29,6 +29,11 @@ public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
 
     public event EventHandler? IsExpandedChanged;
     private bool _isExpanded;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the item is expanded in the tool window.
+    /// </summary>
+    [DataMember]
     public bool IsExpanded
     {
         get { return _isExpanded; }
@@ -46,6 +51,7 @@ public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
     /// Do we have any members that are not null and should be visible?
     /// If we don't hide the expander +/- symbol and the header border
     /// </summary>
+    [DataMember]
     public Visibility HasMembersVisibility
         => Members.Any(m => m.IsVisible == Visibility.Visible)
             ? Visibility.Visible
