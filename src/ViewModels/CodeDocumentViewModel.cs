@@ -17,14 +17,8 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
         SortCommand = Sort();
     }
 
-    private List<CodeItem> _codeDocument = [];
-
     [DataMember]
-    public List<CodeItem> CodeDocument
-    {
-        get => _codeDocument;
-        set => SetProperty(ref _codeDocument, value);
-    }
+    public ObservableList<CodeItem> CodeDocument { get; set; } = [];
 
     public ITextViewSnapshot? TextView { get; set; }
 

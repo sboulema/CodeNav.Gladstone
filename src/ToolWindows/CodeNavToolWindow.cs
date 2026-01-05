@@ -1,6 +1,4 @@
-﻿using CodeNav.Constants;
-using CodeNav.Services;
-using CodeNav.ViewModels;
+﻿using CodeNav.Services;
 using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Commands;
 using Microsoft.VisualStudio.Extensibility.ToolWindows;
@@ -20,7 +18,7 @@ internal class CodeNavToolWindow(CodeDocumentService documentService) : ToolWind
     };
 
     [VisualStudioContribution]
-    private static ToolbarConfiguration Toolbar => new("%ToolWindowSample.MyToolWindow.Toolbar.DisplayName%")
+    private static ToolbarConfiguration Toolbar => new("%CodeNav.CodeNavToolWindow.Toolbar.DisplayName%")
     {
         Children = [
             //ToolbarChild.Command<CommitToolbarCommand>(),
@@ -31,33 +29,11 @@ internal class CodeNavToolWindow(CodeDocumentService documentService) : ToolWind
     };
 
     /// <inheritdoc />
-    public override async Task InitializeAsync(CancellationToken cancellationToken)
+    public override Task InitializeAsync(CancellationToken cancellationToken)
     {
         Title = "CodeNav";
-        //var viewModel = await documentService.GetViewModel();
 
-        //_dataContext.CodeDocument = new()
-        //{
-        //    new CodeItem
-        //    {
-        //        Name = "MyClass",
-        //        Kind = CodeItemKindEnum.Class,
-        //        StartLine = 1,
-        //        EndLine = 20,
-        //    },
-        //};
-        //_dataContext.CodeDocument = viewModel.CodeDocument;
-
-        //documentService.CodeDocumentViewModel.CodeDocument = new()
-        //{
-        //    new CodeItem
-        //    {
-        //        Name = "MyClass",
-        //        Kind = CodeItemKindEnum.Class,
-        //        StartLine = 1,
-        //        EndLine = 20,
-        //    },
-        //};
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />

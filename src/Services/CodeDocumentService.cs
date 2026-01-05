@@ -1,20 +1,17 @@
-﻿using CodeNav.Constants;
-using CodeNav.Helpers;
+﻿using CodeNav.Helpers;
 using CodeNav.Languages.CSharp.Mappers;
 using CodeNav.ViewModels;
-using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Editor;
 
 namespace CodeNav.Services;
 
 internal class CodeDocumentService(
-    VisualStudioExtensibility extensibility,
     ConfigurationHelper configurationHelper)
 {
     private readonly Dictionary<Uri, CodeDocumentViewModel> codeDocumentViewModels = [];
 
     /// <summary>
-    /// DataContext for the CodeNav tool window.
+    /// DataContext for the tool window.
     /// </summary>
     public CodeDocumentViewModel CodeDocumentViewModel { get; set; } = new();
 
@@ -30,7 +27,23 @@ internal class CodeDocumentService(
 
         codeDocumentViewModel.CodeDocument = [.. codeItems];
 
-        UpdateDataContext(codeDocumentViewModel);
+        // Update the DataContext for the tool window.
+        //CodeDocumentViewModel.CodeDocument.Clear();
+
+        foreach (var item in codeItems)
+        {
+            CodeDocumentViewModel.CodeDocument.Add(item);
+        }
+
+        CodeDocumentViewModel.CodeDocument.Add(new()
+        {
+            Name = "test"
+        });
+
+        CodeDocumentViewModel.CodeDocument.Add(new CodeNamespaceItem
+        {
+            Name = "namespace"
+        });
     }
 
     private CodeDocumentViewModel GetViewModel(Uri uri)
@@ -40,40 +53,6 @@ internal class CodeDocumentService(
         viewModel ??= new CodeDocumentViewModel();
 
         return viewModel;
-    }
-
-    /// <summary>
-    /// Update the DataContext of the CodeNav tool window.
-    /// </summary>
-    /// <remarks>
-    /// Update individual properties to avoid replacing the entire DataContext
-    /// and not triggering notifications in the UI.
-    /// </remarks>
-    /// <param name="codeDocumentViewModel"></param>
-    private void UpdateDataContext(CodeDocumentViewModel codeDocumentViewModel)
-    {
-        //CodeDocumentViewModel.CodeDocument = codeDocumentViewModel.CodeDocument;
-
-        //CodeDocumentViewModel.CodeDocument = new()
-        //{
-        //    new CodeItem
-        //    {
-        //        Name = "MyClass",
-        //        Kind = CodeItemKindEnum.Class,
-        //        StartLine = 1,
-        //        EndLine = 20,
-        //    },
-        //};
-
-        codeDocumentViewModel
-            .CodeDocument
-            .Add(new()
-            {
-                Name = "MyClass",
-                Kind = CodeItemKindEnum.Class,
-                StartLine = 1,
-                EndLine = 20,
-            });
     }
 
     public bool RemoveViewModel(Uri uri)

@@ -1,14 +1,15 @@
 ﻿using CodeNav.Constants;
 using CodeNav.ViewModels;
+using Microsoft.VisualStudio.Extensibility.UI;
 
 namespace CodeNav.Helpers;
 
 public static class SortHelper
 {
-    public static List<CodeItem> Sort(CodeDocumentViewModel viewModel)
+    public static ObservableList<CodeItem> Sort(CodeDocumentViewModel viewModel)
         => Sort(viewModel.CodeDocument, viewModel.SortOrder);
 
-    public static List<CodeItem> Sort(List<CodeItem> document, SortOrderEnum sortOrder)
+    public static ObservableList<CodeItem> Sort(ObservableList<CodeItem> document, SortOrderEnum sortOrder)
         => sortOrder switch
         {
             SortOrderEnum.SortByFile => SortByFile(document),
@@ -16,7 +17,7 @@ public static class SortHelper
             _ => document,
         };
 
-    private static List<CodeItem> SortByName(List<CodeItem> document)
+    private static ObservableList<CodeItem> SortByName(ObservableList<CodeItem> document)
     {
         document = [.. document.OrderBy(c => c.Name)];
 
@@ -35,7 +36,7 @@ public static class SortHelper
         return document;
     }
 
-    private static List<CodeItem> SortByFile(List<CodeItem> document)
+    private static ObservableList<CodeItem> SortByFile(ObservableList<CodeItem> document)
     {
         document = [.. document.OrderBy(c => c.StartLine)];
 

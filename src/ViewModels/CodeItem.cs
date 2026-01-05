@@ -28,6 +28,9 @@ public class CodeItem : NotifyPropertyChangedObject
     [DataMember]
     public string Name { get; set; } = string.Empty;
 
+    [DataMember]
+    public string DataTemplateType { get; set; } = string.Empty;
+
     public LinePosition? StartLinePosition { get; set; }
 
     public LinePosition? EndLinePosition { get; set; }
@@ -45,6 +48,7 @@ public class CodeItem : NotifyPropertyChangedObject
     [DataMember]
     public string Id { get; set; } = string.Empty;
 
+    [DataMember]
     public string Tooltip { get; set; } = string.Empty;
 
     public Uri? FilePath { get; set; }

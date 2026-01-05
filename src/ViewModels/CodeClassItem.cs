@@ -1,13 +1,20 @@
 ﻿using CodeNav.Interfaces;
+using Microsoft.VisualStudio.Extensibility.UI;
 using System.Runtime.Serialization;
 using System.Windows;
 
 namespace CodeNav.ViewModels;
 
+[DataContract]
 public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
 {
+    public CodeClassItem()
+    {
+        DataTemplateType = "Class";
+    }
+
     [DataMember]
-    public List<CodeItem> Members { get; set; } = [];
+    public ObservableList<CodeItem> Members { get; set; } = [];
 
     public string Parameters { get; set; } = string.Empty;
 

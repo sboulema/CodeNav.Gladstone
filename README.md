@@ -45,6 +45,7 @@ Visual Studio extension to show the code structure of your current document
 
 ### [RemoteUI](https://github.com/microsoft/VSExtensibility/blob/205f50bec40166533d30b13a281af3ab9cd288ff/docs/new-extensibility-model/inside-the-sdk/remote-ui.md)
 - Remote UI doesn't allow referencing your own custom controls.
+- A Remote user control is fully defined in a single XAML file which references a single (but potentially complex and nested) data context object.
 - A Remote user control is actually instantiated in the Visual Studio process, not the process hosting the extension: the XAML cannot reference types and assemblies from the extension but can reference types and assemblies from the Visual Studio process.
 
 ### [Installation](https://github.com/microsoft/VSExtensibility/issues/128)
@@ -64,3 +65,6 @@ Visual Studio extension to show the code structure of your current document
 
 #### Bookmarks
 ![Bookmarks](https://i.imgur.com/SqLgsXw.png) ![Bookmark styles](https://raw.githubusercontent.com/sboulema/CodeNav/main/Resources/Bookmark%20styles.png)
+
+# Links
+- https://github.com/microsoft/VSExtensibility/issues/456

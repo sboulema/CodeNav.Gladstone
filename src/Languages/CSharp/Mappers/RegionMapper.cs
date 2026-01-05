@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.VisualStudio.Extensibility.UI;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 
@@ -19,9 +20,9 @@ public static class RegionMapper
     /// <param name="tree">SyntaxTree for the given file</param>
     /// <param name="span">Start and end line in which we search for regions</param>
     /// <returns>Flat list of regions</returns>
-    public static ObservableCollection<CodeRegionItem> MapRegions(SyntaxTree tree, TextSpan span, Configuration configuration)
+    public static ObservableList<CodeRegionItem> MapRegions(SyntaxTree tree, TextSpan span, Configuration configuration)
     {
-        var regionList = new ObservableCollection<CodeRegionItem>();
+        var regionList = new ObservableList<CodeRegionItem>();
 
         if (tree == null)
         {
@@ -85,9 +86,9 @@ public static class RegionMapper
     /// <param name="startLine"></param>
     /// <param name="endLine"></param>
     /// <returns></returns>
-    private static ObservableCollection<CodeRegionItem> ToHierarchy(ObservableCollection<CodeRegionItem> regionList, int? startLine, int? endLine)
+    private static ObservableList<CodeRegionItem> ToHierarchy(ObservableList<CodeRegionItem> regionList, int? startLine, int? endLine)
     {
-        var nestedRegions = new ObservableCollection<CodeRegionItem>();
+        var nestedRegions = new ObservableList<CodeRegionItem>();
 
         foreach (var region in regionList)
         {
@@ -155,7 +156,7 @@ public static class RegionMapper
     /// <param name="regions"></param>
     /// <param name="item"></param>
     /// <returns></returns>
-    public static bool AddToRegion(ObservableCollection<CodeRegionItem> regions, CodeItem item)
+    public static bool AddToRegion(ObservableList<CodeRegionItem> regions, CodeItem item)
     {
         if (item?.StartLine == null)
         {
@@ -187,7 +188,7 @@ public static class RegionMapper
     /// <param name="members"></param>
     /// <param name="item"></param>
     /// <returns></returns>
-    private static bool AddToRegion(List<CodeItem> members, CodeItem item)
+    private static bool AddToRegion(ObservableList<CodeItem> members, CodeItem item)
     {
         foreach (var member in members)
         {

@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace CodeNav.ViewModels;
 
+[DataContract]
 public class BookmarkStyle : NotifyPropertyChangedObject
 {
     private string _backgroundColor = string.Empty;

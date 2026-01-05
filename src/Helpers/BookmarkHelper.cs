@@ -4,15 +4,8 @@ using System.Windows.Media;
 
 namespace CodeNav.Helpers;
 
-public class BookmarkHelper
+public class BookmarkHelper(ConfigurationHelper configurationHelper)
 {
-    private readonly ConfigurationHelper _configurationHelper;
-
-    public BookmarkHelper(ConfigurationHelper configurationHelper)
-    {
-        _configurationHelper = configurationHelper;
-    }
-
     /// <summary>
     /// Apply bookmark style to all code items that are bookmarked
     /// </summary>
@@ -165,7 +158,7 @@ public class BookmarkHelper
         codeDocumentViewModel.BookmarkStyles = bookmarkStyles;
         codeDocumentViewModel.Configuration.BookmarkStyles = bookmarkStyles;
 
-        await _configurationHelper.SaveConfiguration(codeDocumentViewModel.Configuration, cancellationToken);
+        await configurationHelper.SaveConfiguration(codeDocumentViewModel.Configuration, cancellationToken);
     }
 
     public static int GetIndex(CodeDocumentViewModel codeDocumentViewModel, BookmarkStyle bookmarkStyle)
@@ -176,13 +169,13 @@ public class BookmarkHelper
     }
 
     private static List<BookmarkStyle> GetDefaultBookmarkStyles()
-        => new()
-        {
+        =>
+        [
             new BookmarkStyle(Brushes.LightYellow.Color.ToString(), Brushes.Black.Color.ToString()),
             new BookmarkStyle(Brushes.PaleVioletRed.Color.ToString(), Brushes.White.Color.ToString()),
             new BookmarkStyle(Brushes.LightGreen.Color.ToString(), Brushes.Black.Color.ToString()),
             new BookmarkStyle(Brushes.LightBlue.Color.ToString(), Brushes.Black.Color.ToString()),
             new BookmarkStyle(Brushes.MediumPurple.Color.ToString(), Brushes.White.Color.ToString()),
             new BookmarkStyle(Brushes.LightGray.Color.ToString(), Brushes.Black.Color.ToString()),
-        };
+        ];
 }

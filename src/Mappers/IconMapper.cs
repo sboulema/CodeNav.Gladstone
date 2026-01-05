@@ -1,7 +1,7 @@
 ﻿using CodeNav.Constants;
+using CodeNav.Extensions;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
-using System.ComponentModel;
 
 namespace CodeNav.Mappers;
 
@@ -9,7 +9,7 @@ public static class IconMapper
 {
     public static ImageMoniker MapMoniker(CodeItemKindEnum kind, CodeItemAccessEnum access)
     {
-        var accessString = GetEnumDescription(access);
+        var accessString = access.GetEnumDescription();
 
         string monikerString = kind switch
         {
@@ -45,18 +45,5 @@ public static class IconMapper
         }
 
         return KnownMonikers.QuestionMark;
-    }
-
-    private static string GetEnumDescription(this Enum value)
-    {
-        var field = value.GetType().GetField(value.ToString());
-
-        if (field == null)
-        {
-            return string.Empty;
-        }
-
-        return Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is not DescriptionAttribute attribute
-            ? value.ToString() : attribute.Description;
     }
 }

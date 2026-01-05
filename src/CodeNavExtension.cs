@@ -39,7 +39,8 @@ internal class CodeNavExtension : Extension
 
         // As of now, any instance that ingests VisualStudioExtensibility is required to be added as a scoped
         // service.
-        serviceCollection.AddScoped<CodeDocumentService>();
+
+        serviceCollection.AddSingleton<CodeDocumentService>();
 
         serviceCollection.AddSingleton<DocumentHelper>();
         serviceCollection.AddSingleton<ConfigurationHelper>();

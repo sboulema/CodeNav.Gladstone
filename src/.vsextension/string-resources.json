@@ -1,3 +1,4 @@
 {
-  "CodeNav.CodeNavToolWindowCommand.DisplayName": "CodeNav"
+  "CodeNav.CodeNavToolWindowCommand.DisplayName": "CodeNav",
+  "CodeNav.CodeNavToolWindow.Toolbar.DisplayName": "CodeNav"
 }

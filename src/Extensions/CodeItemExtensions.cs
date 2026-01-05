@@ -1,5 +1,6 @@
 ﻿using CodeNav.Interfaces;
 using CodeNav.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace CodeNav.Extensions;
 
@@ -50,6 +51,16 @@ public static class CodeItemExtensions
     }
 
     public static void AddIfNotNull(this List<CodeItem> items, CodeItem? item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        items.Add(item);
+    }
+
+    public static void AddIfNotNull(this ObservableCollection<CodeItem> items, CodeItem? item)
     {
         if (item == null)
         {

@@ -4,7 +4,7 @@ namespace CodeNav.Models;
 
 public class FileConfiguration
 {
-    public List<CodeItem> HistoryItems = new();
+    public List<CodeItem> HistoryItems = [];
 
-    public Dictionary<string, int> Bookmarks = new();
+    public Dictionary<string, int> Bookmarks = [];
 }

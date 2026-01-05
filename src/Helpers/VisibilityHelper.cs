@@ -1,16 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-using CodeNav.Constants;
+﻿using CodeNav.Constants;
 using CodeNav.Interfaces;
 using CodeNav.Models;
 using CodeNav.ViewModels;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CodeNav.Helpers;
 
 public static class VisibilityHelper
 {
-    public static List<CodeItem> SetCodeItemVisibility(CodeDocumentViewModel model)
+    public static ObservableCollection<CodeItem> SetCodeItemVisibility(CodeDocumentViewModel model)
         => SetCodeItemVisibility(model.CodeDocument, model.FilterText, model.FilterOnBookmarks, model.Bookmarks);
 
     /// <summary>
@@ -20,7 +20,7 @@ public static class VisibilityHelper
     /// <param name="name">Filters items by name</param>
     /// <param name="filterOnBookmarks">Filters items by being bookmarked</param>
     /// <param name="bookmarks">List of bookmarked items</param>
-    public static List<CodeItem> SetCodeItemVisibility(List<CodeItem> document, string name = "",
+    public static ObservableCollection<CodeItem> SetCodeItemVisibility(ObservableCollection<CodeItem> document, string name = "",
         bool filterOnBookmarks = false, Dictionary<string, int>? bookmarks = null)
     {
         if (document?.Any() != true)

@@ -3,43 +3,106 @@
               xmlns:vs="http://schemas.microsoft.com/visualstudio/extensibility/2022/xaml"
               xmlns:styles="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
               xmlns:colors="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0">
+
     <DataTemplate.Resources>
-        <Style TargetType="TreeView" BasedOn="{StaticResource {x:Static styles:VsResourceKeys.ThemedDialogTreeViewStyleKey}}" />
-        <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Static styles:VsResourceKeys.ThemedDialogTreeViewItemStyleKey}}">
-            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
-            <Setter Property="IsExpanded" Value="True"/>
+        <Style TargetType="ContentControl">
+            <!-- CodeItem Template -->
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <!-- Namespace Template -->
+                <DataTrigger Binding="{Binding DataTemplateType}" Value="Namespace">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" Foreground="Red" />
+
+                                    <ItemsControl 
+                                        ItemsSource="{Binding Members}"
+                                        Margin="4,0,4,0"
+                                        VirtualizingPanel.IsVirtualizing="True"
+                                        VirtualizingPanel.VirtualizationMode="Recycling"
+                                        ScrollViewer.CanContentScroll="False">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <ContentControl Content="{Binding}">
+                                                </ContentControl>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <!-- Class Template -->
+                <DataTrigger Binding="{Binding DataTemplateType}" Value="Class">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" Foreground="Blue" />
+
+                                    <ItemsControl 
+                                        ItemsSource="{Binding Members}"
+                                        Margin="4,0,4,0"
+                                        VirtualizingPanel.IsVirtualizing="True"
+                                        VirtualizingPanel.VirtualizationMode="Recycling"
+                                        ScrollViewer.CanContentScroll="False">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <ContentControl Content="{Binding}">
+                                                </ContentControl>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </DataTemplate.Resources>
+    
     <Border Background="{DynamicResource {x:Static colors:EnvironmentColors.ToolWindowBackgroundBrushKey}}"
             TextElement.Foreground="{DynamicResource {x:Static colors:EnvironmentColors.ToolWindowTextBrushKey}}"
             Padding="5">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            
-
-            <ItemsControl Grid.Row="0" x:Name="CodeItemsControl"
+        
+        <ItemsControl Grid.Row="0" x:Name="CodeItemsControl"
                 ItemsSource="{Binding CodeDocument}"
                 Margin="4,0,4,0"
                 VirtualizingPanel.IsVirtualizing="True"
                 VirtualizingPanel.VirtualizationMode="Recycling"
                 ScrollViewer.CanContentScroll="True">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-        </Grid>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ContentControl Content="{Binding}">
+                    </ContentControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
     </Border>
 </DataTemplate>

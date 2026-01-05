@@ -7,7 +7,7 @@ using CodeNav.Constants;
 using CodeNav.Models;
 using CodeNav.Mappers;
 using CodeNav.Extensions;
-using System.Collections.ObjectModel;
+using Microsoft.VisualStudio.Extensibility.UI;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
@@ -16,7 +16,7 @@ namespace CodeNav.Languages.CSharp.Mappers;
 /// </summary>
 public static class StatementMapper
 {
-    public static List<CodeItem> MapStatement(StatementSyntax? statement,
+    public static ObservableList<CodeItem> MapStatement(StatementSyntax? statement,
         SemanticModel semanticModel, Configuration configuration)
     {
         if (statement == null)
@@ -62,13 +62,13 @@ public static class StatementMapper
         }
     }
 
-    public static List<CodeItem> MapStatement(BlockSyntax? statement, SemanticModel semanticModel, Configuration configuration) 
+    public static ObservableList<CodeItem> MapStatement(BlockSyntax? statement, SemanticModel semanticModel, Configuration configuration) 
         => MapStatement(statement as StatementSyntax, semanticModel, configuration);
 
-    public static List<CodeItem> MapStatements(SyntaxList<StatementSyntax> statements,
+    public static ObservableList<CodeItem> MapStatements(SyntaxList<StatementSyntax> statements,
         SemanticModel semanticModel, Configuration configuration)
     {
-        var list = new List<CodeItem>();
+        var list = new ObservableList<CodeItem>();
 
         if (statements.Any() != true)
         {
