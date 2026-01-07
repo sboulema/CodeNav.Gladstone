@@ -50,7 +50,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Expander">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="0" SnapsToDevicePixels="true">
+                        <Border x:Name="ExpanderBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="0" SnapsToDevicePixels="true">
                             <StackPanel Orientation="Vertical">
                                 <Grid Background="Transparent" SnapsToDevicePixels="False">
                                     <Grid.ColumnDefinitions>
@@ -122,6 +122,12 @@
                             <Trigger Property="IsExpanded" Value="False">
                                 <Setter Property="BorderThickness" TargetName="ExpanderHeaderBorder" Value="0" />
                             </Trigger>
+                            <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="False">
+                                <Setter Property="BorderBrush" TargetName="ExpanderBorder" Value="DarkGray" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="True">
+                                <Setter Property="BorderBrush" TargetName="ExpanderBorder" Value="{DynamicResource {x:Static styles:VsBrushes.FileTabSelectedBorderKey}}" />
+                            </DataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>

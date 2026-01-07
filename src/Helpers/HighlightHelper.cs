@@ -56,10 +56,11 @@ public static class HighlightHelper
                     ? codeDocumentViewModel.BookmarkStyles[codeDocumentViewModel.Bookmarks[item.Id]].ForegroundColor
                     : "red";
 
-                if (item is CodeClassItem classItem)
-                {
-                    classItem.BorderColor = Colors.DarkGray.ToString();
-                }
+                // Reimplemented in XAML triggers
+                //if (item is CodeClassItem classItem)
+                //{
+                //    classItem.BorderColor = Colors.DarkGray.ToString();
+                //}
             });
 
     /// <summary>
@@ -88,10 +89,11 @@ public static class HighlightHelper
             item.NameBackgroundColor = backgroundColor;
             item.IsHighlighted = true;
 
-            if (item is CodeClassItem classItem)
-            {
-                classItem.BorderColor = "red";
-            }
+            // Reimplemented in XAML triggers
+            //if (item is CodeClassItem classItem)
+            //{
+            //    classItem.BorderColor = "red";
+            //}
         }
     }
 

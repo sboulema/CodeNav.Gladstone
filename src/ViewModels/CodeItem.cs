@@ -67,7 +67,17 @@ public class CodeItem : NotifyPropertyChangedObject
 
     public CodeItemAccessEnum Access;
 
-    public bool IsHighlighted;
+    private bool _isHighlighted;
+
+    /// <summary>
+    /// Indicator if the item should be highlighted
+    /// </summary>
+    [DataMember]
+    public bool IsHighlighted
+    {
+        get => _isHighlighted;
+        set => SetProperty(ref _isHighlighted, value);
+    }
 
     private double _opacity;
 
