@@ -49,6 +49,9 @@ public class CodeDocumentService(
         // Apply history items
         HistoryHelper.ApplyHistoryIndicator(CodeDocumentViewModel);
 
+        // TODO: Until we implement syncing collapse to text editor better to expand all
+        OutliningHelper.ExpandAll(CodeDocumentViewModel);
+
         return CodeDocumentViewModel;
     }
 }

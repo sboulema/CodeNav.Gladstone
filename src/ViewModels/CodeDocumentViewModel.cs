@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Windows;
 using CodeNav.Constants;
 using CodeNav.Helpers;
@@ -96,13 +95,9 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
     public bool FilterOnBookmarks;
 
     [DataMember]
-    public Uri? FilePath { get; set; }
-
-    [DataMember]
     public List<BookmarkStyle> BookmarkStyles = [];
 
-    [DataMember]
-    public ObservableCollection<CodeItem> HistoryItems = [];
+    public List<string> HistoryItemIds = [];
 
     [DataMember]
     public AsyncCommand SortCommand { get; }

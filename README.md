@@ -13,15 +13,15 @@ Visual Studio extension to show the code structure of your current document
 - Cursor position will be reflected by highlighting the current method in the list
 - Clicking on an item in the list will take you to that location in the document.
 - Dark theme support
+- Collapse/Expand all regions
+- History/edit indicators
 
 ## Features broken
 - Sort by file order or by name 
 - Filter items by kind (method, property), access (public, private), name and bookmark
 - Customizable fonts
 - Synced collapsing/expanding regions
-- Collapse/Expand all regions
 - Colored Bookmarks
-- History/edit indicators
 
 ## Features dropped
 - Top Margin
@@ -71,3 +71,6 @@ https://github.com/MicrosoftDocs/visualstudio-docs/blob/main/docs/extensibility/
 
 Getting a clientContext in an AsyncCommand bound to a XAML Command property
 https://github.com/microsoft/VSExtensibility/issues/520
+
+Settings Sample
+https://github.com/microsoft/VSExtensibility/blob/2f74457eb241552cd725c8ca544fd99797ef546e/New_Extensibility_Model/Samples/SettingsSample/README.md

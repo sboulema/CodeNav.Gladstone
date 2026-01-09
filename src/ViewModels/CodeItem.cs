@@ -79,18 +79,12 @@ public class CodeItem : NotifyPropertyChangedObject
         set => SetProperty(ref _isHighlighted, value);
     }
 
-    private double _opacity;
-
-    [DataMember]
-    public double Opacity
-    {
-        get => _opacity;
-        set => SetProperty(ref _opacity, value);
-    }
-
     #region Status Image
     private Visibility _statusMonikerVisibility = Visibility.Collapsed;
 
+    /// <summary>
+    /// Visibility of the history icon
+    /// </summary>
     [DataMember]
     public Visibility StatusMonikerVisibility
     {
@@ -112,6 +106,9 @@ public class CodeItem : NotifyPropertyChangedObject
 
     private double _statusOpacity;
 
+    /// <summary>
+    /// Level (0 - 1) of opacity of the history icon
+    /// </summary>
     [DataMember]
     public double StatusOpacity
     {

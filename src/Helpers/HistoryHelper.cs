@@ -1,7 +1,6 @@
 ﻿using CodeNav.Extensions;
 using CodeNav.Interfaces;
 using CodeNav.ViewModels;
-using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Extensibility.Editor;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -45,8 +44,13 @@ public class HistoryHelper
     /// </summary>
     /// <remarks>Used when adding item to history based on clicking a code item</remarks>
     /// <param name="item">Code item that was clicked</param>
-    public static void AddItemToHistory(CodeItem item)
+    public static void AddItemToHistory(CodeItem? item)
     {
+        if (item == null)
+        {
+            return;
+        }
+
         var model = item.CodeDocumentViewModel;
 
         if (model == null)
@@ -54,21 +58,15 @@ public class HistoryHelper
             return;
         }
 
-        // Clear current indicators
-        foreach (var historyItem in model.HistoryItems)
-        {
-            if (historyItem == null)
-            {
-                continue;
-            }
+        // Remove all entries with item id to prevent duplicates
+        model.HistoryItemIds
+            .RemoveAll(id => id == item.Id);
 
-            historyItem.StatusMonikerVisibility = Visibility.Collapsed;
-        }
+        // Insert the new item id
+        model.HistoryItemIds.Insert(0, item.Id);
 
-        // Add new indicator, only keep the five latest history items
-        model.HistoryItems.Remove(item);
-        model.HistoryItems.Insert(0, item);
-        model.HistoryItems = new ObservableCollection<CodeItem>(model.HistoryItems.Take(MaxHistoryItems));
+        // Only keep the max number of item ids
+        model.HistoryItemIds = [.. model.HistoryItemIds.Take(MaxHistoryItems)];
 
         ApplyHistoryIndicator(model);
     }
@@ -80,23 +78,33 @@ public class HistoryHelper
     /// <param name="model">Document holding all code items</param>
     public static void ApplyHistoryIndicator(CodeDocumentViewModel model)
     {
-        var historyItems = model.HistoryItems
-            .Where(i => i != null)
-            .Select((historyItem, i) => (historyItem, i));
+        // Clear old indicators
+        model
+            .CodeDocument
+            .Flatten()
+            .Where(item => item != null)
+            .ToList()
+            .ForEach(item => item.StatusMonikerVisibility = Visibility.Collapsed);
 
-        foreach (var (historyItem, i) in historyItems)
+        // Apply new indicators
+        var rankedHistoryItemIds = model
+            .HistoryItemIds
+            .Where(id => !string.IsNullOrEmpty(id))
+            .Select((historyItemId, index) => (historyItemId, index));
+
+        foreach (var (historyItemId, index) in rankedHistoryItemIds)
         {
             var codeItem = model.CodeDocument
                 .Flatten()
                 .Where(item => item != null)
-                .FirstOrDefault(item => item.Id == historyItem.Id);
+                .FirstOrDefault(item => item.Id == historyItemId);
 
             if (codeItem == null)
             {
                 continue;
             }
 
-            ApplyHistoryIndicator(codeItem, i);
+            ApplyHistoryIndicator(codeItem, index);
         }
     }
 
@@ -146,6 +154,6 @@ public class HistoryHelper
             return;
         }
 
-        item.CodeDocumentViewModel.HistoryItems.Clear();
+        item.CodeDocumentViewModel.HistoryItemIds.Clear();
     }
 }

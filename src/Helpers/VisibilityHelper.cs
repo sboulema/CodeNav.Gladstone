@@ -41,7 +41,6 @@ public static class VisibilityHelper
                 item.IsVisible = ShouldBeVisible(item, name, filterOnBookmarks, bookmarks)
                     ? Visibility.Visible
                     : Visibility.Collapsed;
-                item.Opacity = SetOpacity(item);
             }
         }
         catch (Exception e)

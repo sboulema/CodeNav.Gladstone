@@ -52,7 +52,7 @@
                     <ControlTemplate TargetType="Expander">
                         <Border x:Name="ExpanderBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="0" SnapsToDevicePixels="true">
                             <StackPanel Orientation="Vertical">
-                                <Grid Background="Transparent" SnapsToDevicePixels="False">
+                                <Grid Background="Transparent" SnapsToDevicePixels="False" Margin="0,0,4,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="17"/>
@@ -169,8 +169,8 @@
                             BorderThickness="0" 
                             HorizontalContentAlignment="Stretch"
                             HorizontalAlignment="Stretch"
-                            Margin="0, 3"
-                            Padding="3, 0">
+                            Margin="-3, 3"
+                            Padding="3, 3">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />

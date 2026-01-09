@@ -1,0 +1,26 @@
+﻿using CodeNav.Extensions;
+using CodeNav.Interfaces;
+using CodeNav.ViewModels;
+
+namespace CodeNav.Helpers;
+
+public static class OutliningHelper
+{
+    public static void CollapseAll(CodeDocumentViewModel codeDocumentViewModel)
+        => SetIsExpanded(codeDocumentViewModel, isExpanded: false);
+
+    public static void ExpandAll(CodeDocumentViewModel codeDocumentViewModel)
+        => SetIsExpanded(codeDocumentViewModel, isExpanded: true);
+
+    private static void SetIsExpanded(CodeDocumentViewModel codeDocumentViewModel, bool isExpanded)
+    {
+        codeDocumentViewModel
+            .CodeDocument
+            .Flatten()
+            .FilterNull()
+            .Where(item => item is IMembers)
+            .Cast<IMembers>()
+            .ToList()
+            .ForEach(item => item.IsExpanded = isExpanded);
+    }
+}

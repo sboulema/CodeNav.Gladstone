@@ -26,6 +26,9 @@ internal class CodeNavToolWindow(CodeDocumentService documentService) : ToolWind
             ToolbarChild.Separator,
             ToolbarChild.Command<SortByFileCommand>(),
             ToolbarChild.Command<SortByNameCommand>(),
+            ToolbarChild.Separator,
+            ToolbarChild.Command<ExpandAllCommand>(),
+            ToolbarChild.Command<CollapseAllCommand>(),
             // TODO: Add settings command
         ],
     };

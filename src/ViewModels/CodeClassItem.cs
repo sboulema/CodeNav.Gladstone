@@ -16,6 +16,7 @@ public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
     [DataMember]
     public ObservableList<CodeItem> Members { get; set; } = [];
 
+    [DataMember]
     public string Parameters { get; set; } = string.Empty;
 
     public event EventHandler? IsExpandedChanged;
