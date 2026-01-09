@@ -44,7 +44,7 @@ jobs:
         contents: write
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v7
 
       - name: Tag release
         id: tag_release
