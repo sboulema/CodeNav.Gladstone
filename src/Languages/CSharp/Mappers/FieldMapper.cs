@@ -14,7 +14,7 @@ public static class FieldMapper
         Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         var item = BaseMapper.MapBase<CodeItem>(member, member.Declaration.Variables.First().Identifier,
-            member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
+            member.Modifiers, semanticModel, codeDocumentViewModel);
 
         item.Kind = IsConstant(member.Modifiers)
             ? CodeItemKindEnum.Constant

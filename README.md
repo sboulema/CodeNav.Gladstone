@@ -13,21 +13,24 @@ Visual Studio extension to show the code structure of your current document
 - Cursor position will be reflected by highlighting the current method in the list
 - Clicking on an item in the list will take you to that location in the document.
 - Dark theme support
-- Collapse/Expand all regions
+- Collapse/Expand all ranges
 - History/edit indicators
 
 ## Features broken
 - Sort by file order or by name 
 - Filter items by kind (method, property), access (public, private), name and bookmark
-- Customizable fonts
+
 - Synced collapsing/expanding regions
 - Colored Bookmarks
+- Regions
 
 ## Features dropped
 - Top Margin
 - Toggle visibility by double-clicking the splitter bar
 - Show as an editor margin (left side / right side / top side / hidden) 
 - Visual studio 2017, 2019 support
+- Customizable fonts
+- Set code item opacity through filter window
 
 ## Language support
 - C#

@@ -5,7 +5,6 @@ using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
@@ -14,7 +13,7 @@ public static class StructMapper
     public static CodeClassItem MapStruct(StructDeclarationSyntax member,
         SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
+        var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Struct;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
 

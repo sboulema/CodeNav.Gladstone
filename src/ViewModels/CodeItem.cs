@@ -136,44 +136,6 @@ public class CodeItem : NotifyPropertyChangedObject
         set => SetProperty(ref _contextMenuIsOpen, value);
     }
 
-    #region Fonts
-    private float _fontSize;
-
-    [DataMember]
-    public float FontSize
-    {
-        get => _fontSize;
-        set => SetProperty(ref _fontSize, value);
-    }
-
-    private float _parameterFontSize;
-
-    [DataMember]
-    public float ParameterFontSize
-    {
-        get => _parameterFontSize;
-        set => SetProperty(ref _parameterFontSize, value);
-    }
-
-    private FontFamily? _fontFamily;
-
-    [DataMember]
-    public FontFamily? FontFamily
-    {
-        get => _fontFamily;
-        set => SetProperty(ref _fontFamily, value);
-    }
-
-    private FontStyle _fontStyle;
-
-    [DataMember]
-    public FontStyle FontStyle
-    {
-        get => _fontStyle;
-        set => SetProperty(ref _fontStyle, value);
-    }
-    #endregion
-
     #region IsVisible
     private Visibility _visibility;
 

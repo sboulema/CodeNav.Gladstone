@@ -74,7 +74,6 @@ public static class InterfaceMapper
             Name = name,
             FullName = name,
             Id = name,
-            FontSize = configuration.FontSize - 2,
             Kind = CodeItemKindEnum.ImplementedInterface,
             IsExpanded = true
         };
@@ -132,7 +131,7 @@ public static class InterfaceMapper
         SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
         var item = BaseMapper.MapBase<CodeInterfaceItem>(member, member.Identifier,
-            member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
+            member.Modifiers, semanticModel, codeDocumentViewModel);
 
         item.Kind = CodeItemKindEnum.Interface;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);

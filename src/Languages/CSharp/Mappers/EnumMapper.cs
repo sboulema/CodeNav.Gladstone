@@ -11,9 +11,9 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public class EnumMapper
 {
     public static CodeItem MapEnumMember(EnumMemberDeclarationSyntax member,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeItem>(member, member.Identifier, semanticModel, configuration, codeDocumentViewModel);
+        var item = BaseMapper.MapBase<CodeItem>(member, member.Identifier, semanticModel, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.EnumMember;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
 
@@ -23,7 +23,7 @@ public class EnumMapper
     public static CodeClassItem MapEnum(EnumDeclarationSyntax member,
         SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
+        var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Enum;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.Parameters = MapMembersToString(member.Members);

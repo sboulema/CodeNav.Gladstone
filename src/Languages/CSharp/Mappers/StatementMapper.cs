@@ -29,7 +29,7 @@ public static class StatementMapper
         switch (statement.Kind())
         {
             case SyntaxKind.SwitchStatement:
-                item = MapSwitch(statement as SwitchStatementSyntax, semanticModel, configuration, codeDocumentViewModel);
+                item = MapSwitch(statement as SwitchStatementSyntax, semanticModel, codeDocumentViewModel);
                 return item != null
                     ? [item]
                     : [];
@@ -91,14 +91,14 @@ public static class StatementMapper
     /// <param name="semanticModel"></param>
     /// <returns></returns>
     private static CodeClassItem? MapSwitch(SwitchStatementSyntax? statement,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel)
     {
         if (statement == null)
         {
             return null;
         }
 
-        var item = BaseMapper.MapBase<CodeClassItem>(statement, statement.Expression.ToString(), semanticModel, configuration, codeDocumentViewModel);
+        var item = BaseMapper.MapBase<CodeClassItem>(statement, statement.Expression.ToString(), semanticModel, codeDocumentViewModel);
         item.Name = $"Switch {item.Name}";
         item.Kind = CodeItemKindEnum.Switch;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
@@ -107,7 +107,7 @@ public static class StatementMapper
         // Map switch cases
         foreach (var section in statement.Sections)
         {
-            item.Members.AddIfNotNull(MapSwitchSection(section, semanticModel, configuration, codeDocumentViewModel));
+            item.Members.AddIfNotNull(MapSwitchSection(section, semanticModel, codeDocumentViewModel));
         }
 
         return item;
@@ -121,14 +121,14 @@ public static class StatementMapper
     /// <param name="semanticModel"></param>
     /// <returns></returns>
     private static CodePropertyItem? MapSwitchSection(SwitchSectionSyntax? section,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel)
     {
         if (section == null)
         {
             return null;
         }
 
-        var item = BaseMapper.MapBase<CodePropertyItem>(section, section.Labels.First().ToString(), semanticModel, configuration, codeDocumentViewModel);
+        var item = BaseMapper.MapBase<CodePropertyItem>(section, section.Labels.First().ToString(), semanticModel, codeDocumentViewModel);
         item.Tooltip = TooltipMapper.Map(item.Access, item.ReturnType, item.Name, string.Empty);
         item.Id = item.FullName;
         item.Kind = CodeItemKindEnum.SwitchSection;

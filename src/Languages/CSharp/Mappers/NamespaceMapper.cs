@@ -15,7 +15,7 @@ public static class NamespaceMapper
     public static CodeNamespaceItem MapNamespace(NamespaceDeclarationSyntax member,
         SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, configuration, codeDocumentViewModel);
+        var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Namespace;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.IgnoreVisibility = VisibilityHelper.GetIgnoreVisibility(item);
@@ -55,7 +55,7 @@ public static class NamespaceMapper
     public static CodeNamespaceItem MapNamespace(BaseNamespaceDeclarationSyntax member,
         SemanticModel semanticModel, SyntaxTree tree, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, configuration, codeDocumentViewModel);
+        var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Namespace;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.IgnoreVisibility = VisibilityHelper.GetIgnoreVisibility(item);

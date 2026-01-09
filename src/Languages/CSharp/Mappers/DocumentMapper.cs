@@ -57,7 +57,7 @@ internal class DocumentMapper
                 SyntaxKind.EnumDeclaration when member is EnumDeclarationSyntax enumSyntax
                     => EnumMapper.MapEnum(enumSyntax, semanticModel, tree, configuration, codeDocumentViewModel),
                 SyntaxKind.EnumMemberDeclaration when member is EnumMemberDeclarationSyntax enumMemberSyntax
-                    => EnumMapper.MapEnumMember(enumMemberSyntax, semanticModel, configuration, codeDocumentViewModel),
+                    => EnumMapper.MapEnumMember(enumMemberSyntax, semanticModel, codeDocumentViewModel),
                 SyntaxKind.InterfaceDeclaration when member is InterfaceDeclarationSyntax interfaceSyntax
                     => InterfaceMapper.MapInterface(interfaceSyntax, semanticModel, tree, configuration, codeDocumentViewModel),
                 SyntaxKind.FieldDeclaration when member is FieldDeclarationSyntax fieldSyntax
@@ -69,9 +69,9 @@ internal class DocumentMapper
                 SyntaxKind.ClassDeclaration when member is ClassDeclarationSyntax classSyntax
                     => ClassMapper.MapClass(classSyntax, semanticModel, tree, configuration, codeDocumentViewModel, mapBaseClass),
                 SyntaxKind.EventFieldDeclaration when member is EventFieldDeclarationSyntax eventFieldSyntax
-                    => DelegateEventMapper.MapEvent(eventFieldSyntax, semanticModel, configuration, codeDocumentViewModel),
+                    => DelegateEventMapper.MapEvent(eventFieldSyntax, semanticModel, codeDocumentViewModel),
                 SyntaxKind.DelegateDeclaration when member is DelegateDeclarationSyntax delegateSyntax
-                    => DelegateEventMapper.MapDelegate(delegateSyntax, semanticModel, configuration, codeDocumentViewModel),
+                    => DelegateEventMapper.MapDelegate(delegateSyntax, semanticModel, codeDocumentViewModel),
                 SyntaxKind.FileScopedNamespaceDeclaration when member is BaseNamespaceDeclarationSyntax namespaceSyntax
                     => NamespaceMapper.MapNamespace(namespaceSyntax, semanticModel, tree, configuration, codeDocumentViewModel),
                 SyntaxKind.NamespaceDeclaration when member is BaseNamespaceDeclarationSyntax namespaceSyntax
@@ -79,7 +79,7 @@ internal class DocumentMapper
                 SyntaxKind.RecordDeclaration when member is RecordDeclarationSyntax recordSyntax
                     => RecordMapper.MapRecord(recordSyntax, semanticModel, configuration, codeDocumentViewModel),
                 SyntaxKind.ConstructorDeclaration when member is ConstructorDeclarationSyntax constructorSyntax
-                    => MethodMapper.MapConstructor(constructorSyntax, semanticModel, configuration, codeDocumentViewModel),
+                    => MethodMapper.MapConstructor(constructorSyntax, semanticModel, codeDocumentViewModel),
                 SyntaxKind.IndexerDeclaration when member is IndexerDeclarationSyntax indexerSyntax
                     => IndexerMapper.MapIndexer(indexerSyntax, semanticModel, configuration, codeDocumentViewModel),
                 _ => null,

@@ -39,13 +39,13 @@ public static class MethodMapper
         if (statementsCodeItems.Any(statement => statement.IsVisible == Visibility.Visible))
         {
             // Map method as item containing statements
-            item = BaseMapper.MapBase<CodeClassItem>(node, identifier,modifiers, semanticModel, configuration, codeDocumentViewModel);
+            item = BaseMapper.MapBase<CodeClassItem>(node, identifier,modifiers, semanticModel, codeDocumentViewModel);
             ((CodeClassItem)item).Members.AddRange(statementsCodeItems);
         }
         else
         {
             // Map method as single item
-            item = BaseMapper.MapBase<CodeFunctionItem>(node, identifier, modifiers, semanticModel, configuration, codeDocumentViewModel);
+            item = BaseMapper.MapBase<CodeFunctionItem>(node, identifier, modifiers, semanticModel, codeDocumentViewModel);
             ((CodeFunctionItem)item).ReturnType = TypeMapper.Map(returnType);
             ((CodeFunctionItem)item).Parameters = ParameterMapper.MapParameters(parameterList);
             item.Tooltip = TooltipMapper.Map(item.Access, ((CodeFunctionItem)item).ReturnType, item.Name, parameterList);
@@ -66,9 +66,9 @@ public static class MethodMapper
     }
 
     public static CodeItem MapConstructor(ConstructorDeclarationSyntax member,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel)
     {
-        var item = BaseMapper.MapBase<CodeFunctionItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
+        var item = BaseMapper.MapBase<CodeFunctionItem>(member, member.Identifier, member.Modifiers, semanticModel, codeDocumentViewModel);
         item.Parameters = ParameterMapper.MapParameters(member.ParameterList);
         item.Tooltip = TooltipMapper.Map(item.Access, item.ReturnType, item.Name, member.ParameterList);
         item.Id = IdMapper.MapId(member.Identifier, member.ParameterList);

@@ -4,7 +4,6 @@ using CodeNav.Models;
 using CodeNav.ViewModels;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CodeNav.Helpers;
 
@@ -51,42 +50,6 @@ public static class VisibilityHelper
         return document;
     }
 
-    /// <summary>
-    /// Toggle visibility of the CodeNav margin
-    /// </summary>
-    /// <param name="column">the grid column of which the visibility will be toggled</param>
-    /// <param name="condition">if condition is True visibility will be set to hidden</param>
-    public static void SetMarginWidth(ColumnDefinition column, Configuration configuration, bool condition)
-    {
-        if (column == null)
-        {
-            return;
-        }
-
-        column.Width = condition ? new GridLength(0) : new GridLength(configuration.MarginWidth);
-    }
-
-    /// <summary>
-    /// Toggle visibility of the CodeNav margin
-    /// </summary>
-    /// <param name="column">the grid column of which the visibility will be toggled</param>
-    /// <param name="document">the list of code items to determine if there is anything to show at all</param>
-    public static void SetMarginWidth(ColumnDefinition column, Configuration configuration, List<CodeItem> document)
-    {
-        if (column == null)
-        {
-            return;
-        }
-
-        if (!configuration.ShowMargin || IsEmpty(document))
-        {
-            column.Width = new GridLength(0);
-            return;
-        }
-
-        column.Width = new GridLength(configuration.MarginWidth);
-    }
-
     public static bool IsEmpty(List<CodeItem> document)
     {
         if (document?.Any() != true)
@@ -105,45 +68,6 @@ public static class VisibilityHelper
         }
 
         return isEmpty;
-    }
-
-    /// <summary>
-    /// Set opacity of code item to value given in the filter window
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
-    private static double SetOpacity(CodeItem item)
-    {
-        var filterRule = GetFilterRule(item);
-
-        if (filterRule != null)
-        {
-            return GetOpacityValue(filterRule.Opacity);
-        }
-
-        return 1.0;
-    }
-
-    /// <summary>
-    /// Get opacity value from filter rule setting
-    /// </summary>
-    /// <param name="opacitySetting"></param>
-    /// <returns></returns>
-    private static double GetOpacityValue(string opacitySetting)
-    {
-        if (string.IsNullOrEmpty(opacitySetting))
-        {
-            return 1.0;
-        }
-
-        double.TryParse(opacitySetting, out var opacity);
-
-        if (opacity < 0 || opacity > 1)
-        {
-            return 1.0;
-        }
-
-        return opacity;
     }
 
     /// <summary>

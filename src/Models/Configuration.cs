@@ -7,15 +7,7 @@ public class Configuration
 {
     public bool UseXMLComments { get; set; } = false;
 
-    public string FontFamilyName { get; set; } = "Segoe UI";
-
-    public float FontSize { get; set; } = 11.25f;
-
     public bool ShowFilterToolbar { get; set; } = true;
-
-    public bool ShowMargin { get; set; } = true;
-
-    public double MarginWidth { get; set; } = 200;
 
     public SortOrderEnum SortOrder { get; set; }
 

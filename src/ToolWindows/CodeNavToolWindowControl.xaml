@@ -133,6 +133,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- Highlighting Styles --> 
         <Style x:Key="HighlightNameStyle" TargetType="Run">
             <Style.Triggers>
                 <MultiDataTrigger>
@@ -148,6 +149,13 @@
                         <Condition Binding="{Binding Path=DataContext.DataTemplateType, RelativeSource={RelativeSource Self}}" Value=""/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="FontWeight" Value="Regular" />
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="False"/>
+                        <Condition Binding="{Binding Path=DataContext.DataTemplateType, RelativeSource={RelativeSource Self}}" Value="Region"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="FontWeight" Value="SemiBold" />
                 </MultiDataTrigger>
                 <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="True">
                     <Setter Property="Foreground" Value="{DynamicResource {x:Static styles:VsBrushes.FileTabSelectedBorderKey}}" />
@@ -169,7 +177,7 @@
                             BorderThickness="0" 
                             HorizontalContentAlignment="Stretch"
                             HorizontalAlignment="Stretch"
-                            Margin="-3, 3"
+                            Margin="-3, 0"
                             Padding="3, 3">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -183,12 +191,15 @@
                                     <vs:Image Source="{Binding OverlayMoniker}" Width="8" Height="8" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                                 </Grid>
 
-                                <TextBlock Grid.Column="1" FontFamily="{Binding FontFamily}" FontStyle="{Binding FontStyle}">
+                                <TextBlock Grid.Column="1">
                                     <Run Text="{Binding Name}"       
-                                         FontSize="{Binding FontSize}"
                                          Style="{StaticResource HighlightNameStyle}" />
-                                    <Run Text="{Binding ReturnType}" FontSize="{Binding ParameterFontSize}" Foreground="DarkGray" />
-                                    <Run Text="{Binding Parameters}" FontSize="{Binding ParameterFontSize}" Foreground="DarkGray" />
+                                    <Run Text="{Binding ReturnType}"
+                                         Foreground="DarkGray"
+                                         Style="{StaticResource {x:Static styles:VsResourceKeys.TextBlockEnvironment90PercentFontSizeStyleKey}}" />
+                                    <Run Text="{Binding Parameters}"
+                                         Foreground="DarkGray"
+                                         Style="{StaticResource {x:Static styles:VsResourceKeys.TextBlockEnvironment90PercentFontSizeStyleKey}}" />
                                 </TextBlock>
 
                                 <vs:Image 
@@ -223,15 +234,10 @@
                                                 <vs:Image Source="{Binding Moniker}" Width="16" Height="16" Margin="0,0,3,0" />
                                                 <TextBlock>
                                                     <Run Text="{Binding Name}" 
-                                                         FontFamily="{Binding FontFamily}" 
-                                                         FontSize="{Binding FontSize}" 
-                                                         FontStyle="{Binding FontStyle}"
                                                          Style="{StaticResource HighlightNameStyle}"/>
                                                     <Run Text="{Binding Parameters}" 
-                                                         FontFamily="{Binding FontFamily}" 
-                                                         FontSize="{Binding ParameterFontSize}" 
-                                                         FontStyle="{Binding FontStyle}"
-                                                         Foreground="DarkGray" />
+                                                         Foreground="DarkGray" 
+                                                         Style="{StaticResource {x:Static styles:VsResourceKeys.TextBlockEnvironment90PercentFontSizeStyleKey}}" />
                                                 </TextBlock>
                                             </StackPanel>
                                         </Expander.Header>
@@ -274,21 +280,16 @@
                                                 <vs:Image Source="{Binding Moniker}" Width="16" Height="16" Margin="0,0,3,0" />
                                                 <TextBlock>
                                                     <Run Text="{Binding Name}" 
-                                                         FontFamily="{Binding FontFamily}" 
-                                                         FontSize="{Binding FontSize}" 
-                                                         FontStyle="{Binding FontStyle}"
                                                          Style="{StaticResource HighlightNameStyle}" />
                                                     <Run Text="{Binding Parameters}" 
-                                                         FontFamily="{Binding FontFamily}" 
-                                                         FontSize="{Binding ParameterFontSize}" 
-                                                         FontStyle="{Binding FontStyle}"
-                                                         Foreground="DarkGray" />
+                                                         Foreground="DarkGray"
+                                                         Style="{StaticResource {x:Static styles:VsResourceKeys.TextBlockEnvironment90PercentFontSizeStyleKey}}" />
                                                 </TextBlock>
                                             </StackPanel>
                                         </Expander.Header>
                                         <ItemsControl 
                                             ItemsSource="{Binding Members}"
-                                            Margin="4,0,4,0"
+                                            Margin="4"
                                             VirtualizingPanel.IsVirtualizing="True"
                                             VirtualizingPanel.VirtualizationMode="Recycling"
                                             ScrollViewer.CanContentScroll="False">
@@ -310,6 +311,47 @@
                         </Setter.Value>
                     </Setter>
                 </DataTrigger>
+                <!-- Region Template -->
+                <DataTrigger Binding="{Binding DataTemplateType}" Value="Region">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Expander
+                                        IsExpanded="{Binding IsExpanded}"
+                                        ToolTip="{Binding Tooltip}"
+                                        HorizontalAlignment="Stretch">
+                                        <Expander.Header>
+                                            <TextBlock
+                                                Text="{Binding Name}"
+                                                FontWeight="SemiBold"
+                                                Style="{StaticResource {x:Static styles:VsResourceKeys.TextBlockEnvironment66PercentFontSizeStyleKey}}" />
+
+                                        </Expander.Header>
+                                        <!--<ItemsControl 
+                                            ItemsSource="{Binding Members}"
+                                            Margin="4"
+                                            VirtualizingPanel.IsVirtualizing="True"
+                                            VirtualizingPanel.VirtualizationMode="Recycling"
+                                            ScrollViewer.CanContentScroll="False">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <VirtualizingStackPanel />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ContentControl Content="{Binding}">
+                                                    </ContentControl>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>-->
+                                    </Expander>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </DataTemplate.Resources>
@@ -317,25 +359,27 @@
     <Border Background="{DynamicResource {x:Static colors:EnvironmentColors.ToolWindowBackgroundBrushKey}}"
             TextElement.Foreground="{DynamicResource {x:Static colors:EnvironmentColors.ToolWindowTextBrushKey}}"
             Padding="5">
-        
-        <ItemsControl Grid.Row="0" x:Name="CodeItemsControl"
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl Grid.Row="0" x:Name="CodeItemsControl"
                 ItemsSource="{Binding CodeDocument}"
-                Margin="4,0,4,0"
+                Margin="4"
                 VirtualizingPanel.IsVirtualizing="True"
                 VirtualizingPanel.VirtualizationMode="Recycling"
                 ScrollViewer.CanContentScroll="True">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <ContentControl Content="{Binding}">
-                    </ContentControl>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}">
+                        </ContentControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
     </Border>
 </DataTemplate>

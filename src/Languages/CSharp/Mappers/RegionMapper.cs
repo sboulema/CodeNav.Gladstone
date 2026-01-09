@@ -7,8 +7,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Extensibility.UI;
-using System.Collections.ObjectModel;
-using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
@@ -48,7 +46,7 @@ public static class RegionMapper
             .Where(i => (i.RawKind == (int)SyntaxKind.RegionDirectiveTrivia) && 
                          span.Contains(i.Span)))
         {
-            regionList.Add(MapRegion(regionDirective, configuration));
+            regionList.Add(MapRegion(regionDirective));
         }
 
         if (!regionList.Any())
@@ -104,7 +102,7 @@ public static class RegionMapper
         return nestedRegions;
     }
 
-    private static CodeRegionItem MapRegion(SyntaxTrivia source, Configuration configuration)
+    private static CodeRegionItem MapRegion(SyntaxTrivia source)
     {
         var name = MapRegionName(source);
 
@@ -115,7 +113,6 @@ public static class RegionMapper
             Id = name,
             Tooltip = name,
             StartLine = GetStartLine(source),
-            FontSize = configuration.FontSize - 2,
             Kind = CodeItemKindEnum.Region,
             Span = source.Span
         };

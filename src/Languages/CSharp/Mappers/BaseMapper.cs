@@ -5,31 +5,29 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Windows;
-using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
 public static class BaseMapper
 {
     public static T MapBase<T>(SyntaxNode source, SyntaxToken identifier, SyntaxTokenList modifiers,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
-        => MapBase<T>(source, identifier.Text, modifiers, semanticModel, configuration, codeDocumentViewModel);
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
+        => MapBase<T>(source, identifier.Text, modifiers, semanticModel, codeDocumentViewModel);
 
     public static T MapBase<T>(SyntaxNode source, NameSyntax name,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
-        => MapBase<T>(source, name.ToString(), [], semanticModel, configuration, codeDocumentViewModel);
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
+        => MapBase<T>(source, name.ToString(), [], semanticModel, codeDocumentViewModel);
 
     public static T MapBase<T>(SyntaxNode source, string name,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
-        => MapBase<T>(source, name, [], semanticModel, configuration, codeDocumentViewModel);
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
+        => MapBase<T>(source, name, [], semanticModel, codeDocumentViewModel);
 
     public static T MapBase<T>(SyntaxNode source, SyntaxToken identifier,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
-        => MapBase<T>(source, identifier.Text, [], semanticModel, configuration, codeDocumentViewModel);
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
+        => MapBase<T>(source, identifier.Text, [], semanticModel, codeDocumentViewModel);
 
     private static T MapBase<T>(SyntaxNode source, string name, SyntaxTokenList modifiers,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel) where T : CodeItem
     {
         var element = Activator.CreateInstance<T>();
 
@@ -42,10 +40,6 @@ public static class BaseMapper
         element.EndLine = GetEndLine(source);
         element.Span = source.Span;
         element.Access = MapAccess(modifiers, source);
-        element.FontSize = configuration.FontSize;
-        element.ParameterFontSize = configuration.FontSize - 1;
-        element.FontFamily = new FontFamily(configuration.FontFamilyName);
-        element.FontStyle = FontStyles.Normal;
         element.CodeDocumentViewModel = codeDocumentViewModel;
 
         return element;
