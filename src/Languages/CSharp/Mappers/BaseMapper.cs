@@ -41,7 +41,6 @@ public static class BaseMapper
         element.StartLine = GetStartLine(source);
         element.EndLine = GetEndLine(source);
         element.Span = source.Span;
-        element.ForegroundColor = Colors.Black.ToString();
         element.Access = MapAccess(modifiers, source);
         element.FontSize = configuration.FontSize;
         element.ParameterFontSize = configuration.FontSize - 1;

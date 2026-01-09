@@ -111,7 +111,6 @@ public class ClassMapper
             FullName = baseType.Name,
             Id = baseType.Name,
             Tooltip = baseType.Name,
-            ForegroundColor = Colors.Black.ToString(),
             BorderColor = Colors.DarkGray.ToString(),
             FontSize = configuration.FontSize - 2,
             Kind = CodeItemKindEnum.BaseClass,

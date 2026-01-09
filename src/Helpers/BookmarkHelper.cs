@@ -71,7 +71,8 @@ public class BookmarkHelper(ConfigurationHelper configurationHelper)
     public static void ApplyBookmarkStyle(CodeItem codeItem, BookmarkStyle bookmarkStyle)
     {
         codeItem.BackgroundColor = bookmarkStyle.BackgroundColor;
-        codeItem.ForegroundColor = bookmarkStyle.ForegroundColor;
+        // TODO: Reimplement in XAML way
+        //codeItem.ForegroundColor = bookmarkStyle.ForegroundColor;
     }
 
     /// <summary>
@@ -86,7 +87,8 @@ public class BookmarkHelper(ConfigurationHelper configurationHelper)
         }
 
         codeItem.BackgroundColor = Brushes.Transparent.Color.ToString();
-        codeItem.ForegroundColor = "red";
+        // TODO: Reimplement in XAML way
+        //codeItem.ForegroundColor = "red";
     }
 
     /// <summary>

@@ -10,14 +10,13 @@ Visual Studio extension to show the code structure of your current document
 - Quickly see all the important methods and properties in your document.
 - Never get lost during a refactoring of a super long document.
 - Show/Dock as a separate tool window.
+- Cursor position will be reflected by highlighting the current method in the list
+- Clicking on an item in the list will take you to that location in the document.
+- Dark theme support
 
 ## Features broken
-- Clicking on an item in the list will take you to that location in the document.
 - Sort by file order or by name 
-- Dark theme support
-- Show as a separate tool window (View -> Other Windows -> CodeNav)
 - Filter items by kind (method, property), access (public, private), name and bookmark
-- Cursor position will be reflected by highlighting the current method in the list
 - Customizable fonts
 - Synced collapsing/expanding regions
 - Collapse/Expand all regions
@@ -64,4 +63,11 @@ Visual Studio extension to show the code structure of your current document
 ![Bookmarks](https://i.imgur.com/SqLgsXw.png) ![Bookmark styles](https://raw.githubusercontent.com/sboulema/CodeNav/main/Resources/Bookmark%20styles.png)
 
 # Links
-- https://github.com/microsoft/VSExtensibility/issues/456
+DataTriggers in a XAML ItemsControl
+https://github.com/microsoft/VSExtensibility/issues/456
+
+Splitting up the tool window XAML in resource dictionaries
+https://github.com/MicrosoftDocs/visualstudio-docs/blob/main/docs/extensibility/visualstudio.extensibility/inside-the-sdk/advanced-remote-ui.md#user-xaml-resource-dictionaries
+
+Getting a clientContext in an AsyncCommand bound to a XAML Command property
+https://github.com/microsoft/VSExtensibility/issues/520

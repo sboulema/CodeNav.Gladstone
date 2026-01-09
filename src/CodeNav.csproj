@@ -40,4 +40,8 @@
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ToolWindows\Commands\" />
+  </ItemGroup>
 </Project>

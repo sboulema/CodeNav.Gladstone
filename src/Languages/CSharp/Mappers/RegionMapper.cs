@@ -115,7 +115,6 @@ public static class RegionMapper
             Id = name,
             Tooltip = name,
             StartLine = GetStartLine(source),
-            ForegroundColor = Colors.Black.ToString(),
             BorderColor = Colors.DarkGray.ToString(),
             FontSize = configuration.FontSize - 2,
             Kind = CodeItemKindEnum.Region,

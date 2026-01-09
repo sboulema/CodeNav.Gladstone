@@ -29,6 +29,7 @@ internal class TextViewEventListener(
     {
         AppliesTo =
         [
+            DocumentFilter.FromDocumentType("CSharp"),
             DocumentFilter.FromGlobPattern("**/*.cs", true),
         ],
     };
@@ -48,7 +49,6 @@ internal class TextViewEventListener(
         {
             HighlightHelper.HighlightCurrentItem(
                 codeDocumentService.CodeDocumentViewModel,
-                "red",
                 args.AfterTextView.Selection.ActivePosition.GetContainingLine().LineNumber);
         }
 

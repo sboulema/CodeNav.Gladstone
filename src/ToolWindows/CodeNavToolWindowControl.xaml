@@ -133,6 +133,30 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="HighlightNameStyle" TargetType="Run">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="True"/>
+                        <Condition Binding="{Binding Path=DataContext.DataTemplateType, RelativeSource={RelativeSource Self}}" Value=""/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="FontWeight" Value="Bold" />
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="False"/>
+                        <Condition Binding="{Binding Path=DataContext.DataTemplateType, RelativeSource={RelativeSource Self}}" Value=""/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="FontWeight" Value="Regular" />
+                </MultiDataTrigger>
+                <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static styles:VsBrushes.FileTabSelectedBorderKey}}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static styles:VsBrushes.ToolWindowTextKey}}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <!-- CodeItem Styles -->
         <Style TargetType="ContentControl">
             <!-- CodeItem Template -->
@@ -161,11 +185,8 @@
 
                                 <TextBlock Grid.Column="1" FontFamily="{Binding FontFamily}" FontStyle="{Binding FontStyle}">
                                     <Run Text="{Binding Name}"       
-                                         FontSize="{Binding FontSize}"          
-                                         Foreground="{Binding ForegroundBrush}"
-                                         Background="{Binding NameBackgroundBrush}"
-                                         FontWeight="{Binding FontWeight}" 
-                                         x:Name="ItemName"/>
+                                         FontSize="{Binding FontSize}"
+                                         Style="{StaticResource HighlightNameStyle}" />
                                     <Run Text="{Binding ReturnType}" FontSize="{Binding ParameterFontSize}" Foreground="DarkGray" />
                                     <Run Text="{Binding Parameters}" FontSize="{Binding ParameterFontSize}" Foreground="DarkGray" />
                                 </TextBlock>
@@ -205,7 +226,7 @@
                                                          FontFamily="{Binding FontFamily}" 
                                                          FontSize="{Binding FontSize}" 
                                                          FontStyle="{Binding FontStyle}"
-                                                         Foreground="{Binding ForegroundBrush}" />
+                                                         Style="{StaticResource HighlightNameStyle}"/>
                                                     <Run Text="{Binding Parameters}" 
                                                          FontFamily="{Binding FontFamily}" 
                                                          FontSize="{Binding ParameterFontSize}" 
@@ -216,7 +237,7 @@
                                         </Expander.Header>
                                         <ItemsControl 
                                             ItemsSource="{Binding Members}"
-                                            Margin="4,0,4,0"
+                                            Margin="4"
                                             VirtualizingPanel.IsVirtualizing="True"
                                             VirtualizingPanel.VirtualizationMode="Recycling"
                                             ScrollViewer.CanContentScroll="False">
@@ -256,7 +277,7 @@
                                                          FontFamily="{Binding FontFamily}" 
                                                          FontSize="{Binding FontSize}" 
                                                          FontStyle="{Binding FontStyle}"
-                                                         Foreground="{Binding ForegroundBrush}" />
+                                                         Style="{StaticResource HighlightNameStyle}" />
                                                     <Run Text="{Binding Parameters}" 
                                                          FontFamily="{Binding FontFamily}" 
                                                          FontSize="{Binding ParameterFontSize}" 

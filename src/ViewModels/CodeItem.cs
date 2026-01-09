@@ -180,15 +180,6 @@ public class CodeItem : NotifyPropertyChangedObject
         get => _fontStyle;
         set => SetProperty(ref _fontStyle, value);
     }
-
-    private FontWeight _fontWeight;
-
-    [DataMember]
-    public FontWeight FontWeight
-    {
-        get => _fontWeight;
-        set => SetProperty(ref _fontWeight, value);
-    }
     #endregion
 
     #region IsVisible
@@ -203,18 +194,6 @@ public class CodeItem : NotifyPropertyChangedObject
     #endregion
 
     #region Colors
-    private string _foregroundColor = string.Empty;
-
-    [DataMember]
-    public string ForegroundColor
-    {
-        get => _foregroundColor;
-        set
-        {
-            SetProperty(ref _foregroundColor, value);
-        }
-    }
-
     private string _backgroundColor = string.Empty;
 
     [DataMember]
@@ -226,18 +205,6 @@ public class CodeItem : NotifyPropertyChangedObject
             SetProperty(ref _backgroundColor, value);
         }
     }
-
-    private string _nameBackgroundColor = string.Empty;
-
-    [DataMember]
-    public string NameBackgroundColor
-    {
-        get => _nameBackgroundColor;
-        set
-        {
-            SetProperty(ref _nameBackgroundColor, value);
-        }
-    }
     #endregion
 
     #region Commands
@@ -245,10 +212,10 @@ public class CodeItem : NotifyPropertyChangedObject
     public AsyncCommand ClickItemCommand { get; }
     public AsyncCommand ClickItem()
     {
-        return new AsyncCommand(async (parameter, cancellationToken) =>
+        return new AsyncCommand(async (obj, clientContext, cancellationToken) =>
         {
             HistoryHelper.AddItemToHistory(this);
-            await ScrollToLine(Span.Start, cancellationToken);
+            await ScrollToLine(Span.Start, clientContext, cancellationToken);
         });
     }
 
@@ -256,9 +223,9 @@ public class CodeItem : NotifyPropertyChangedObject
     public AsyncCommand GoToDefinitionCommand { get; }
     public AsyncCommand GoToDefinition()
     {
-        return new AsyncCommand(async (parameter, cancellationToken) =>
+        return new AsyncCommand(async (obj, clientContext, cancellationToken) =>
         {
-            await ScrollToLine(Span.Start, cancellationToken);
+            await ScrollToLine(Span.Start, clientContext, cancellationToken);
         });
     }
 
@@ -276,9 +243,9 @@ public class CodeItem : NotifyPropertyChangedObject
     public AsyncCommand GoToEndCommand { get; }
     public AsyncCommand GoToEnd()
     {
-        return new AsyncCommand(async (parameter, cancellationToken) =>
+        return new AsyncCommand(async (obj, clientContext, cancellationToken) =>
         {
-            await ScrollToLine(Span.End, cancellationToken);
+            await ScrollToLine(Span.End, clientContext, cancellationToken);
         });
     }
 
@@ -413,35 +380,44 @@ public class CodeItem : NotifyPropertyChangedObject
 
     private async Task ScrollToLine(
         int position,
+        IClientContext clientContext,
         CancellationToken cancellationToken)
     {
         try
         {
-            var documentSnapshot = CodeDocumentViewModel?.TextDocumentSnapshot;
+            var textViewSnapshot = await clientContext.GetActiveTextViewAsync(cancellationToken);
+
+            if (textViewSnapshot == null)
+            {
+                return;
+            }
+
+            var textDocumentSnapshot = textViewSnapshot?.Document;
 
             // If the code item has a different file path, open that document
             if (FilePath != null &&
-                documentSnapshot?.Uri != FilePath)
+                textViewSnapshot?.Uri != FilePath)
             {
-                documentSnapshot = await CodeDocumentViewModel
-                    .Extensibility
+                textDocumentSnapshot = await clientContext.Extensibility
                     .Documents()
                     .OpenTextDocumentAsync(FilePath, cancellationToken);
             }
 
+            if (textDocumentSnapshot == null)
+            {
+                return;
+            }
+
             // Scroll to the requested line
-            await CodeDocumentViewModel
-                .Extensibility
-                .Editor()
-                .EditAsync(
-                    batch =>
-                    {
-                        CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(
-                        [
-                            new(new TextRange(new TextPosition(documentSnapshot, position), 0))
-                        ]);
-                    },
-                    cancellationToken);
+            await clientContext.Extensibility.Editor().EditAsync(batch =>
+            {
+                var caret = new TextPosition(textDocumentSnapshot, position);
+                textViewSnapshot!.AsEditable(batch).SetSelections(
+                [
+                    new Selection(activePosition: caret, anchorPosition: caret, insertionPosition: caret)
+                ]);
+            },
+            cancellationToken);
         }
         catch (Exception)
         {

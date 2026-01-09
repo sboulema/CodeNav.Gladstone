@@ -74,7 +74,6 @@ public static class InterfaceMapper
             Name = name,
             FullName = name,
             Id = name,
-            ForegroundColor = Colors.Black.ToString(),
             BorderColor = Colors.DarkGray.ToString(),
             FontSize = configuration.FontSize - 2,
             Kind = CodeItemKindEnum.ImplementedInterface,
