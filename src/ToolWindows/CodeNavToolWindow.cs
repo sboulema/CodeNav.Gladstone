@@ -1,4 +1,5 @@
 ﻿using CodeNav.Services;
+using CodeNav.ToolWindows.Commands;
 using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Commands;
 using Microsoft.VisualStudio.Extensibility.ToolWindows;
@@ -21,10 +22,11 @@ internal class CodeNavToolWindow(CodeDocumentService documentService) : ToolWind
     private static ToolbarConfiguration Toolbar => new("%CodeNav.CodeNavToolWindow.Toolbar.DisplayName%")
     {
         Children = [
-            //ToolbarChild.Command<CommitToolbarCommand>(),
-            //ToolbarChild.Command<RevertToolbarCommand>(),
-            //ToolbarChild.Command<HideFilesToolbarCommand>(),
-            //ToolbarChild.Command<RefreshToolbarCommand>(),
+            ToolbarChild.Command<RefreshCommand>(),
+            ToolbarChild.Separator,
+            ToolbarChild.Command<SortByFileCommand>(),
+            ToolbarChild.Command<SortByNameCommand>(),
+            // TODO: Add settings command
         ],
     };
 

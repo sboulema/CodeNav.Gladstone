@@ -18,7 +18,6 @@ public static class NamespaceMapper
         var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, configuration, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Namespace;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
-        item.BorderColor = Colors.DarkGray.ToString();
         item.IgnoreVisibility = VisibilityHelper.GetIgnoreVisibility(item);
 
         if (TriviaSummaryMapper.HasSummary(member) &&
@@ -59,7 +58,6 @@ public static class NamespaceMapper
         var item = BaseMapper.MapBase<CodeNamespaceItem>(member, member.Name, semanticModel, configuration, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Namespace;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
-        item.BorderColor = Colors.DarkGray.ToString();
         item.IgnoreVisibility = VisibilityHelper.GetIgnoreVisibility(item);
 
         if (TriviaSummaryMapper.HasSummary(member) &&

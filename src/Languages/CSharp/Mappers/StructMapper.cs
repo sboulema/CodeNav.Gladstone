@@ -17,7 +17,6 @@ public static class StructMapper
         var item = BaseMapper.MapBase<CodeClassItem>(member, member.Identifier, member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
         item.Kind = CodeItemKindEnum.Struct;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
-        item.BorderColor = Colors.DarkGray.ToString();
 
         if (TriviaSummaryMapper.HasSummary(member) &&
             configuration.UseXMLComments)

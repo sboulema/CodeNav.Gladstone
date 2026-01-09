@@ -5,7 +5,6 @@ using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
@@ -28,7 +27,6 @@ public class EnumMapper
         item.Kind = CodeItemKindEnum.Enum;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.Parameters = MapMembersToString(member.Members);
-        item.BorderColor = Colors.DarkGray.ToString();
 
         if (TriviaSummaryMapper.HasSummary(member) &&
             configuration.UseXMLComments)

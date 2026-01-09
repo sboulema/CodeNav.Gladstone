@@ -2,49 +2,57 @@
 using CodeNav.Interfaces;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.VisualStudio.Extensibility;
+using Microsoft.VisualStudio.Extensibility.Editor;
 using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace CodeNav.Helpers;
 
-public class HistoryHelper(ConfigurationHelper configurationHelper)
+public class HistoryHelper
 {
     private const int MaxHistoryItems = 5;
 
     /// <summary>
-    /// Add code item to history items based on its span
+    /// Add code item to history items based on text edits
     /// </summary>
     /// <remarks>Used when adding item to history based on text changes</remarks>
     /// <param name="model">Document holding all code items</param>
-    /// <param name="span">Span containing the text changes</param>
-    public static void AddItemToHistory(CodeDocumentViewModel model, TextSpan span)
+    /// <param name="textEdits">List of text edits made</param>
+    public static void AddItemToHistory(CodeDocumentViewModel model, IEnumerable<TextEdit> textEdits)
     {
-        try
+        foreach (var textEdit in textEdits)
         {
-            var item = model
-                .CodeDocument
-                .Flatten()
-                .FilterNull()
-                .Where(i => i is not IMembers)
-                .FirstOrDefault(i => i.Span.Contains(span.Start));
+            try
+            {
+                var item = model
+                    .CodeDocument
+                    .Flatten()
+                    .FilterNull()
+                    .Where(item => item is not IMembers)
+                    .FirstOrDefault(item => item.Span.Contains(textEdit.Range.Start));
 
-            AddItemToHistory(item);
-        }
-        catch (Exception e)
-        {
-            LogHelper.Log("Error adding item to history", e);
+                AddItemToHistory(item);
+            }
+            catch (Exception e)
+            {
+                LogHelper.Log("Error adding item to history", e);
+            }
         }
     }
 
+    /// <summary>
+    /// Add code item to history items based on its code item
+    /// </summary>
+    /// <remarks>Used when adding item to history based on clicking a code item</remarks>
+    /// <param name="item">Code item that was clicked</param>
     public static void AddItemToHistory(CodeItem item)
     {
-        if (item.CodeDocumentViewModel == null)
+        var model = item.CodeDocumentViewModel;
+
+        if (model == null)
         {
             return;
         }
-
-        var model = item.CodeDocumentViewModel;
 
         // Clear current indicators
         foreach (var historyItem in model.HistoryItems)
@@ -100,9 +108,11 @@ public class HistoryHelper(ConfigurationHelper configurationHelper)
     /// <param name="index">Index in history list</param>
     private static void ApplyHistoryIndicator(CodeItem item, int index = 0)
     {
-        item.StatusMoniker = ImageMoniker.KnownValues.History;
         item.StatusMonikerVisibility = Visibility.Visible;
+
+        // Show the icon in grayscale if it is not the most recent history item
         item.StatusGrayscale = index > 0;
+
         item.StatusOpacity = GetOpacity(index);
     }
 
@@ -129,7 +139,7 @@ public class HistoryHelper(ConfigurationHelper configurationHelper)
     /// Delete all history item indicators
     /// </summary>
     /// <param name="item">Code item on which the context menu was invoked</param>
-    public async Task ClearHistory(CodeItem item, CancellationToken cancellationToken)
+    public static async Task ClearHistory(CodeItem item, CancellationToken cancellationToken)
     {
         if (item.CodeDocumentViewModel == null)
         {
@@ -137,9 +147,5 @@ public class HistoryHelper(ConfigurationHelper configurationHelper)
         }
 
         item.CodeDocumentViewModel.HistoryItems.Clear();
-
-        ConfigurationHelper.GetFileConfiguration(item.CodeDocumentViewModel.Configuration, item.FilePath).HistoryItems.Clear();
-
-        await configurationHelper.SaveConfiguration(item.CodeDocumentViewModel.Configuration, cancellationToken);
     }
 }

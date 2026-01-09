@@ -89,15 +89,6 @@ public class CodeItem : NotifyPropertyChangedObject
     }
 
     #region Status Image
-    private ImageMoniker _statusMoniker;
-
-    [DataMember]
-    public ImageMoniker StatusMoniker
-    {
-        get => _statusMoniker;
-        set => SetProperty(ref _statusMoniker, value);
-    }
-
     private Visibility _statusMonikerVisibility = Visibility.Collapsed;
 
     [DataMember]
@@ -109,6 +100,9 @@ public class CodeItem : NotifyPropertyChangedObject
 
     private bool _statusGrayscale;
 
+    /// <summary>
+    /// Indicator if the history icon should be shown in grayscale
+    /// </summary>
     [DataMember]
     public bool StatusGrayscale
     {
@@ -124,6 +118,7 @@ public class CodeItem : NotifyPropertyChangedObject
         get => _statusOpacity;
         set => SetProperty(ref _statusOpacity, value);
     }
+
     #endregion
 
     public List<BookmarkStyle> BookmarkStyles
@@ -235,7 +230,7 @@ public class CodeItem : NotifyPropertyChangedObject
     {
         return new AsyncCommand(async (parameter, cancellationToken) =>
         {
-            await CodeDocumentViewModel!.HistoryHelper!.ClearHistory(this, cancellationToken);
+            await HistoryHelper.ClearHistory(this, cancellationToken);
         });
     }
 
@@ -253,9 +248,9 @@ public class CodeItem : NotifyPropertyChangedObject
     public AsyncCommand SelectInCodeCommand { get; }
     public AsyncCommand SelectInCode()
     {
-        return new AsyncCommand(async (parameter, cancellationToken) =>
+        return new AsyncCommand(async (obj, clientContext, cancellationToken) =>
         {
-            await SelectLines(cancellationToken);
+            await SelectLines(clientContext, cancellationToken);
         });
     }
 
@@ -272,11 +267,12 @@ public class CodeItem : NotifyPropertyChangedObject
     public AsyncCommand RefreshCommand { get; }
     public AsyncCommand Refresh()
     {
-        return new AsyncCommand(async (parameter, cancellationToken) =>
+        return new AsyncCommand(async (parameter, clientContext, cancellationToken) =>
         {
+            var textView = await clientContext.GetActiveTextViewAsync(cancellationToken);
             await CodeDocumentViewModel!
                 .CodeDocumentService!
-                .UpdateCodeDocumentViewModel(CodeDocumentViewModel.Extensibility, CodeDocumentViewModel.TextView, cancellationToken);
+                .UpdateCodeDocumentViewModel(CodeDocumentViewModel.Extensibility, textView, cancellationToken);
         });
     }
 
@@ -425,37 +421,45 @@ public class CodeItem : NotifyPropertyChangedObject
         }
     }
 
-    private async Task SelectLines(CancellationToken cancellationToken)
+    private async Task SelectLines(IClientContext clientContext, CancellationToken cancellationToken)
     {
         try
         {
-            var documentSnapshot = CodeDocumentViewModel?.TextDocumentSnapshot;
+            var textViewSnapshot = await clientContext.GetActiveTextViewAsync(cancellationToken);
+
+            if (textViewSnapshot == null)
+            {
+                return;
+            }
+
+            var textDocumentSnapshot = textViewSnapshot?.Document;
 
             // If the code item has a different file path, open that document
             if (FilePath != null &&
-                documentSnapshot?.Uri != FilePath)
+                textViewSnapshot?.Uri != FilePath)
             {
-                documentSnapshot = await CodeDocumentViewModel
-                    .Extensibility
+                textDocumentSnapshot = await clientContext.Extensibility
                     .Documents()
                     .OpenTextDocumentAsync(FilePath, cancellationToken);
             }
 
+            if (textDocumentSnapshot == null)
+            {
+                return;
+            }
+
             // Select all lines corresponding to the code item
-            await CodeDocumentViewModel
-                .Extensibility
-                .Editor()
-                .EditAsync(
-                    batch =>
-                    {
-                        CodeDocumentViewModel?.TextView?.AsEditable(batch).SetSelections(
-                        [
-                            new(new TextRange(
-                                new TextPosition(documentSnapshot, Span.Start),
-                                new TextPosition(documentSnapshot, Span.End)))
-                        ]);
-                    },
-                    cancellationToken);
+            await clientContext.Extensibility.Editor().EditAsync(batch =>
+            {
+                textViewSnapshot!.AsEditable(batch).SetSelections(
+                [
+                    new Selection(
+                        new TextRange(
+                            new TextPosition(textDocumentSnapshot, Span.Start),
+                            new TextPosition(textDocumentSnapshot, Span.End)))
+                ]);
+            },
+            cancellationToken);
         }
         catch (Exception)
         {

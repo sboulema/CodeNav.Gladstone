@@ -165,12 +165,12 @@
                     <DataTemplate>
                         <Button Command="{Binding Path=ClickItemCommand}" CommandParameter="{Binding StartLine}"
                             ToolTip="{Binding Tooltip}"
-                            Background="{Binding BackgroundBrush}"
-                            Opacity="{Binding Opacity}"
+                            Background="Transparent"
                             BorderThickness="0" 
                             HorizontalContentAlignment="Stretch"
                             HorizontalAlignment="Stretch"
-                            Margin="3">
+                            Margin="0, 3"
+                            Padding="3, 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -193,7 +193,7 @@
 
                                 <vs:Image 
                                     Grid.Column="2"
-                                    Source="{Binding StatusMoniker}"
+                                    Source="KnownMonikers.History"
                                     Margin="3,0,0,0"
                                     Width="10"
                                     Height="10"

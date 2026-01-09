@@ -18,15 +18,6 @@ public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
 
     public string Parameters { get; set; } = string.Empty;
 
-    private string _borderColor = string.Empty;
-
-    [DataMember]
-    public string BorderColor
-    {
-        get => _borderColor;
-        set => SetProperty(ref _borderColor, value);
-    }
-
     public event EventHandler? IsExpandedChanged;
     private bool _isExpanded;
 

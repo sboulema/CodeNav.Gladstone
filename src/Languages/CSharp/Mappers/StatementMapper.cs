@@ -102,7 +102,6 @@ public static class StatementMapper
         item.Name = $"Switch {item.Name}";
         item.Kind = CodeItemKindEnum.Switch;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
-        item.BorderColor = Colors.DarkGray.ToString();
         item.Tooltip = TooltipMapper.Map(item.Access, string.Empty, item.Name, item.Parameters);
 
         // Map switch cases

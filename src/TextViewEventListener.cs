@@ -40,6 +40,7 @@ internal class TextViewEventListener(
         // Document changed - Update CodeNav view
         if (args.Edits.Any())
         {
+            HistoryHelper.AddItemToHistory(codeDocumentService.CodeDocumentViewModel, args.Edits);
             return codeDocumentService.UpdateCodeDocumentViewModel(extensibility, args.AfterTextView, cancellationToken);
         }
 

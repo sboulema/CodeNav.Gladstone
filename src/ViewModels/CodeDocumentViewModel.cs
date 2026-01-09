@@ -6,7 +6,6 @@ using CodeNav.Helpers;
 using CodeNav.Models;
 using CodeNav.Services;
 using Microsoft.VisualStudio.Extensibility;
-using Microsoft.VisualStudio.Extensibility.Editor;
 using Microsoft.VisualStudio.Extensibility.UI;
 
 namespace CodeNav.ViewModels;
@@ -22,17 +21,11 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
     [DataMember]
     public ObservableList<CodeItem> CodeDocument { get; set; } = [];
 
-    public ITextViewSnapshot? TextView { get; set; }
-
-    public ITextDocumentSnapshot? TextDocumentSnapshot { get; set; }
-
     public VisualStudioExtensibility Extensibility { get; set; }
 
     public CodeDocumentService CodeDocumentService { get; set; }
 
     public Configuration Configuration { get; set; } = new();
-
-    public HistoryHelper? HistoryHelper { get; set; }
 
     public ConfigurationHelper? ConfigurationHelper { get; set; }
 

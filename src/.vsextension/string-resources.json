@@ -1,4 +1,7 @@
 {
   "CodeNav.CodeNavToolWindowCommand.DisplayName": "CodeNav",
-  "CodeNav.CodeNavToolWindow.Toolbar.DisplayName": "CodeNav"
+  "CodeNav.CodeNavToolWindow.Toolbar.DisplayName": "CodeNav",
+  "CodeNav.CodeNavToolWindow.RefreshCommand.DisplayName": "Refresh",
+  "CodeNav.CodeNavToolWindow.SortByNameCommand.DisplayName": "Sort by name",
+  "CodeNav.CodeNavToolWindow.SortByFileCommand.DisplayName": "Sort by file order"
 }

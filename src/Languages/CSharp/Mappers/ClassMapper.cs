@@ -21,7 +21,6 @@ public class ClassMapper
         item.Kind = CodeItemKindEnum.Class;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.Parameters = MapInheritance(member);
-        item.BorderColor = Colors.DarkGray.ToString();
         item.Tooltip = TooltipMapper.Map(item.Access, string.Empty, item.Name, item.Parameters);
 
         if (TriviaSummaryMapper.HasSummary(member) &&
@@ -111,7 +110,6 @@ public class ClassMapper
             FullName = baseType.Name,
             Id = baseType.Name,
             Tooltip = baseType.Name,
-            BorderColor = Colors.DarkGray.ToString(),
             FontSize = configuration.FontSize - 2,
             Kind = CodeItemKindEnum.BaseClass,
         };

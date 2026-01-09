@@ -41,7 +41,6 @@ public static class MethodMapper
             // Map method as item containing statements
             item = BaseMapper.MapBase<CodeClassItem>(node, identifier,modifiers, semanticModel, configuration, codeDocumentViewModel);
             ((CodeClassItem)item).Members.AddRange(statementsCodeItems);
-            ((CodeClassItem)item).BorderColor = Colors.DarkGray.ToString();
         }
         else
         {

@@ -74,7 +74,6 @@ public static class InterfaceMapper
             Name = name,
             FullName = name,
             Id = name,
-            BorderColor = Colors.DarkGray.ToString(),
             FontSize = configuration.FontSize - 2,
             Kind = CodeItemKindEnum.ImplementedInterface,
             IsExpanded = true
@@ -136,7 +135,6 @@ public static class InterfaceMapper
             member.Modifiers, semanticModel, configuration, codeDocumentViewModel);
 
         item.Kind = CodeItemKindEnum.Interface;
-        item.BorderColor = Colors.DarkGray.ToString();
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
 
         if (TriviaSummaryMapper.HasSummary(member) &&

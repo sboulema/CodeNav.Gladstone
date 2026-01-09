@@ -23,21 +23,15 @@ public class CodeDocumentService(
 
         var codeItems = await DocumentMapper.MapDocument(textView.Document, configuration, CodeDocumentViewModel, cancellationToken);
 
+        CodeDocumentViewModel.CodeDocument.Clear();
+        CodeDocumentViewModel.CodeDocument.AddRange(codeItems);
+
         // Update the DataContext for the tool window.
-        CodeDocumentViewModel.TextDocumentSnapshot = textView.Document;
         CodeDocumentViewModel.Configuration = configuration;
         CodeDocumentViewModel.SortOrder = configuration.SortOrder;
-        //CodeDocumentViewModel.HistoryHelper = historyHelper;
         CodeDocumentViewModel.ConfigurationHelper = configurationHelper;
         CodeDocumentViewModel.Extensibility = extensibility;
         CodeDocumentViewModel.CodeDocumentService = this;
-
-        CodeDocumentViewModel.CodeDocument.Clear();
-
-        foreach (var item in codeItems)
-        {
-            CodeDocumentViewModel.CodeDocument.Add(item);
-        }
 
         // Sort items
         SortHelper.Sort(CodeDocumentViewModel);
@@ -53,7 +47,6 @@ public class CodeDocumentService(
         BookmarkHelper.ApplyBookmarks(CodeDocumentViewModel);
 
         // Apply history items
-        CodeDocumentViewModel.HistoryItems = new(ConfigurationHelper.GetFileConfiguration(CodeDocumentViewModel.Configuration, textView.Uri).HistoryItems);
         HistoryHelper.ApplyHistoryIndicator(CodeDocumentViewModel);
 
         return CodeDocumentViewModel;

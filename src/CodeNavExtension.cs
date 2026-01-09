@@ -14,6 +14,7 @@ internal class CodeNavExtension : Extension
     /// <inheritdoc/>
     public override ExtensionConfiguration ExtensionConfiguration => new()
     {
+        LoadedWhen = ActivationConstraint.SolutionState(SolutionState.FullyLoaded),
         Metadata = new(
             id: "CodeNav.dcdbcca4-3a88-432f-ba04-eb4a4cb64437",
             version: ExtensionAssemblyVersion,
@@ -42,7 +43,6 @@ internal class CodeNavExtension : Extension
 
         serviceCollection.AddSingleton<ConfigurationHelper>();
         serviceCollection.AddSingleton<BookmarkHelper>();
-        serviceCollection.AddSingleton<HistoryHelper>();
 
         // As of now, any instance that ingests VisualStudioExtensibility is required to be added as a scoped
         // service.
