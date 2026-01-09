@@ -30,7 +30,7 @@ jobs:
           directory: 'src/bin/Release/net6.0-windows'
 
       - name: Publish Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v6
         with:
           name: CodeNav
           path: '**/*.zip'
