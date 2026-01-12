@@ -76,3 +76,5 @@ https://github.com/microsoft/VSExtensibility/issues/520
 
 Settings Sample
 https://github.com/microsoft/VSExtensibility/blob/2f74457eb241552cd725c8ca544fd99797ef546e/New_Extensibility_Model/Samples/SettingsSample/README.md
+
+https://github.com/MicrosoftDocs/visualstudio-docs/blob/c70d685e945ff6cea8dd0f7bbb54f780ef67170e/docs/extensibility/visualstudio.extensibility/settings/settings.md?plain=1#L201

@@ -26,40 +26,6 @@ public static class CodeItemExtensions
     public static IEnumerable<CodeItem> FilterNull(this IEnumerable<CodeItem> codeDocument)
         => codeDocument.Where(codeItem => codeItem != null);
 
-    /// <summary>
-    /// Recursively delete null items from a nested list of CodeItems
-    /// </summary>
-    /// <param name="items">Nested list of CodeItems</param>
-    public static List<CodeItem> FilterNullItems(this List<CodeItem?> items)
-    {
-        if (items == null)
-        {
-            return [];
-        }
-
-        items.RemoveAll(item => item == null);
-
-        foreach (var item in items)
-        {
-            if (item is IMembers memberItem)
-            {
-                FilterNullItems([.. memberItem.Members.Cast<CodeItem?>()]);
-            }
-        }
-
-        return [.. items.Cast<CodeItem>()];
-    }
-
-    public static void AddIfNotNull(this List<CodeItem> items, CodeItem? item)
-    {
-        if (item == null)
-        {
-            return;
-        }
-
-        items.Add(item);
-    }
-
     public static void AddIfNotNull(this ObservableCollection<CodeItem> items, CodeItem? item)
     {
         if (item == null)

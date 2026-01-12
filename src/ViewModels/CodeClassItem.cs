@@ -45,7 +45,7 @@ public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
     /// </summary>
     [DataMember]
     public Visibility HasMembersVisibility
-        => Members.Any(m => m.IsVisible == Visibility.Visible)
+        => Members.Any(m => m.Visibility == Visibility.Visible)
             ? Visibility.Visible
             : Visibility.Collapsed;
 }

@@ -39,7 +39,7 @@ public static class VisibilityHelper
                     SetCodeItemVisibility(hasMembersItem.Members, filterText);
                 }
 
-                item.IsVisible = ShouldBeVisible(item, filterText)
+                item.Visibility = ShouldBeVisible(item, filterText)
                     ? Visibility.Visible
                     : Visibility.Collapsed;
             }
@@ -107,11 +107,11 @@ public static class VisibilityHelper
         if (item is IMembers hasMembersItem &&
             hasMembersItem?.Members != null)
         {
-            if (hasMembersItem.Members.Any(m => m.IsVisible == Visibility.Visible))
+            if (hasMembersItem.Members.Any(m => m.Visibility == Visibility.Visible))
             {
                 visible = true;
             }
-            else if (!hasMembersItem.Members.Any(m => m.IsVisible == Visibility.Visible) && filterRule != null)
+            else if (!hasMembersItem.Members.Any(m => m.Visibility == Visibility.Visible) && filterRule != null)
             {
                 visible = !filterRule.HideIfEmpty;
             }

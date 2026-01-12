@@ -34,7 +34,7 @@ public static class MethodMapper
 
         VisibilityHelper.SetCodeItemVisibility(statementsCodeItems);
 
-        if (statementsCodeItems.Any(statement => statement.IsVisible == Visibility.Visible))
+        if (statementsCodeItems.Any(statement => statement.Visibility == Visibility.Visible))
         {
             // Map method as item containing statements
             item = BaseMapper.MapBase<CodeClassItem>(node, identifier,modifiers, semanticModel, codeDocumentViewModel);

@@ -128,7 +128,7 @@ public class CodeItem : NotifyPropertyChangedObject
     private Visibility _visibility;
 
     [DataMember]
-    public Visibility IsVisible
+    public Visibility Visibility
     {
         get => _visibility;
         set => SetProperty(ref _visibility, value);
