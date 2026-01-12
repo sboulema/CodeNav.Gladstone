@@ -1,5 +1,4 @@
-﻿using CodeNav.Helpers;
-using CodeNav.Services;
+﻿using CodeNav.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.Extensibility;
 
@@ -36,15 +35,14 @@ internal class CodeNavExtension : Extension
     /// <inheritdoc />
     protected override void InitializeServices(IServiceCollection serviceCollection)
     {
-        base.InitializeServices(serviceCollection);
+        serviceCollection.AddSettingsObservers();
 
         // Must be singleton so we have a single source of truth for the code document
         serviceCollection.AddSingleton<CodeDocumentService>();
 
-        serviceCollection.AddSingleton<ConfigurationHelper>();
-        serviceCollection.AddSingleton<BookmarkHelper>();
-
         // As of now, any instance that ingests VisualStudioExtensibility is required to be added as a scoped
         // service.
+
+        base.InitializeServices(serviceCollection);
     }
 }

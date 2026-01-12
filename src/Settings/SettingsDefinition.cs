@@ -1,0 +1,54 @@
+﻿using Microsoft.VisualStudio.Extensibility;
+using Microsoft.VisualStudio.Extensibility.Settings;
+
+namespace CodeNav.Settings;
+
+#pragma warning disable VSEXTPREVIEW_SETTINGS // The settings API is currently in preview and marked as experimental
+
+internal static class SettingsDefinition
+{
+    [VisualStudioContribution]
+    internal static SettingCategory CodeNavSettingsCategory { get; } = new("codeNavSettings", "%CodeNav.Settings.Category.DisplayName%")
+    {
+        Description = "%CodeNav.Settings.Category.Description%",
+        GenerateObserverClass = true,
+    };
+
+    [VisualStudioContribution]
+    internal static Setting.Boolean ShowFilterToolbarSetting { get; } = new(
+        "showFilterToolbar",
+        "%CodeNav.Settings.ShowFilterToolbar.DisplayName%",
+        CodeNavSettingsCategory,
+        defaultValue: true)
+    {
+        Description = "%CodeNav.Settings.ShowFilterToolbar.Description%",
+    };
+
+    [VisualStudioContribution]
+    internal static Setting.Enum SortOrderSetting { get; } = new(
+        "sortOrder",
+        "%CodeNav.Settings.SortOrder.DisplayName%",
+        CodeNavSettingsCategory,
+        [
+            new("Unknown", "%CodeNav.Settings.SortOrder.Unknown%"),
+            new("SortByFile", "%CodeNav.Settings.SortOrder.SortByFile%"),
+            new("SortByName", "%CodeNav.Settings.SortOrder.SortByName%")
+        ],
+        defaultValue: "Unknown")
+    {
+        Description = "%CodeNav.Settings.SortOrder.Description%",
+    };
+
+    [VisualStudioContribution]
+    internal static Setting.ObjectArray FilterRulesSetting { get; } = new(
+        "filterRules",
+        "%CodeNav.Settings.FilterRules.DisplayName%",
+        CodeNavSettingsCategory,
+        [
+            new ArraySettingItemProperty.Boolean("filterRuleVisible", "%CodeNav.Settings.FilterRules.Visible.DisplayName%", true),
+        ],
+        defaultValue: [])
+    {
+        Description = "%CodeNav.Settings.FilterRules.Description%",
+    };
+}

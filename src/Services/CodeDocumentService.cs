@@ -1,14 +1,23 @@
-﻿using CodeNav.Helpers;
+﻿using CodeNav.Constants;
+using CodeNav.Helpers;
 using CodeNav.Languages.CSharp.Mappers;
+using CodeNav.Settings;
+using CodeNav.Settings.Settings;
 using CodeNav.ViewModels;
 using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Editor;
 
 namespace CodeNav.Services;
 
-public class CodeDocumentService(
-    ConfigurationHelper configurationHelper)
+#pragma warning disable VSEXTPREVIEW_SETTINGS // Type is for evaluation purposes only and is subject to change or removal in future updates.
+
+public class CodeDocumentService
 {
+    public CodeDocumentService(CodeNavSettingsCategoryObserver settingsObserver)
+    {
+        settingsObserver.Changed += SettingsObserver_ChangedAsync;
+    }
+
     /// <summary>
     /// DataContext for the tool window.
     /// </summary>
@@ -19,17 +28,11 @@ public class CodeDocumentService(
         ITextViewSnapshot textView,
         CancellationToken cancellationToken)
     {
-        var configuration = await configurationHelper.GetConfiguration();
-
-        var codeItems = await DocumentMapper.MapDocument(textView.Document, configuration, CodeDocumentViewModel, cancellationToken);
-
-        CodeDocumentViewModel.CodeDocument.Clear();
-        CodeDocumentViewModel.CodeDocument.AddRange(codeItems);
+        var codeItems = await DocumentMapper.MapDocument(textView.Document, CodeDocumentViewModel, cancellationToken);
 
         // Update the DataContext for the tool window.
-        CodeDocumentViewModel.Configuration = configuration;
-        CodeDocumentViewModel.SortOrder = configuration.SortOrder;
-        CodeDocumentViewModel.ConfigurationHelper = configurationHelper;
+        CodeDocumentViewModel.CodeDocument.Clear();
+        CodeDocumentViewModel.CodeDocument.AddRange(codeItems);
         CodeDocumentViewModel.Extensibility = extensibility;
         CodeDocumentViewModel.CodeDocumentService = this;
 
@@ -42,10 +45,6 @@ public class CodeDocumentService(
         // Apply current visibility settings to the document
         VisibilityHelper.SetCodeItemVisibility(CodeDocumentViewModel);
 
-        // Apply bookmarks
-        CodeDocumentViewModel.Bookmarks = ConfigurationHelper.GetFileConfiguration(CodeDocumentViewModel.Configuration, textView.Uri).Bookmarks;
-        BookmarkHelper.ApplyBookmarks(CodeDocumentViewModel);
-
         // Apply history items
         HistoryHelper.ApplyHistoryIndicator(CodeDocumentViewModel);
 
@@ -53,5 +52,16 @@ public class CodeDocumentService(
         OutliningHelper.ExpandAll(CodeDocumentViewModel);
 
         return CodeDocumentViewModel;
+    }
+
+    private Task SettingsObserver_ChangedAsync(CodeNavSettingsCategorySnapshot settingsSnapshot)
+    {
+        CodeDocumentViewModel.ShowFilterToolbarVisibility =
+            SettingsHelper.GetShowFilterToolbarVisibility(settingsSnapshot);
+
+        CodeDocumentViewModel.SortOrder =
+            SettingsHelper.GetSortOrder(settingsSnapshot);
+
+        return Task.CompletedTask;
     }
 }

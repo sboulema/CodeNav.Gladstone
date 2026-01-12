@@ -1,6 +1,5 @@
 ﻿using CodeNav.Constants;
 using CodeNav.Mappers;
-using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,7 +10,7 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public static class FieldMapper
 {
     public static CodeItem MapField(FieldDeclarationSyntax member, SemanticModel semanticModel,
-        Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        CodeDocumentViewModel codeDocumentViewModel)
     {
         var item = BaseMapper.MapBase<CodeItem>(member, member.Declaration.Variables.First().Identifier,
             member.Modifiers, semanticModel, codeDocumentViewModel);
@@ -21,7 +20,7 @@ public static class FieldMapper
             : CodeItemKindEnum.Variable;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
 
-        if (TriviaSummaryMapper.HasSummary(member) && configuration.UseXMLComments)
+        if (TriviaSummaryMapper.HasSummary(member))
         {
             item.Tooltip = TriviaSummaryMapper.Map(member);
         }

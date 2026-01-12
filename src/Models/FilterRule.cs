@@ -10,8 +10,6 @@ public class FilterRule
 
     public bool Visible { get; set; }
 
-    public string Opacity { get; set; } = string.Empty;
-
     public bool HideIfEmpty { get; set; }
 
     public bool Ignore { get; set; }

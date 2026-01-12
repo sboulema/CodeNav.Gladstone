@@ -19,9 +19,7 @@ Visual Studio extension to show the code structure of your current document
 ## Features broken
 - Sort by file order or by name 
 - Filter items by kind (method, property), access (public, private), name and bookmark
-
 - Synced collapsing/expanding regions
-- Colored Bookmarks
 - Regions
 
 ## Features dropped
@@ -31,6 +29,7 @@ Visual Studio extension to show the code structure of your current document
 - Visual studio 2017, 2019 support
 - Customizable fonts
 - Set code item opacity through filter window
+- Colored Bookmarks
 
 ## Language support
 - C#

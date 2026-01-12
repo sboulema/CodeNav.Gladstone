@@ -5,5 +5,17 @@
   "CodeNav.CodeNavToolWindow.SortByNameCommand.DisplayName": "Sort by name",
   "CodeNav.CodeNavToolWindow.SortByFileCommand.DisplayName": "Sort by file order",
   "CodeNav.CodeNavToolWindow.ExpandAllCommand.DisplayName": "Expand all",
-  "CodeNav.CodeNavToolWindow.CollapseAllCommand.DisplayName": "Collapse all"
+  "CodeNav.CodeNavToolWindow.CollapseAllCommand.DisplayName": "Collapse all",
+  "CodeNav.Settings.Category.DisplayName": "CodeNav",
+  "CodeNav.Settings.Category.Description": "CodeNav Settings",
+  "CodeNav.Settings.ShowFilterToolbar.DisplayName": "Show Filter Toolbar",
+  "CodeNav.Settings.ShowFilterToolbar.Description": "Show the filter toolbar in the tool window.",
+  "CodeNav.Settings.SortOrder.DisplayName": "Sorting Order",
+  "CodeNav.Settings.SortOrder.Description": "Determines how the code items in the tool window are sorted.",
+  "CodeNav.Settings.SortOrder.Unknown": "Unknown",
+  "CodeNav.Settings.SortOrder.SortByName": "Sort by name",
+  "CodeNav.Settings.SortOrder.SortByFile": "Sort by file",
+  "CodeNav.Settings.FilterRules.DisplayName": "Filter Rules",
+  "CodeNav.Settings.FilterRules.Description": "Determines how the different code items are shown in the tool window.",
+  "CodeNav.Settings.FilterRules.Visible.DisplayName": "Visible"
 }

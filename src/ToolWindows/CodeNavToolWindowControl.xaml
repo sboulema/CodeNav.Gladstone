@@ -360,26 +360,102 @@
             TextElement.Foreground="{DynamicResource {x:Static colors:EnvironmentColors.ToolWindowTextBrushKey}}"
             Padding="5">
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl Grid.Row="0" x:Name="CodeItemsControl"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Filter Toolbar -->
+            <Grid Visibility="{Binding ShowFilterToolbarVisibility}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Grid>
+                    <TextBox x:Name="FilterTextBox"
+                         Margin="4,3,3,0" 
+                         ToolTip="Text to filter the CodeNav contents by" 
+                         Text="{Binding FilterText, Mode=TwoWay}"
+                         Style="{StaticResource {x:Static styles:VsResourceKeys.TextBoxStyleKey}}" />
+                    <TextBlock
+                        IsHitTestVisible="False"
+                        Text="Enter text to filter by..."
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Margin="10,0,0,0"
+                        Padding="0,0,10,0"
+                        Foreground="DarkGray">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=FilterTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding Path=ClearFilterTextCommand}"
+                    ToolTip="Click to clear text filter contents">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <vs:Image Source="KnownMonikers.DeleteFilter" Width="16" Height="16" />
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=FilterTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding Path=OpenFilterDialogCommand}"
+                    ToolTip="Click to filter by item kind">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <vs:Image Source="KnownMonikers.Filter" Width="16" Height="16" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+            
+            <!-- Code items -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="CodeItemsControl"
                 ItemsSource="{Binding CodeDocument}"
                 Margin="4"
                 VirtualizingPanel.IsVirtualizing="True"
                 VirtualizingPanel.VirtualizationMode="Recycling"
                 ScrollViewer.CanContentScroll="True">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ContentControl Content="{Binding}">
-                        </ContentControl>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding}">
+                            </ContentControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
 
     </Border>
 </DataTemplate>

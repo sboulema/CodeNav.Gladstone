@@ -1,10 +1,8 @@
-﻿using System.Windows.Media;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
 using CodeNav.ViewModels;
 using CodeNav.Constants;
-using CodeNav.Models;
 using CodeNav.Mappers;
 using CodeNav.Extensions;
 using Microsoft.VisualStudio.Extensibility.UI;
@@ -17,7 +15,7 @@ namespace CodeNav.Languages.CSharp.Mappers;
 public static class StatementMapper
 {
     public static ObservableList<CodeItem> MapStatement(StatementSyntax? statement,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel)
     {
         if (statement == null)
         {
@@ -39,21 +37,21 @@ public static class StatementMapper
                     return [];
                 }
 
-                return MapStatements(blockSyntax.Statements, semanticModel, configuration, codeDocumentViewModel);
+                return MapStatements(blockSyntax.Statements, semanticModel, codeDocumentViewModel);
             case SyntaxKind.TryStatement:
                 if (statement is not TryStatementSyntax trySyntax)
                 {
                     return [];
                 }
 
-                return MapStatement(trySyntax.Block, semanticModel, configuration, codeDocumentViewModel);
+                return MapStatement(trySyntax.Block, semanticModel, codeDocumentViewModel);
             case SyntaxKind.LocalFunctionStatement:
                 if (statement is not LocalFunctionStatementSyntax syntax)
                 {
                     return [];
                 }
 
-                item = MethodMapper.MapMethod(syntax, semanticModel, configuration, codeDocumentViewModel);
+                item = MethodMapper.MapMethod(syntax, semanticModel, codeDocumentViewModel);
                 return item != null
                     ? [item]
                     : [];
@@ -62,11 +60,11 @@ public static class StatementMapper
         }
     }
 
-    public static ObservableList<CodeItem> MapStatement(BlockSyntax? statement, SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel) 
-        => MapStatement(statement as StatementSyntax, semanticModel, configuration, codeDocumentViewModel);
+    public static ObservableList<CodeItem> MapStatement(BlockSyntax? statement, SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel) 
+        => MapStatement(statement as StatementSyntax, semanticModel, codeDocumentViewModel);
 
     public static ObservableList<CodeItem> MapStatements(SyntaxList<StatementSyntax> statements,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel)
     {
         var list = new ObservableList<CodeItem>();
 
@@ -77,7 +75,7 @@ public static class StatementMapper
 
         foreach (var statement in statements)
         {
-            list.AddRange(MapStatement(statement, semanticModel, configuration, codeDocumentViewModel));
+            list.AddRange(MapStatement(statement, semanticModel, codeDocumentViewModel));
         }
 
         return list;

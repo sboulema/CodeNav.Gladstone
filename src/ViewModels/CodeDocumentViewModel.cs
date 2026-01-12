@@ -17,87 +17,48 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
         SortCommand = Sort();
     }
 
-    [DataMember]
-    public ObservableList<CodeItem> CodeDocument { get; set; } = [];
-
     public VisualStudioExtensibility Extensibility { get; set; }
 
     public CodeDocumentService CodeDocumentService { get; set; }
 
-    public Configuration Configuration { get; set; } = new();
-
-    public ConfigurationHelper? ConfigurationHelper { get; set; }
-
-    public bool ShowFilterToolbar => Configuration.ShowFilterToolbar;
-
-    public Visibility ShowFilterToolbarVisibility
-        => Configuration.ShowFilterToolbar
-            ? Visibility.Visible
-            : Visibility.Collapsed;
-
     public SortOrderEnum SortOrder;
 
-    public Visibility BookmarksAvailable
-        => Bookmarks.Any() ? Visibility.Visible : Visibility.Collapsed;
+    public List<string> HistoryItemIds = [];
 
-    public void AddBookmark(string id, int bookmarkStyleIndex)
+    public List<FilterRule> FilterRules = [];
+
+    #region Dependency properties
+
+    [DataMember]
+    public ObservableList<CodeItem> CodeDocument { get; set; } = [];
+
+    private Visibility _showFilterToolbarVisibility = Visibility.Visible;
+
+    /// <summary>
+    /// Visibility of the filter toolbar.
+    /// </summary>
+    [DataMember]
+    public Visibility ShowFilterToolbarVisibility
     {
-        Bookmarks.Remove(id);
-
-        Bookmarks.Add(id, bookmarkStyleIndex);
-
-        //NotifyPropertyChanged("BookmarksAvailable");
+        get => _showFilterToolbarVisibility;
+        set => SetProperty(ref _showFilterToolbarVisibility, value);
     }
-
-    public void RemoveBookmark(string id)
-    {
-        Bookmarks.Remove(id);
-
-        //NotifyPropertyChanged("BookmarksAvailable");
-    }
-
-    public void ClearBookmarks()
-    {
-        BookmarkHelper.ClearBookmarks(this);
-
-        //NotifyPropertyChanged("BookmarksAvailable");
-    }
-
-    public Visibility ClearFilterVisibility
-        => string.IsNullOrEmpty(FilterText)
-            ? Visibility.Collapsed
-            : Visibility.Visible;
 
     private string _filterText = string.Empty;
+
+    /// <summary>
+    /// Text to filter code items by name.
+    /// </summary>
+    [DataMember]
     public string FilterText
     {
         get => _filterText;
         set
         {
-            _filterText = value;
-            //NotifyPropertyChanged("ClearFilterVisibility");
+            SetProperty(ref _filterText, value);
+            VisibilityHelper.SetCodeItemVisibility(this);
         }
     }
-
-    private Dictionary<string, int> _bookmarks = [];
-
-    [DataMember]
-    public Dictionary<string, int> Bookmarks
-    {
-        get => _bookmarks;
-        set
-        {
-            _bookmarks = value;
-            //NotifyPropertyChanged("BookmarksAvailable");
-        }
-    }
-
-    public bool FilterOnBookmarks;
-
-    [DataMember]
-    public List<BookmarkStyle> BookmarkStyles = [];
-
-    public List<string> HistoryItemIds = [];
 
     [DataMember]
     public AsyncCommand SortCommand { get; }
@@ -110,11 +71,14 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
                 return;
             }
 
-            Configuration.SortOrder = sortOrder;
+            // TODO: How are we going to sort, custom toolbar or default toolbar?
+            //Configuration.SortOrder = sortOrder;
             SortOrder = sortOrder;
             SortHelper.Sort(this);
 
-            await ConfigurationHelper.SaveConfiguration(Configuration, cancellationToken);
+            //await ConfigurationHelper.SaveConfiguration(Configuration, cancellationToken);
         });
     }
+
+    #endregion
 }

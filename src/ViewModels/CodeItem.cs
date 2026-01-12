@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.Extensibility.Editor;
 using Microsoft.VisualStudio.Extensibility.UI;
 using System.Runtime.Serialization;
 using System.Windows;
-using System.Windows.Media;
 
 namespace CodeNav.ViewModels;
 
@@ -118,17 +117,6 @@ public class CodeItem : NotifyPropertyChangedObject
 
     #endregion
 
-    public List<BookmarkStyle> BookmarkStyles
-        => CodeDocumentViewModel?.BookmarkStyles ?? [];
-
-    public bool FilterOnBookmarks
-    {
-        get => CodeDocumentViewModel?.FilterOnBookmarks ?? false;
-        set => CodeDocumentViewModel!.FilterOnBookmarks = value;
-    }
-
-    public bool BookmarksAvailable => CodeDocumentViewModel?.Bookmarks.Any() == true;
-
     private bool _contextMenuIsOpen;
     public bool ContextMenuIsOpen
     {
@@ -144,20 +132,6 @@ public class CodeItem : NotifyPropertyChangedObject
     {
         get => _visibility;
         set => SetProperty(ref _visibility, value);
-    }
-    #endregion
-
-    #region Colors
-    private string _backgroundColor = string.Empty;
-
-    [DataMember]
-    public string BackgroundColor
-    {
-        get => _backgroundColor;
-        set
-        {
-            SetProperty(ref _backgroundColor, value);
-        }
     }
     #endregion
 
@@ -241,96 +215,6 @@ public class CodeItem : NotifyPropertyChangedObject
     //public ICommand CollapseAllCommand => new DelegateCommand(CollapseAll);
     //public void CollapseAll(object args) => Control?.ToggleAll(false, new List<CodeItem>() { this });
 
-    ///// <summary>
-    ///// Add a single bookmark
-    ///// </summary>
-    //public ICommand BookmarkCommand => new DelegateCommand(Bookmark);
-    //public void Bookmark(object args) => BookmarkAsync(args).FireAndForget();
-
-    //public async Task BookmarkAsync(object args)
-    //{
-    //    try
-    //    {
-    //        if (args is not BookmarkStyle bookmarkStyle ||
-    //            CodeDocumentViewModel == null)
-    //        {
-    //            return;
-    //        }
-
-    //        BookmarkHelper.ApplyBookmarkStyle(this, bookmarkStyle);
-
-    //        var bookmarkStyleIndex = BookmarkHelper.GetIndex(CodeDocumentViewModel, bookmarkStyle);
-
-    //        CodeDocumentViewModel.AddBookmark(Id, bookmarkStyleIndex);
-
-    //        await SolutionStorageHelper.SaveToSolutionStorage(CodeDocumentViewModel);
-
-    //        ContextMenuIsOpen = false;
-
-    //        NotifyPropertyChanged("BookmarksAvailable");
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        LogHelper.Log("CodeItem.Bookmark", e);
-    //    }
-    //}
-
-    ///// <summary>
-    ///// Delete a single bookmark
-    ///// </summary>
-    //public ICommand DeleteBookmarkCommand => new DelegateCommand(DeleteBookmark);
-    //public void DeleteBookmark(object args)
-    //{
-    //    try
-    //    {
-    //        BookmarkHelper.ClearBookmark(this);
-
-    //        CodeDocumentViewModel?.RemoveBookmark(Id);
-
-    //        SolutionStorageHelper.SaveToSolutionStorage(CodeDocumentViewModel).FireAndForget();
-
-    //        NotifyPropertyChanged("BookmarksAvailable");
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        LogHelper.Log("CodeItem.DeleteBookmark", e);
-    //    }
-    //}
-
-    ///// <summary>
-    ///// Clear all bookmarks
-    ///// </summary>
-    //public ICommand ClearBookmarksCommand => new DelegateCommand(ClearBookmarks);
-    //public void ClearBookmarks(object args)
-    //{
-    //    try
-    //    {
-    //        CodeDocumentViewModel?.ClearBookmarks();
-
-    //        SolutionStorageHelper.SaveToSolutionStorage(CodeDocumentViewModel).FireAndForget();
-
-    //        NotifyPropertyChanged("BookmarksAvailable");
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        LogHelper.Log("CodeItem.ClearBookmarks", e);
-    //    }
-    //}
-
-    //public ICommand FilterBookmarksCommand => new DelegateCommand(FilterBookmarks);
-    //public void FilterBookmarks(object args) => Control?.FilterBookmarks();
-
-    //public ICommand CustomizeBookmarkStylesCommand => new DelegateCommand(CustomizeBookmarkStyles);
-    //public void CustomizeBookmarkStyles(object args)
-    //{
-    //    if (CodeDocumentViewModel == null)
-    //    {
-    //        return;
-    //    }
-
-    //    new BookmarkStylesWindow(CodeDocumentViewModel).ShowDialog();
-    //    BookmarkHelper.ApplyBookmarks(CodeDocumentViewModel);
-    //}
     #endregion
 
     private async Task ScrollToLine(

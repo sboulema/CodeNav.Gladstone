@@ -1,6 +1,5 @@
 ﻿using CodeNav.Constants;
 using CodeNav.Interfaces;
-using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,7 +17,7 @@ public static class RegionMapper
     /// <param name="tree">SyntaxTree for the given file</param>
     /// <param name="span">Start and end line in which we search for regions</param>
     /// <returns>Flat list of regions</returns>
-    public static ObservableList<CodeRegionItem> MapRegions(SyntaxTree tree, TextSpan span, Configuration configuration)
+    public static ObservableList<CodeRegionItem> MapRegions(SyntaxTree tree, TextSpan span, CodeDocumentViewModel codeDocumentViewModel)
     {
         var regionList = new ObservableList<CodeRegionItem>();
 
@@ -27,9 +26,9 @@ public static class RegionMapper
             return regionList;
         }
 
-        if (configuration.FilterRules.Any())
+        if (codeDocumentViewModel.FilterRules.Any())
         {
-            var filterRule = configuration.FilterRules
+            var filterRule = codeDocumentViewModel.FilterRules
                 .LastOrDefault(f => f.Kind == CodeItemKindEnum.Region ||
                                     f.Kind == CodeItemKindEnum.All);
 

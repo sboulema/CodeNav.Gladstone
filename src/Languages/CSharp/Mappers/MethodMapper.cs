@@ -1,38 +1,36 @@
 ﻿using CodeNav.Constants;
 using CodeNav.Helpers;
 using CodeNav.Mappers;
-using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Extensibility;
 using System.Windows;
-using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
 public static class MethodMapper
 {
     public static CodeItem MapMethod(MethodDeclarationSyntax member, SemanticModel semanticModel,
-        Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        CodeDocumentViewModel codeDocumentViewModel)
         => MapMethod(member, member.Identifier, member.Modifiers,
             member.Body, member.ReturnType as ITypeSymbol, member.ParameterList,
-            CodeItemKindEnum.Method, semanticModel, configuration, codeDocumentViewModel);
+            CodeItemKindEnum.Method, semanticModel, codeDocumentViewModel);
 
     public static CodeItem MapMethod(LocalFunctionStatementSyntax member,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel)
         => MapMethod(member, member.Identifier, member.Modifiers,
             member.Body, member.ReturnType as ITypeSymbol, member.ParameterList,
-            CodeItemKindEnum.LocalFunction, semanticModel, configuration, codeDocumentViewModel);
+            CodeItemKindEnum.LocalFunction, semanticModel, codeDocumentViewModel);
 
     private static CodeItem MapMethod(SyntaxNode node, SyntaxToken identifier,
         SyntaxTokenList modifiers, BlockSyntax? body, ITypeSymbol? returnType,
         ParameterListSyntax parameterList, CodeItemKindEnum kind,
-        SemanticModel semanticModel, Configuration configuration, CodeDocumentViewModel codeDocumentViewModel)
+        SemanticModel semanticModel, CodeDocumentViewModel codeDocumentViewModel)
     {
         CodeItem item;
 
-        var statementsCodeItems = StatementMapper.MapStatement(body, semanticModel, configuration, codeDocumentViewModel);
+        var statementsCodeItems = StatementMapper.MapStatement(body, semanticModel, codeDocumentViewModel);
 
         VisibilityHelper.SetCodeItemVisibility(statementsCodeItems);
 
@@ -56,8 +54,7 @@ public static class MethodMapper
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
         item.StartLine = BaseMapper.GetStartLine(identifier);
 
-        if (TriviaSummaryMapper.HasSummary(node) &&
-            configuration.UseXMLComments)
+        if (TriviaSummaryMapper.HasSummary(node))
         {
             item.Tooltip = TriviaSummaryMapper.Map(node);
         }

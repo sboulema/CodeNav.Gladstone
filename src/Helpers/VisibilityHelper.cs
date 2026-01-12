@@ -10,34 +10,36 @@ namespace CodeNav.Helpers;
 public static class VisibilityHelper
 {
     public static ObservableCollection<CodeItem> SetCodeItemVisibility(CodeDocumentViewModel model)
-        => SetCodeItemVisibility(model.CodeDocument, model.FilterText, model.FilterOnBookmarks, model.Bookmarks);
+        => SetCodeItemVisibility(model.CodeDocument, model.FilterText);
 
     /// <summary>
-    /// Loop through all codeItems and look into Settings to see if the item should be visible or not.
+    /// Loop through all code items and set if the item should be visible or not.
     /// </summary>
-    /// <param name="document">List of codeItems</param>
-    /// <param name="name">Filters items by name</param>
-    /// <param name="filterOnBookmarks">Filters items by being bookmarked</param>
-    /// <param name="bookmarks">List of bookmarked items</param>
-    public static ObservableCollection<CodeItem> SetCodeItemVisibility(ObservableCollection<CodeItem> document, string name = "",
-        bool filterOnBookmarks = false, Dictionary<string, int>? bookmarks = null)
+    /// <remarks>
+    /// - Check if the code item should be visible based on the fitler rules
+    /// - Check if the code item's name contains the filter text
+    /// </remarks>
+    /// <param name="document">List of code items</param>
+    /// <param name="filterText">Text that should be contained in the code items name</param>
+    public static ObservableCollection<CodeItem> SetCodeItemVisibility(ObservableCollection<CodeItem> codeDocument, string filterText = "")
     {
-        if (document?.Any() != true)
+        // TODO: We can do this easier with flatten() ?!
+        if (codeDocument?.Any() != true)
         {
-            // No code items have been found to filter on by name
             return [];
         }
 
         try
         {
-            foreach (var item in document)
+            foreach (var item in codeDocument)
             {
-                if (item is IMembers hasMembersItem && hasMembersItem.Members.Any())
+                if (item is IMembers hasMembersItem &&
+                    hasMembersItem.Members.Any())
                 {
-                    SetCodeItemVisibility(hasMembersItem.Members, name, filterOnBookmarks, bookmarks);
+                    SetCodeItemVisibility(hasMembersItem.Members, filterText);
                 }
 
-                item.IsVisible = ShouldBeVisible(item, name, filterOnBookmarks, bookmarks)
+                item.IsVisible = ShouldBeVisible(item, filterText)
                     ? Visibility.Visible
                     : Visibility.Collapsed;
             }
@@ -47,7 +49,7 @@ public static class VisibilityHelper
             LogHelper.Log("Error during setting visibility", e);
         }
 
-        return document;
+        return codeDocument;
     }
 
     public static bool IsEmpty(List<CodeItem> document)
@@ -71,37 +73,37 @@ public static class VisibilityHelper
     }
 
     /// <summary>
-    /// Determine if an item should be visible
+    /// Determine if a code item should be visible
     /// </summary>
+    /// <remarks>
+    /// - Check if the code item should be visible based on the fitler rules
+    /// - Check if the code item's name contains the filter text
+    /// </remarks>
     /// <param name="item">CodeItem that is checked</param>
-    /// <param name="name">Text filter</param>
-    /// <param name="filterOnBookmarks">Are we only showing bookmarks?</param>
-    /// <param name="bookmarks">List of current bookmarks</param>
+    /// <param name="filterText">Text filter</param>
     /// <returns></returns>
-    private static bool ShouldBeVisible(CodeItem item, string name = "",
-        bool filterOnBookmarks = false, Dictionary<string, int>? bookmarks = null)
+    private static bool ShouldBeVisible(CodeItem item, string filterText = "")
     {
         var visible = true;
 
+        // Check filter rules
         var filterRule = GetFilterRule(item);
 
-        if (filterRule != null && filterRule.Visible == false)
+        if (filterRule != null &&
+            filterRule.Visible == false)
         {
             return false;
         }
 
-        if (filterOnBookmarks)
+        // Check filter text
+        if (!string.IsNullOrEmpty(filterText))
         {
-            visible = BookmarkHelper.IsBookmark(bookmarks, item);
-        }
-
-        if (!string.IsNullOrEmpty(name))
-        {
-            visible = visible && item.Name.Contains(name, StringComparison.OrdinalIgnoreCase);
+            visible = visible &&
+                item.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase);
         }
 
         // If an item has any visible members, it should be visible.
-        // If an item does not have any visible members, hide it depending on an option
+        // If an item does not have any visible members, hide it depending on an the "Hide if empty" filter rule setting.
         if (item is IMembers hasMembersItem &&
             hasMembersItem?.Members != null)
         {
@@ -132,12 +134,12 @@ public static class VisibilityHelper
 
     private static FilterRule? GetFilterRule(CodeItem item)
     {
-        if (item.CodeDocumentViewModel?.Configuration.FilterRules == null)
+        if (item.CodeDocumentViewModel?.FilterRules == null)
         {
             return null;
         }
 
-        var filterRule = item.CodeDocumentViewModel?.Configuration.FilterRules
+        var filterRule = item.CodeDocumentViewModel?.FilterRules
             .LastOrDefault(f => (f.Access == item.Access || f.Access == CodeItemAccessEnum.All) &&
                                 (f.Kind == item.Kind || f.Kind == CodeItemKindEnum.All));
 

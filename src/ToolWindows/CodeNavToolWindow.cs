@@ -8,7 +8,8 @@ using Microsoft.VisualStudio.RpcContracts.RemoteUI;
 namespace CodeNav.ToolWindows;
 
 [VisualStudioContribution]
-internal class CodeNavToolWindow(CodeDocumentService documentService) : ToolWindow
+internal class CodeNavToolWindow(
+    CodeDocumentService documentService) : ToolWindow
 {
     /// <inheritdoc />
     public override ToolWindowConfiguration ToolWindowConfiguration => new()
