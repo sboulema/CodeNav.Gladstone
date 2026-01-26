@@ -25,6 +25,9 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnetVersion }}.x
 
+      - name: Restore/Build/Test
+        run: dotnet test
+
       - name: Build VSIX
         run: dotnet publish src -p:Version=${{ env.version }}
 
