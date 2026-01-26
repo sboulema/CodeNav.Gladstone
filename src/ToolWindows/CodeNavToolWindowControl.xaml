@@ -45,6 +45,16 @@
             <GradientStop Color="{DynamicResource {x:Static colors:EnvironmentColors.ComboBoxBorderColorKey}}" Offset="0.0" />
             <GradientStop Color="Transparent" Offset="1" />
         </LinearGradientBrush>
+        <VisualBrush x:Key="ExpanderRegionBorderBrush">
+            <VisualBrush.Visual>
+                <Rectangle
+                    StrokeThickness="1"
+                    Stroke="Red" 
+                    StrokeDashArray="5 3"
+                    Width="1000px"
+                    Height="1000px" />
+            </VisualBrush.Visual>
+        </VisualBrush>
         <Style TargetType="Expander">
             <Setter Property="Foreground" Value="{DynamicResource {x:Static colors:EnvironmentColors.ToolWindowTextBrushKey}}"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -54,7 +64,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Expander">
-                        <Border x:Name="ExpanderBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="0" SnapsToDevicePixels="true">
+                        <Border x:Name="ExpanderBorder"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="0"
+                            SnapsToDevicePixels="true">
+                            
                             <StackPanel Orientation="Vertical">
                                 <Grid Background="Transparent" SnapsToDevicePixels="False" Margin="0,0,4,0">
                                     <Grid.ColumnDefinitions>
@@ -126,6 +142,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="True">
                                 <Setter Property="BorderBrush" TargetName="ExpanderBorder" Value="{DynamicResource {x:Static styles:VsBrushes.ClassDesignerDefaultConnectionKey}}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataTemplateType}" Value="Region">
+                                <Setter Property="BorderBrush" TargetName="ExpanderBorder" Value="{StaticResource ExpanderRegionBorderBrush}" />
                             </DataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -319,41 +338,41 @@
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate>
-                                <StackPanel>
-                                    <Expander
+                                <Expander
                                         IsExpanded="{Binding IsExpanded}"
                                         ToolTip="{Binding Tooltip}"
-                                        HorizontalAlignment="Stretch">
-                                        <Expander.Header>
-                                            <TextBlock
-                                                Text="{Binding Name}"
-                                                FontWeight="SemiBold" />
-                                        </Expander.Header>
-                                        <!--<ItemsControl 
+                                        HorizontalAlignment="Stretch"
+                                        Margin="0,3">
+                                    <Expander.Header>
+                                        <TextBlock
+                                            Text="{Binding Name}"
+                                            FontWeight="SemiBold"
+                                            Style="{StaticResource {x:Static styles:VsResourceKeys.TextBlockEnvironment90PercentFontSizeStyleKey}}"/>
+                                    </Expander.Header>
+                                    <ItemsControl 
                                             ItemsSource="{Binding Members}"
-                                            Margin="4"
+                                            Margin="3"
                                             VirtualizingPanel.IsVirtualizing="True"
                                             VirtualizingPanel.VirtualizationMode="Recycling"
                                             ScrollViewer.CanContentScroll="False">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <VirtualizingStackPanel />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <ContentControl Content="{Binding}">
-                                                    </ContentControl>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                            <ItemsControl.ItemContainerStyle>
-                                                <Style>
-                                                    <Setter Property="FrameworkElement.Visibility" Value="{Binding Visibility}"/>
-                                                </Style>
-                                            </ItemsControl.ItemContainerStyle>
-                                        </ItemsControl>-->
-                                    </Expander>
-                                </StackPanel>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <ContentControl Content="{Binding}">
+                                                </ContentControl>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style>
+                                                <Setter Property="FrameworkElement.Visibility" Value="{Binding Visibility}"/>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+                                    </ItemsControl>
+                                </Expander>
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>

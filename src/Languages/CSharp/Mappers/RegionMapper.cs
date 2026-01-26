@@ -207,14 +207,8 @@ public static class RegionMapper
     private static int? GetStartLine(SyntaxTrivia source) =>
         source.SyntaxTree?.GetLineSpan(source.Span).StartLinePosition.Line + 1;
 
-    private static LinePosition? GetStartLinePosition(SyntaxTrivia source) =>
-        source.SyntaxTree?.GetLineSpan(source.Span).StartLinePosition;
-
     private static int? GetEndLine(SyntaxTrivia source) =>
         source.SyntaxTree?.GetLineSpan(source.Span).EndLinePosition.Line + 1;
-
-    private static LinePosition? GetEndLinePosition(SyntaxTrivia source) =>
-        source.SyntaxTree?.GetLineSpan(source.Span).EndLinePosition;
 
     /// <summary>
     /// Check if item 1 is contained within item 2

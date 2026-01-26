@@ -15,12 +15,12 @@ Visual Studio extension to show the code structure of your current document
 - Dark theme support
 - Collapse/Expand all ranges
 - History/edit indicators
+- Regions
 
 ## Features broken
 - Sort by file order or by name 
 - Filter items by kind (method, property), access (public, private), name and bookmark
 - Synced collapsing/expanding regions
-- Regions
 
 ## Features dropped
 - Top Margin
