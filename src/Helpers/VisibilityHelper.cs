@@ -134,14 +134,15 @@ public static class VisibilityHelper
 
     private static FilterRule? GetFilterRule(CodeItem item)
     {
-        if (item.CodeDocumentViewModel?.FilterRules == null)
+        if (item.CodeDocumentViewModel?.FilterRules?.Any() != true)
         {
             return null;
         }
 
         var filterRule = item.CodeDocumentViewModel?.FilterRules
-            .LastOrDefault(f => (f.Access == item.Access || f.Access == CodeItemAccessEnum.All) &&
-                                (f.Kind == item.Kind || f.Kind == CodeItemKindEnum.All));
+            .LastOrDefault(filterRule =>
+                (filterRule.Access == item.Access || filterRule.Access == CodeItemAccessEnum.All) &&
+                (filterRule.Kind == item.Kind || filterRule.Kind == CodeItemKindEnum.All));
 
         return filterRule;
     }

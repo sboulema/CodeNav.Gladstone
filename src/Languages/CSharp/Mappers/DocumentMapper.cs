@@ -1,18 +1,23 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis;
-using Microsoft.VisualStudio.Extensibility.Editor;
 using CodeNav.ViewModels;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.VisualStudio.Extensibility.Editor;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
-internal class DocumentMapper
+public class DocumentMapper
 {
     public static async Task<IEnumerable<CodeItem>> MapDocument(ITextDocumentSnapshot documentSnapshot,
         CodeDocumentViewModel codeDocumentViewModel,
         CancellationToken cancellationToken)
+        => await MapDocument(documentSnapshot.Text.CopyToString(), codeDocumentViewModel, cancellationToken);
+
+    public static async Task<IEnumerable<CodeItem>> MapDocument(string text,
+        CodeDocumentViewModel codeDocumentViewModel,
+        CancellationToken cancellationToken)
     {
-        var tree = CSharpSyntaxTree.ParseText(documentSnapshot.Text.CopyToString(), cancellationToken: cancellationToken);
+        var tree = CSharpSyntaxTree.ParseText(text, cancellationToken: cancellationToken);
         var msCorLib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
         var compilation = CSharpCompilation.Create("CodeNavCompilation", [tree], [msCorLib]);
         var semanticModel = compilation.GetSemanticModel(tree);

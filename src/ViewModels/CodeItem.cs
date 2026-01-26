@@ -25,6 +25,9 @@ public class CodeItem : NotifyPropertyChangedObject
 
     public CodeDocumentViewModel? CodeDocumentViewModel { get; set; }
 
+    /// <summary>
+    /// Display name of the code item
+    /// </summary>
     [DataMember]
     public string Name { get; set; } = string.Empty;
 
@@ -52,6 +55,9 @@ public class CodeItem : NotifyPropertyChangedObject
     [DataMember]
     public ImageMoniker OverlayMoniker { get; set; }
 
+    /// <summary>
+    /// Unique id of the code item based on fully qualified name
+    /// </summary>
     [DataMember]
     public string Id { get; set; } = string.Empty;
 
