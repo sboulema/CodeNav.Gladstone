@@ -175,6 +175,7 @@
                             CommandParameter="{Binding StartLine}"
                             ToolTip="{Binding Tooltip}"
                             Visibility="{Binding Visibility}"
+                            ContextMenu="{DynamicResource ItemContextMenu}"
                             Background="Transparent"
                             BorderThickness="0" 
                             HorizontalContentAlignment="Stretch"

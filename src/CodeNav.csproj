@@ -21,10 +21,14 @@
 	
   <ItemGroup>
     <None Remove="ToolWindows\CodeNavToolWindowControl.xaml" />
+    <None Remove="ToolWindows\Templates\ItemContextMenu.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="ToolWindows\CodeNavToolWindowControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolWindows\Templates\ItemContextMenu.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

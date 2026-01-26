@@ -2,7 +2,11 @@
 
 namespace CodeNav.ToolWindows;
 
-internal class CodeNavToolWindowControl(object? dataContext, SynchronizationContext? synchronizationContext = null)
-    : RemoteUserControl(dataContext, synchronizationContext)
+internal class CodeNavToolWindowControl : RemoteUserControl
 {
+    public CodeNavToolWindowControl(object? dataContext, SynchronizationContext? synchronizationContext = null)
+        : base(dataContext, synchronizationContext)
+    {
+        ResourceDictionaries.AddEmbeddedResource("CodeNav.ToolWindows.Templates.ItemContextMenu.xaml");
+    }
 }
