@@ -123,10 +123,10 @@
                                 <Setter Property="BorderThickness" TargetName="ExpanderHeaderBorder" Value="0" />
                             </Trigger>
                             <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="False">
-                                <Setter Property="BorderBrush" TargetName="ExpanderBorder" Value="DarkGray" />
+                                <Setter Property="BorderBrush" TargetName="ExpanderBorder" Value="{DynamicResource {x:Static styles:VsBrushes.ComboBoxBorderKey}}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="True">
-                                <Setter Property="BorderBrush" TargetName="ExpanderBorder" Value="{DynamicResource {x:Static styles:VsBrushes.FileTabSelectedBorderKey}}" />
+                                <Setter Property="BorderBrush" TargetName="ExpanderBorder" Value="{DynamicResource {x:Static styles:VsBrushes.ClassDesignerDefaultConnectionKey}}" />
                             </DataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -135,6 +135,7 @@
         </Style>
         <!-- Highlighting Styles --> 
         <Style x:Key="HighlightNameStyle" TargetType="Run">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static styles:VsBrushes.ToolWindowTextKey}}" />
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
@@ -157,12 +158,6 @@
                     </MultiDataTrigger.Conditions>
                     <Setter Property="FontWeight" Value="SemiBold" />
                 </MultiDataTrigger>
-                <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="True">
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static styles:VsBrushes.FileTabSelectedBorderKey}}" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=DataContext.IsHighlighted, RelativeSource={RelativeSource Self}}" Value="False">
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static styles:VsBrushes.ToolWindowTextKey}}" />
-                </DataTrigger>
             </Style.Triggers>
         </Style>
         <!-- CodeItem Styles -->
@@ -243,7 +238,7 @@
                                         </Expander.Header>
                                         <ItemsControl 
                                             ItemsSource="{Binding Members}"
-                                            Margin="4"
+                                            Margin="3"
                                             VirtualizingPanel.IsVirtualizing="True"
                                             VirtualizingPanel.VirtualizationMode="Recycling"
                                             ScrollViewer.CanContentScroll="False">
@@ -293,7 +288,7 @@
                                         </Expander.Header>
                                         <ItemsControl 
                                             ItemsSource="{Binding Members}"
-                                            Margin="4"
+                                            Margin="3"
                                             VirtualizingPanel.IsVirtualizing="True"
                                             VirtualizingPanel.VirtualizationMode="Recycling"
                                             ScrollViewer.CanContentScroll="False">
@@ -366,6 +361,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Static styles:VsResourceKeys.TextBoxStyleKey}}" />
     </DataTemplate.Resources>
     
     <Border Background="{DynamicResource {x:Static colors:EnvironmentColors.ToolWindowBackgroundBrushKey}}"
@@ -387,7 +383,7 @@
 
                 <Grid>
                     <TextBox x:Name="FilterTextBox"
-                         Padding="3"
+                         Padding="2"
                          ToolTip="Type words to search for" 
                          Text="{Binding FilterText, Mode=TwoWay}" />
                     <TextBlock
@@ -395,7 +391,7 @@
                         Text="Search CodeNav"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left"
-                        Margin="10,0,0,0"
+                        Margin="4,0,0,0"
                         Padding="0,0,10,0"
                         Foreground="DarkGray">
                         <TextBlock.Style>
@@ -411,7 +407,7 @@
                     </TextBlock>
                 </Grid>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="4,0">
                     <Button
                         Command="{Binding Path=ClearFilterTextCommand}"
                         ToolTip="Click to clear text filter contents">
@@ -445,7 +441,7 @@
             </Grid>
             
             <!-- Code items -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,4,0,0">
                 <ItemsControl x:Name="CodeItemsControl"
                 ItemsSource="{Binding CodeDocument}"
                 VirtualizingPanel.IsVirtualizing="True"
