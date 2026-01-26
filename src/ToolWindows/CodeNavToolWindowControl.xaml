@@ -41,6 +41,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <LinearGradientBrush x:Key="ExpanderHeaderGradientBrush" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="{DynamicResource {x:Static colors:EnvironmentColors.ComboBoxBorderColorKey}}" Offset="0.0" />
+            <GradientStop Color="Transparent" Offset="1" />
+        </LinearGradientBrush>
         <Style TargetType="Expander">
             <Setter Property="Foreground" Value="{DynamicResource {x:Static colors:EnvironmentColors.ToolWindowTextBrushKey}}"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -58,14 +62,9 @@
                                         <ColumnDefinition Width="17"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Border BorderThickness="0" x:Name="ExpanderHeaderBorder">
-                                        <Border.BorderBrush>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                <GradientStop Color="DarkGray" Offset="0.0" />
-                                                <GradientStop Color="LightGray" Offset="0.5" />
-                                                <GradientStop Color="Transparent" Offset="1" />
-                                            </LinearGradientBrush>
-                                        </Border.BorderBrush>
+                                    <Border x:Name="ExpanderHeaderBorder"
+                                        BorderThickness="0"
+                                        BorderBrush="{StaticResource ExpanderHeaderGradientBrush}">
                                         <Button Command="{Binding Path=ClickItemCommand}" 
                                             CommandParameter="{Binding StartLinePosition}"
                                             ContentTemplate="{TemplateBinding HeaderTemplate}"
