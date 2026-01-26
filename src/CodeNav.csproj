@@ -34,9 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Templates\Menus\ItemContextMenu.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
     <None Update="Templates\UserControls\FilterToolbarUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
