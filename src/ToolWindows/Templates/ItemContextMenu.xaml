@@ -5,9 +5,8 @@
                     xmlns:colors="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0">
 
     <ContextMenu
-      x:Key="ItemContextMenu"
-      IsOpen="{Binding Path=ContextMenuIsOpen, Mode=TwoWay}"
-      Style="{DynamicResource {x:Static styles:VsResourceKeys.ContextMenuStyleKey}}">
+        x:Key="ItemContextMenu"
+        Style="{DynamicResource {x:Static styles:VsResourceKeys.ContextMenuStyleKey}}">
 
         <MenuItem Header="Go to Definition" Command="{Binding Path=GoToDefinitionCommand}">
             <MenuItem.Icon>

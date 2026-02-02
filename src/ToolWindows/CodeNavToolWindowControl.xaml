@@ -244,7 +244,7 @@
                                         ToolTip="{Binding Tooltip}"
                                         HorizontalAlignment="Stretch">
                                         <Expander.Header>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal" ContextMenu="{DynamicResource ItemContextMenu}">
                                                 <vs:Image Source="{Binding Moniker}" Width="16" Height="16" Margin="0,0,3,0" />
                                                 <TextBlock>
                                                     <Run Text="{Binding Name}" 
@@ -294,7 +294,7 @@
                                         ToolTip="{Binding Tooltip}"
                                         HorizontalAlignment="Stretch">
                                         <Expander.Header>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal" ContextMenu="{DynamicResource ItemContextMenu}">
                                                 <vs:Image Source="{Binding Moniker}" Width="16" Height="16" Margin="0,0,3,0" />
                                                 <TextBlock>
                                                     <Run Text="{Binding Name}" 
@@ -347,7 +347,8 @@
                                         <TextBlock
                                             Text="{Binding Name}"
                                             FontWeight="SemiBold"
-                                            Style="{StaticResource {x:Static styles:VsResourceKeys.TextBlockEnvironment90PercentFontSizeStyleKey}}"/>
+                                            Style="{StaticResource {x:Static styles:VsResourceKeys.TextBlockEnvironment90PercentFontSizeStyleKey}}"
+                                            ContextMenu="{DynamicResource ItemContextMenu}" />
                                     </Expander.Header>
                                     <ItemsControl 
                                             ItemsSource="{Binding Members}"

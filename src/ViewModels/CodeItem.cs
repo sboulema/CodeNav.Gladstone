@@ -14,13 +14,15 @@ public class CodeItem : NotifyPropertyChangedObject
 {
     public CodeItem()
     {
-        ClickItemCommand = ClickItem();
-        CopyNameCommand = CopyName();
-        GoToDefinitionCommand = GoToDefinition();
-        GoToEndCommand = GoToEnd();
-        SelectInCodeCommand = SelectInCode();
-        ClearHistoryCommand = ClearHistory();
-        RefreshCommand = Refresh();
+        ClickItemCommand = new(ClickItem);
+        GoToDefinitionCommand = new(GoToDefinition);
+        GoToEndCommand = new(GoToEnd);
+        SelectInCodeCommand = new(SelectInCode);
+        CopyNameCommand = new(CopyName);
+        RefreshCommand = new(Refresh);
+        CollapseAllCommand = new(CollapseAll);
+        ExpandAllCommand = new(ExpandAll);
+        ClearHistoryCommand = new(ClearHistory);
     }
 
     public CodeDocumentViewModel? CodeDocumentViewModel { get; set; }
@@ -123,103 +125,88 @@ public class CodeItem : NotifyPropertyChangedObject
 
     #endregion
 
-    private bool _contextMenuIsOpen;
-    public bool ContextMenuIsOpen
-    {
-        get => _contextMenuIsOpen;
-        set => SetProperty(ref _contextMenuIsOpen, value);
-    }
-
-    #region IsVisible
     private Visibility _visibility;
 
+    /// <summary>
+    /// Visibility of the code item, used in filtering and searching
+    /// </summary>
     [DataMember]
     public Visibility Visibility
     {
         get => _visibility;
         set => SetProperty(ref _visibility, value);
     }
-    #endregion
 
     #region Commands
     [DataMember]
     public AsyncCommand ClickItemCommand { get; }
-    public AsyncCommand ClickItem()
+    public async Task ClickItem(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
     {
-        return new AsyncCommand(async (obj, clientContext, cancellationToken) =>
-        {
-            HistoryHelper.AddItemToHistory(this);
-            await ScrollToLine(Span.Start, clientContext, cancellationToken);
-        });
+        HistoryHelper.AddItemToHistory(this);
+        await ScrollToLine(Span.Start, clientContext, cancellationToken);
     }
 
     [DataMember]
     public AsyncCommand GoToDefinitionCommand { get; }
-    public AsyncCommand GoToDefinition()
-    {
-        return new AsyncCommand(async (obj, clientContext, cancellationToken) =>
-        {
-            await ScrollToLine(Span.Start, clientContext, cancellationToken);
-        });
-    }
+    private async Task GoToDefinition(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
+        => await ScrollToLine(Span.Start, clientContext, cancellationToken);
 
     [DataMember]
     public AsyncCommand ClearHistoryCommand { get; }
-    public AsyncCommand ClearHistory()
-    {
-        return new AsyncCommand(async (parameter, cancellationToken) =>
-        {
-            await HistoryHelper.ClearHistory(this, cancellationToken);
-        });
-    }
+    public async Task ClearHistory(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
+        => await HistoryHelper.ClearHistory(this, cancellationToken);
 
     [DataMember]
     public AsyncCommand GoToEndCommand { get; }
-    public AsyncCommand GoToEnd()
-    {
-        return new AsyncCommand(async (obj, clientContext, cancellationToken) =>
-        {
-            await ScrollToLine(Span.End, clientContext, cancellationToken);
-        });
-    }
+    public async Task GoToEnd(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
+        => await ScrollToLine(Span.End, clientContext, cancellationToken);
 
     [DataMember]
     public AsyncCommand SelectInCodeCommand { get; }
-    public AsyncCommand SelectInCode()
-    {
-        return new AsyncCommand(async (obj, clientContext, cancellationToken) =>
-        {
-            await SelectLines(clientContext, cancellationToken);
-        });
-    }
+    public async Task SelectInCode(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
+        => await SelectLines(clientContext, cancellationToken);
 
     [DataMember]
     public AsyncCommand CopyNameCommand { get; }
-    public AsyncCommand CopyName()
-        => new(async (parameter, cancellationToken) =>
+    public async Task CopyName(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
+    {
+        TaskCompletionSource<bool> taskCompletionSource = new();
+        var thread = new Thread(() =>
         {
-            Clipboard.SetText(Name);
-            await Task.CompletedTask;
+            try
+            {
+                Clipboard.SetText(Name);
+                taskCompletionSource.SetResult(false);
+            }
+            catch (Exception e)
+            {
+                taskCompletionSource.SetException(e);
+            }
         });
+
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+    }
 
     [DataMember]
     public AsyncCommand RefreshCommand { get; }
-    public AsyncCommand Refresh()
+    public async Task Refresh(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
     {
-        return new AsyncCommand(async (parameter, clientContext, cancellationToken) =>
-        {
-            var textView = await clientContext.GetActiveTextViewAsync(cancellationToken);
-            await CodeDocumentViewModel!
-                .CodeDocumentService!
-                .UpdateCodeDocumentViewModel(CodeDocumentViewModel.Extensibility, textView, cancellationToken);
-        });
+        var textView = await clientContext.GetActiveTextViewAsync(cancellationToken);
+        await CodeDocumentViewModel!
+            .CodeDocumentService!
+            .UpdateCodeDocumentViewModel(CodeDocumentViewModel.Extensibility, textView, cancellationToken);
     }
 
-    //public ICommand ExpandAllCommand => new DelegateCommand(ExpandAll);
-    //public void ExpandAll(object args) => Control?.ToggleAll(true, new List<CodeItem>() { this });
+    [DataMember]
+    public AsyncCommand ExpandAllCommand { get; }
+    public async Task ExpandAll(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
+        => OutliningHelper.ExpandAll(CodeDocumentViewModel!);
 
-    //public ICommand CollapseAllCommand => new DelegateCommand(CollapseAll);
-    //public void CollapseAll(object args) => Control?.ToggleAll(false, new List<CodeItem>() { this });
+    [DataMember]
+    public AsyncCommand CollapseAllCommand { get; }
+    public async Task CollapseAll(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
+        => OutliningHelper.CollapseAll(CodeDocumentViewModel!);
 
     #endregion
 

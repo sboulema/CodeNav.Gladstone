@@ -2,7 +2,6 @@
 using CodeNav.Interfaces;
 using CodeNav.ViewModels;
 using Microsoft.VisualStudio.Extensibility.Editor;
-using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace CodeNav.Helpers;
@@ -155,5 +154,7 @@ public class HistoryHelper
         }
 
         item.CodeDocumentViewModel.HistoryItemIds.Clear();
+
+        ApplyHistoryIndicator(item.CodeDocumentViewModel);
     }
 }
