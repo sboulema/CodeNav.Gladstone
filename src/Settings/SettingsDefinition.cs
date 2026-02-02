@@ -25,6 +25,56 @@ internal static class SettingsDefinition
     };
 
     [VisualStudioContribution]
+    internal static Setting.Boolean ShowRegionsSetting { get; } = new(
+        "showRegions",
+        "%CodeNav.Settings.ShowRegions.DisplayName%",
+        CodeNavSettingsCategory,
+        defaultValue: true)
+    {
+        Description = "%CodeNav.Settings.ShowRegions.Description%",
+    };
+
+    [VisualStudioContribution]
+    internal static Setting.Boolean ShowHistoryIndicatorsSetting { get; } = new(
+        "showHistoryIndicators",
+        "%CodeNav.Settings.ShowHistoryIndicators.DisplayName%",
+        CodeNavSettingsCategory,
+        defaultValue: true)
+    {
+        Description = "%CodeNav.Settings.ShowHistoryIndicators.Description%",
+    };
+
+    [VisualStudioContribution]
+    internal static Setting.Boolean AutoHighlightSetting { get; } = new(
+        "autoHighlight",
+        "%CodeNav.Settings.AutoHighlight.DisplayName%",
+        CodeNavSettingsCategory,
+        defaultValue: true)
+    {
+        Description = "%CodeNav.Settings.AutoHighlight.Description%",
+    };
+
+    [VisualStudioContribution]
+    internal static Setting.Boolean UpdateWhileTypingSetting { get; } = new(
+        "updateWhileTyping",
+        "%CodeNav.Settings.UpdateWhileTyping.DisplayName%",
+        CodeNavSettingsCategory,
+        defaultValue: true)
+    {
+        Description = "%CodeNav.Settings.UpdateWhileTyping.Description%",
+    };
+
+    [VisualStudioContribution]
+    internal static Setting.Integer AutoLoadLineThreshold { get; } = new(
+        "autoLoadLineThreshold",
+        "%CodeNav.Settings.AutoLoadLineThreshold.DisplayName%",
+        CodeNavSettingsCategory,
+        defaultValue: 0)
+    {
+        Description = "%CodeNav.Settings.AutoLoadLineThreshold.Description%",
+    };
+
+    [VisualStudioContribution]
     internal static Setting.Enum SortOrderSetting { get; } = new(
         "sortOrder",
         "%CodeNav.Settings.SortOrder.DisplayName%",

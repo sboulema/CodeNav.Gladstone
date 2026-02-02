@@ -1,7 +1,5 @@
-﻿using CodeNav.Constants;
-using CodeNav.Helpers;
+﻿using CodeNav.Helpers;
 using CodeNav.Languages.CSharp.Mappers;
-using CodeNav.Settings;
 using CodeNav.Settings.Settings;
 using CodeNav.ViewModels;
 using Microsoft.VisualStudio.Extensibility;

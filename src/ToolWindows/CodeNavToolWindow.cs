@@ -30,7 +30,8 @@ internal class CodeNavToolWindow(
             ToolbarChild.Separator,
             ToolbarChild.Command<ExpandAllCommand>(),
             ToolbarChild.Command<CollapseAllCommand>(),
-            // TODO: Add settings command
+            ToolbarChild.Separator,
+            ToolbarChild.Command<SettingsCommand>(),
         ],
     };
 
