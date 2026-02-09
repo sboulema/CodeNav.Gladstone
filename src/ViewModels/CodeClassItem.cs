@@ -1,4 +1,5 @@
 ﻿using CodeNav.Interfaces;
+using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.UI;
 using System.Runtime.Serialization;
 using System.Windows;
@@ -11,6 +12,7 @@ public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
     public CodeClassItem()
     {
         DataTemplateType = "Class";
+        ToggleExpandCollapseCommand = new(ToggleExpandCollapse);
     }
 
     [DataMember]
@@ -48,4 +50,11 @@ public class CodeClassItem : CodeItem, IMembers, ICodeCollapsible
         => Members.Any(m => m.Visibility == Visibility.Visible)
             ? Visibility.Visible
             : Visibility.Collapsed;
+
+    [DataMember]
+    public AsyncCommand ToggleExpandCollapseCommand { get; }
+    public async Task ToggleExpandCollapse(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
+    {
+        IsExpanded = !IsExpanded;
+    }
 }
