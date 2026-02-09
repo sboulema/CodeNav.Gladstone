@@ -43,7 +43,6 @@ internal class TextViewEventListener(
         {
             // Show the "line threshold passed" placeholder if the document exceeds the line threshold for auto-loading
             codeDocumentService.CodeDocumentViewModel.CodeDocument.Clear();
-            codeDocumentService.CodeDocumentViewModel.HistoryItemIds.Clear();
             codeDocumentService.CodeDocumentViewModel.CodeDocument.AddRange(PlaceholderHelper.CreateLineThresholdPassedItem());
 
             return;
@@ -88,7 +87,6 @@ internal class TextViewEventListener(
         {
             // Show the "line threshold passed" placeholder if the document exceeds the line threshold for auto-loading
             codeDocumentService.CodeDocumentViewModel.CodeDocument.Clear();
-            codeDocumentService.CodeDocumentViewModel.HistoryItemIds.Clear();
             codeDocumentService.CodeDocumentViewModel.CodeDocument.AddRange(PlaceholderHelper.CreateLineThresholdPassedItem());
 
             return Task.CompletedTask;

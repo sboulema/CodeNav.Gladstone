@@ -16,22 +16,6 @@ public static class PlaceholderHelper
 
     private static IEnumerable<CodeItem> CreateItem(string name, ImageMoniker moniker)
         => [
-            //new CodeNamespaceItem
-            //{
-            //    Id = name,
-            //    IsExpanded = true,
-            //    Members =
-            //    [
-            //        new CodeClassItem
-            //        {
-            //            Name = name,
-            //            FullName = name,
-            //            Id = name,
-            //            Moniker = moniker,
-            //            IsExpanded = true
-            //        }
-            //    ]
-            //}
             new CodeItem
             {
                 Name = name,
