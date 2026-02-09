@@ -52,7 +52,6 @@ public static class MethodMapper
         item.Id = IdMapper.MapId(item.FullName, parameterList);
         item.Kind = kind;
         item.Moniker = IconMapper.MapMoniker(item.Kind, item.Access);
-        item.StartLine = BaseMapper.GetStartLine(identifier);
 
         if (TriviaSummaryMapper.HasSummary(node))
         {

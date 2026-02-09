@@ -22,6 +22,9 @@ internal class SortByNameCommand(
     /// <inheritdoc />
     public override async Task ExecuteCommandAsync(IClientContext clientContext, CancellationToken cancellationToken)
     {
-        SortHelper.Sort(codeDocumentService.CodeDocumentViewModel.CodeDocument, SortOrderEnum.SortByName);
+        codeDocumentService.CodeDocumentViewModel.SortOrder = SortOrderEnum.SortByName;
+        var sorted = SortHelper.Sort(codeDocumentService.CodeDocumentViewModel);
+        codeDocumentService.CodeDocumentViewModel.CodeDocument.Clear();
+        codeDocumentService.CodeDocumentViewModel.CodeDocument.AddRange(sorted);
     }
 }

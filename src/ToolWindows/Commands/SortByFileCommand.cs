@@ -23,6 +23,8 @@ internal class SortByFileCommand(
     public override async Task ExecuteCommandAsync(IClientContext clientContext, CancellationToken cancellationToken)
     {
         codeDocumentService.CodeDocumentViewModel.SortOrder = SortOrderEnum.SortByFile;
-        SortHelper.Sort(codeDocumentService.CodeDocumentViewModel);
+        var sorted = SortHelper.Sort(codeDocumentService.CodeDocumentViewModel);
+        codeDocumentService.CodeDocumentViewModel.CodeDocument.Clear();
+        codeDocumentService.CodeDocumentViewModel.CodeDocument.AddRange(sorted);
     }
 }

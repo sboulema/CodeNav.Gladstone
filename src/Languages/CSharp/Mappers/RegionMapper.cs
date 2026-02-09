@@ -40,59 +40,59 @@ public static class RegionMapper
 
         var root = tree.GetRoot();
         
-        // Find all start points of regions
-        foreach (var regionDirective in root.DescendantTrivia()
-            .Where(i => (i.RawKind == (int)SyntaxKind.RegionDirectiveTrivia) && 
-                         span.Contains(i.Span)))
-        {
-            regionList.Add(MapRegion(regionDirective));
-        }
+        // Find all region start trivia
+        var regionStarts = root
+            .DescendantTrivia()
+            .Where(syntaxTrivia => syntaxTrivia.IsKind(SyntaxKind.RegionDirectiveTrivia))
+            .Where(syntaxTrivia => span.Contains(syntaxTrivia.Span));
 
-        if (!regionList.Any())
-        {
-            return regionList;
-        }
+        regionList.AddRange(regionStarts.Select(MapRegion));
 
-        // Find all matching end points of regions
-        foreach (var endRegionDirective in root.DescendantTrivia()
-            .Where(j => (j.RawKind == (int)SyntaxKind.EndRegionDirectiveTrivia) && 
-                         span.Contains(j.Span)))
+        // Find all region end trivia
+        var regionEnds = root
+            .DescendantTrivia()
+            .Where(syntaxTrivia => syntaxTrivia.IsKind(SyntaxKind.EndRegionDirectiveTrivia))
+            .Where(syntaxTrivia => span.Contains(syntaxTrivia.Span));
+
+        // Match a region start with the closest region end
+        foreach (var regionEnd in regionEnds)
         {
             var region = regionList
-                .LastOrDefault(x => x.StartLine < GetStartLine(endRegionDirective) &&
-                                    x.EndLine == null);
-            
+                .LastOrDefault(regionStart => regionStart.Span.Start < regionEnd.Span.Start &&
+                    regionStart.Span.End == regionStart.Span.Start);
+
             if (region == null)
             {
                 continue;
             }
 
-            region.EndLine = GetEndLine(endRegionDirective);
+            region.Span = new(region.Span.Start, regionEnd.Span.End - region.Span.Start);
         }
 
-        var regions = ToHierarchy(regionList, int.MinValue, int.MaxValue);
+        var regions = ToHierarchy(regionList, span);
 
         return regions;
     }
 
     /// <summary>
-    /// Transform the flat list of Regions to a nested List based on the start and end lines of the items
+    /// Transform the flat list of Regions to a nested List based on the span start and span end of the items
     /// </summary>
     /// <param name="regionList"></param>
     /// <param name="startLine"></param>
     /// <param name="endLine"></param>
     /// <returns></returns>
-    private static ObservableList<CodeRegionItem> ToHierarchy(ObservableList<CodeRegionItem> regionList, int? startLine, int? endLine)
+    private static ObservableList<CodeRegionItem> ToHierarchy(ObservableList<CodeRegionItem> regionList, TextSpan textSpan)
     {
         var nestedRegions = new ObservableList<CodeRegionItem>();
 
         foreach (var region in regionList)
         {
-            if (IsContainedWithin(region, startLine, endLine) && 
-                regionList.Any(otherBiggerRegion => IsContainedWithin(region, otherBiggerRegion) &&
-                    (startLine != int.MinValue ? otherBiggerRegion.EndLine - otherBiggerRegion.StartLine < endLine - startLine : true)) == false)
+            if (StrictContains(textSpan, region.Span) && 
+                !regionList.Any(otherBiggerRegion =>
+                    StrictContains(otherBiggerRegion.Span, region.Span) &&
+                    otherBiggerRegion.Span.Length < textSpan.Length))
             {
-                region.Members = [.. ToHierarchy(regionList, region.StartLine, region.EndLine).Cast<CodeItem>()];
+                region.Members = [.. ToHierarchy(regionList, region.Span).Cast<CodeItem>()];
 
                 nestedRegions.Add(region);
             }
@@ -101,19 +101,18 @@ public static class RegionMapper
         return nestedRegions;
     }
 
-    private static CodeRegionItem MapRegion(SyntaxTrivia source)
+    private static CodeRegionItem MapRegion(SyntaxTrivia regionStart)
     {
-        var name = MapRegionName(source);
+        var name = MapRegionName(regionStart);
 
-        return new CodeRegionItem
+        return new()
         {
             Name = name,
             FullName = name,
             Id = name,
             Tooltip = name,
-            StartLine = GetStartLine(source),
             Kind = CodeItemKindEnum.Region,
-            Span = source.Span
+            Span = new(regionStart.Span.Start, 0)
         };
     }
 
@@ -150,27 +149,31 @@ public static class RegionMapper
     /// <returns></returns>
     public static bool AddToRegion(ObservableList<CodeRegionItem> regions, CodeItem item)
     {
-        if (item?.StartLine == null)
+        if (item?.Span == null)
         {
             return false;
         }
 
         foreach (var region in regions)
         {
-            if (region?.Kind == CodeItemKindEnum.Region)
+            if (region?.Kind != CodeItemKindEnum.Region)
             {
-                if (AddToRegion(region.Members, item))
-                {
-                    return true;
-                }
+                continue;
+            }
 
-                if (item.StartLine >= region.StartLine && item.StartLine <= region.EndLine)
-                {
-                    region.Members.Add(item);
-                    return true;
-                }
+            if (AddToRegion(region.Members, item))
+            {
+                return true;
+            }
+
+            if (item.Span.Start >= region.Span.Start &&
+                item.Span.Start <= region.Span.End)
+            {
+                region.Members.Add(item);
+                return true;
             }
         }
+
         return false;
     }
 
@@ -194,7 +197,8 @@ public static class RegionMapper
                 return true;
             }
 
-            if (member is CodeRegionItem regionItem && IsContainedWithin(item, member))
+            if (member is CodeRegionItem regionItem &&
+                member.Span.Contains(item.Span))
             {
                 regionItem.Members.Add(item);
                 return true;
@@ -204,23 +208,19 @@ public static class RegionMapper
         return false;
     }
 
-    private static int? GetStartLine(SyntaxTrivia source) =>
-        source.SyntaxTree?.GetLineSpan(source.Span).StartLinePosition.Line + 1;
-
-    private static int? GetEndLine(SyntaxTrivia source) =>
-        source.SyntaxTree?.GetLineSpan(source.Span).EndLinePosition.Line + 1;
-
     /// <summary>
-    /// Check if item 1 is contained within item 2
+    /// Determines whether <paramref name="smallSpan"/> falls completely within <paramref name="bigSpan"/>.
     /// </summary>
-    /// <param name="smallerRegion">Smaller Item</param>
-    /// <param name="biggerRegion">Bigger Item</param>
-    /// <returns></returns>
-    private static bool IsContainedWithin(CodeItem smallerRegion, CodeItem biggerRegion)
-        => smallerRegion.StartLine > biggerRegion.StartLine &&
-           smallerRegion.EndLine < biggerRegion.EndLine;
-
-    private static bool IsContainedWithin(CodeItem region, int? startLine, int? endLine)
-        => region.StartLine > startLine &&
-           region.EndLine < endLine;
+    /// <param name="smallSpan">
+    /// The span to check.
+    /// </param>
+    /// <param name="bigSpan">
+    /// The span to check.
+    /// </param>
+    /// <returns>
+    /// <c>true</c> if the specified span falls completely within this span without overlapping start or end, otherwise <c>false</c>.
+    /// </returns>
+    public static bool StrictContains(TextSpan bigSpan, TextSpan smallSpan)
+        => smallSpan.Start > bigSpan.Start &&
+           smallSpan.End < bigSpan.End;
 }

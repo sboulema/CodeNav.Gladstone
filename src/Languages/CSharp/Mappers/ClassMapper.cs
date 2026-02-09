@@ -61,16 +61,10 @@ public class ClassMapper
             }
         }
 
-        // Add regions to class if they have a region member inside them
+        // Add regions to class
         if (regions.Any())
         {
-            foreach (var region in regions)
-            {
-                if (region?.Members.Any() == true)
-                {
-                    item.Members.Add(region);
-                }
-            }
+            item.Members.AddRange(regions);
         }
 
         return item;

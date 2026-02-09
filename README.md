@@ -79,3 +79,5 @@ Visual Studio extension to show the code structure of your current document
 [Fix having multiple projects](https://github.com/microsoft/VSExtensibility/issues/388)
 
 [Making a WPF TextBox binding fire on each new character](https://stackoverflow.com/questions/10619596/making-a-wpf-textbox-binding-fire-on-each-new-character)
+
+[Bind width of a textbox inside VisualBrush](https://stackoverflow.com/questions/30670911/bind-width-of-a-textbox-inside-visualbrush)

@@ -11,8 +11,6 @@
   "CodeNav.Settings.Category.Description": "CodeNav Settings",
   "CodeNav.Settings.ShowFilterToolbar.DisplayName": "Show Filter Toolbar",
   "CodeNav.Settings.ShowFilterToolbar.Description": "Show the filter toolbar in the tool window.",
-  "CodeNav.Settings.ShowRegions.DisplayName": "Show Regions",
-  "CodeNav.Settings.ShowRegions.Description": "Show regions in the tool window.",
   "CodeNav.Settings.ShowHistoryIndicators.DisplayName": "Show History Indicators",
   "CodeNav.Settings.ShowHistoryIndicators.Description": "Show history/edit indicators on code items in the tool window.",
   "CodeNav.Settings.AutoHighlight.DisplayName": "Auto-Highlight Code Item",

@@ -21,19 +21,19 @@ internal class TestMethodsLocal : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // Inner item should be a class
-        var innerClass = (codeItems.First() as CodeNamespaceItem).Members.First() as CodeClassItem;
+        var innerClass = (codeItems.First() as CodeNamespaceItem)?.Members.First() as CodeClassItem;
 
         // Class should have a method
-        var method = innerClass.Members.First() as CodeClassItem;
+        var method = innerClass?.Members.First() as CodeClassItem;
 
-        Assert.That(method.Name, Is.EqualTo("Method"));
+        Assert.That(method?.Name, Is.EqualTo("Method"));
 
         // Method should have a local method
         var localMethod = method.Members.First() as CodeFunctionItem;
 
-        Assert.That(localMethod.Name, Is.EqualTo("LocalMethod"));
+        Assert.That(localMethod?.Name, Is.EqualTo("LocalMethod"));
 
         // Local method should have a proper starting line
-        Assert.That(localMethod.StartLine, Is.EqualTo(8));
+        Assert.That(localMethod.Span.Start, Is.EqualTo(124));
     }
 }

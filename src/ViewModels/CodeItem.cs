@@ -39,10 +39,9 @@ public class CodeItem : NotifyPropertyChangedObject
     [DataMember]
     public string DataTemplateType { get; set; } = string.Empty;
 
-    public int? StartLine { get; set; }
-
-    public int? EndLine { get; set; }
-
+    /// <summary>
+    /// Gets or sets the span of text represented by this code item.
+    /// </summary>
     public TextSpan Span { get; set; }
 
     /// <summary>

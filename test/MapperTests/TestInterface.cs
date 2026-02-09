@@ -13,29 +13,29 @@ internal class TestInterface : BaseTest
         // First item should be a namespace
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
-        // Namespace item should have 2 members
-        Assert.That((codeItems.First() as IMembers).Members, Has.Count.EqualTo(3));
+        // Namespace item should have 3 members
+        Assert.That((codeItems.First() as IMembers)?.Members, Has.Count.EqualTo(3));
 
         // First item should be an interface
-        var innerInterface = (codeItems.First() as IMembers).Members.First() as CodeInterfaceItem;
-        Assert.That(innerInterface.Members, Has.Count.EqualTo(3));
+        var innerInterface = (codeItems.First() as IMembers)?.Members.First() as CodeInterfaceItem;
+        Assert.That(innerInterface?.Members, Has.Count.EqualTo(3));
 
         // Second item should be the implementing class
-        var implementingClass = (codeItems.First() as IMembers).Members[1] as CodeClassItem;
+        var implementingClass = (codeItems.First() as IMembers)?.Members[1] as CodeClassItem;
 
-        Assert.That(implementingClass.Kind, Is.EqualTo(CodeItemKindEnum.Class));
+        Assert.That(implementingClass?.Kind, Is.EqualTo(CodeItemKindEnum.Class));
         Assert.That(implementingClass.Members, Has.Count.EqualTo(3));
 
         var implementedInterface = implementingClass.Members.Last() as CodeImplementedInterfaceItem;
 
-        Assert.That(implementedInterface.Kind, Is.EqualTo(CodeItemKindEnum.ImplementedInterface));
+        Assert.That(implementedInterface?.Kind, Is.EqualTo(CodeItemKindEnum.ImplementedInterface));
         Assert.That(implementedInterface.Members, Has.Count.EqualTo(3));
         Assert.That(implementedInterface.Name, Does.Not.StartWith("#"));
 
         // Items should have proper start lines
-        Assert.That(implementedInterface.Members[0].StartLine, Is.EqualTo(12));
-        Assert.That(implementedInterface.Members[1].StartLine, Is.EqualTo(17));
-        Assert.That(implementedInterface.Members[2].StartLine, Is.EqualTo(34));
+        Assert.That(implementedInterface.Members[0].Span.Start, Is.EqualTo(261));
+        Assert.That(implementedInterface.Members[1].Span.Start, Is.EqualTo(346));
+        Assert.That(implementedInterface.Members[2].Span.Start, Is.EqualTo(717));
     }
 
     [Test]
@@ -48,20 +48,20 @@ internal class TestInterface : BaseTest
         // First item should be a namespace
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
-        // Namespace item should have 2 members
-        Assert.That((codeItems.First() as IMembers).Members, Has.Count.EqualTo(3));
+        // Namespace item should have 3 members
+        Assert.That((codeItems.First() as IMembers)?.Members, Has.Count.EqualTo(3));
 
-        // Third item should be a implementing class
-        var implementingClass = (codeItems.First() as IMembers).Members.Last() as CodeClassItem;
+        // Third item should be the second implementing class
+        var implementingClass = (codeItems.First() as IMembers)?.Members.Last() as CodeClassItem;
 
-        Assert.That(implementingClass.Kind, Is.EqualTo(CodeItemKindEnum.Class));
+        Assert.That(implementingClass?.Kind, Is.EqualTo(CodeItemKindEnum.Class));
         Assert.That(implementingClass.Members, Has.Count.EqualTo(3));
 
         var region = implementingClass.Members.Last() as CodeRegionItem;
 
-        var implementedInterface = region.Members.First() as CodeImplementedInterfaceItem;
+        var implementedInterface = region?.Members.First() as CodeImplementedInterfaceItem;
 
-        Assert.That(implementedInterface.Kind, Is.EqualTo(CodeItemKindEnum.ImplementedInterface));
+        Assert.That(implementedInterface?.Kind, Is.EqualTo(CodeItemKindEnum.ImplementedInterface));
         Assert.That(implementedInterface.Members, Has.Count.EqualTo(3));
     }
 
@@ -76,16 +76,16 @@ internal class TestInterface : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // Namespace item should have 1 member
-        Assert.That((codeItems.First() as IMembers).Members, Has.Count.EqualTo(1));
+        Assert.That((codeItems.First() as IMembers)?.Members, Has.Count.EqualTo(1));
 
         // First item should be an interface
-        var innerInterface = (codeItems.First() as IMembers).Members.First() as CodeInterfaceItem;
-        Assert.That(innerInterface.Members, Has.Count.EqualTo(4));
+        var innerInterface = (codeItems.First() as IMembers)?.Members.First() as CodeInterfaceItem;
+        Assert.That(innerInterface?.Members, Has.Count.EqualTo(4));
 
         // Region in interface should have 1 member
         var region = innerInterface.Members[3] as CodeRegionItem;
 
-        Assert.That(region.Kind, Is.EqualTo(CodeItemKindEnum.Region));
+        Assert.That(region?.Kind, Is.EqualTo(CodeItemKindEnum.Region));
         Assert.That(region.Members, Has.Count.EqualTo(1));
     }
 }

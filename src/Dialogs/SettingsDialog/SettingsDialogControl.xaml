@@ -25,10 +25,6 @@
                     Show the filter toolbar
                 </CheckBox>
 
-                <CheckBox IsChecked="{Binding ShowRegions, Mode=TwoWay}">
-                    Show regions
-                </CheckBox>
-
                 <CheckBox IsChecked="{Binding ShowHistoryIndicators, Mode=TwoWay}">
                     Show history/edit indicators
                 </CheckBox>

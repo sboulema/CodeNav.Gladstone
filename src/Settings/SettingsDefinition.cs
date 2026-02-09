@@ -25,16 +25,6 @@ internal static class SettingsDefinition
     };
 
     [VisualStudioContribution]
-    internal static Setting.Boolean ShowRegionsSetting { get; } = new(
-        "showRegions",
-        "%CodeNav.Settings.ShowRegions.DisplayName%",
-        CodeNavSettingsCategory,
-        defaultValue: true)
-    {
-        Description = "%CodeNav.Settings.ShowRegions.Description%",
-    };
-
-    [VisualStudioContribution]
     internal static Setting.Boolean ShowHistoryIndicatorsSetting { get; } = new(
         "showHistoryIndicators",
         "%CodeNav.Settings.ShowHistoryIndicators.DisplayName%",
@@ -84,7 +74,7 @@ internal static class SettingsDefinition
             new("SortByFile", "%CodeNav.Settings.SortOrder.SortByFile%"),
             new("SortByName", "%CodeNav.Settings.SortOrder.SortByName%")
         ],
-        defaultValue: "Unknown")
+        defaultValue: "SortByFile")
     {
         Description = "%CodeNav.Settings.SortOrder.Description%",
     };

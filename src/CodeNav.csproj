@@ -36,13 +36,4 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Templates\UserControls\FilterToolbarUserControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Templates\UserControls\MainToolbarUserControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-  </ItemGroup>
 </Project>

@@ -83,7 +83,6 @@
                                         BorderThickness="0"
                                         BorderBrush="{StaticResource ExpanderHeaderGradientBrush}">
                                         <Button Command="{Binding Path=ClickItemCommand}" 
-                                            CommandParameter="{Binding StartLine}"
                                             ContentTemplate="{TemplateBinding HeaderTemplate}"
                                             ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
                                             Content="{TemplateBinding Header}"
@@ -199,7 +198,7 @@
                             HorizontalContentAlignment="Stretch"
                             HorizontalAlignment="Stretch"
                             Margin="-3, 0"
-                            Padding="3, 3">
+                            Padding="3">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -279,6 +278,7 @@
                                             <ItemsControl.ItemContainerStyle>
                                                 <Style>
                                                     <Setter Property="FrameworkElement.Visibility" Value="{Binding Visibility}"/>
+                                                    <Setter Property="FrameworkElement.Margin" Value="0,0,0,3"/>
                                                 </Style>
                                             </ItemsControl.ItemContainerStyle>
                                         </ItemsControl>

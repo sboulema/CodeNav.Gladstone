@@ -1,5 +1,6 @@
 ﻿using CodeNav.Helpers;
 using CodeNav.Services;
+using CodeNav.ViewModels;
 using Microsoft;
 using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Editor;
@@ -69,13 +70,15 @@ internal class TextViewEventListener(
         {
             HighlightHelper.HighlightCurrentItem(
                 codeDocumentService.CodeDocumentViewModel,
-                args.AfterTextView.Selection.ActivePosition.GetContainingLine().LineNumber);
+                args.AfterTextView.Selection.ActivePosition.Offset);
         }
     }
 
     /// <inheritdoc />
     public async Task TextViewClosedAsync(ITextViewSnapshot textViewSnapshot, CancellationToken cancellationToken)
     {
+        codeDocumentService.CodeDocumentViewModel.CodeDocument.Clear();
+        codeDocumentService.CodeDocumentViewModel.CodeDocument.AddRange(PlaceholderHelper.CreateSelectDocumentItem());
         return;
     }
 

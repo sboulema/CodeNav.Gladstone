@@ -14,7 +14,7 @@ internal class RegionMapperTests : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // There should be a single class
-        var regionClass = (codeItems.First() as IMembers).Members.First() as CodeClassItem;
+        var regionClass = (codeItems.First() as IMembers)?.Members.First() as CodeClassItem;
         Assert.That(regionClass, Is.Not.Null);
 
         // The class should have a function in it
@@ -45,7 +45,7 @@ internal class RegionMapperTests : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // There should be a single class
-        var regionClass = (codeItems.First() as IMembers).Members.First() as CodeClassItem;
+        var regionClass = (codeItems.First() as IMembers)?.Members.First() as CodeClassItem;
         Assert.That(regionClass, Is.Not.Null);
 
         // The class should have a region in it
@@ -64,7 +64,7 @@ internal class RegionMapperTests : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // There should be a single class
-        var regionClass = (codeItems.First() as IMembers).Members.First() as CodeClassItem;
+        var regionClass = (codeItems.First() as IMembers)?.Members.First() as CodeClassItem;
         Assert.That(regionClass, Is.Not.Null);
 
         // The class should have a function in it
@@ -76,6 +76,6 @@ internal class RegionMapperTests : BaseTest
 
         // The region should have correct span for outlining usages
         Assert.That(regionR1.Span.Start, Is.EqualTo(101));
-        Assert.That(regionR1.Span.End, Is.EqualTo(111));
+        Assert.That(regionR1.Span.End, Is.EqualTo(704));
     }
 }

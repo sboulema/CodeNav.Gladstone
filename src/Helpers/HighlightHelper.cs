@@ -9,9 +9,9 @@ public static class HighlightHelper
     /// Highlight code items that contain the current line number
     /// </summary>
     /// <param name="codeDocumentViewModel">Code document</param>
-    /// <param name="lineNumber">Current line number</param>
+    /// <param name="offset">Cursor position as a numeric offset from the start of the document</param>
     public static void HighlightCurrentItem(CodeDocumentViewModel codeDocumentViewModel,
-        int lineNumber)
+        int offset)
     {
         if (codeDocumentViewModel == null)
         {
@@ -21,7 +21,7 @@ public static class HighlightHelper
         try
         {
             UnHighlight(codeDocumentViewModel);
-            Highlight(codeDocumentViewModel, lineNumber);
+            Highlight(codeDocumentViewModel, offset);
         }
         catch (Exception e)
         {
@@ -45,20 +45,20 @@ public static class HighlightHelper
             });
 
     /// <summary>
-    /// Highlight code items that contain the current line number
+    /// Highlight code items that contain the current cursor position
     /// </summary>
     /// <remarks>
     /// Highlighting changes the foreground, font weight and background of a code item
     /// Deepest highlighted code item will be scrolled to, to ensure it is in view
     /// </remarks>
-    /// <param name="document">Code document</param>
-    /// <param name="ids">List of unique code item ids</param>
-    private static void Highlight(CodeDocumentViewModel codeDocumentViewModel, int lineNumber)
+    /// <param name="codeDocumentViewModel">Code document</param>
+    /// <param name="offset">Cursor position as a numeric offset from the start of the document</param>
+    private static void Highlight(CodeDocumentViewModel codeDocumentViewModel, int offset)
         => codeDocumentViewModel
             .CodeDocument
             .Flatten()
             .FilterNull()
-            .Where(item => item.StartLine <= lineNumber && item.EndLine >= lineNumber)
+            .Where(item => item.Span.Contains(offset))
             .ToList()
             .ForEach(item => item.IsHighlighted = true);
 }

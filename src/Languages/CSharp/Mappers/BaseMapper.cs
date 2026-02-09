@@ -1,5 +1,4 @@
 ﻿using CodeNav.Constants;
-using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -36,8 +35,6 @@ public static class BaseMapper
         element.FilePath = string.IsNullOrEmpty(source.SyntaxTree.FilePath) ? null : new Uri(source.SyntaxTree.FilePath);
         element.Id = element.FullName;
         element.Tooltip = name;
-        element.StartLine = GetStartLine(source);
-        element.EndLine = GetEndLine(source);
         element.Span = source.Span;
         element.Access = MapAccess(modifiers, source);
         element.CodeDocumentViewModel = codeDocumentViewModel;
@@ -61,14 +58,8 @@ public static class BaseMapper
     private static LinePosition GetStartLinePosition(SyntaxNode source)
         => source.SyntaxTree.GetLineSpan(source.Span).StartLinePosition;
 
-    private static LinePosition GetEndLinePosition(SyntaxNode source)
-        => source.SyntaxTree.GetLineSpan(source.Span).EndLinePosition;
-
     private static int GetStartLine(SyntaxNode source)
         => GetStartLinePosition(source).Line + 1;
-
-    private static int GetEndLine(SyntaxNode source)
-        => GetEndLinePosition(source).Line + 1;
 
     public static LinePosition GetStartLinePosition(SyntaxToken identifier)
         => identifier.SyntaxTree.GetLineSpan(identifier.Span).StartLinePosition;

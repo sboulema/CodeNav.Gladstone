@@ -30,7 +30,6 @@ public static class SettingsHelper
             AutoLoadLineThreshold = GetSettingValueOrDefault(settingCategory, SettingsDefinition.AutoLoadLineThresholdSetting),
             ShowFilterToolbar = GetSettingValueOrDefault(settingCategory, SettingsDefinition.ShowFilterToolbarSetting),
             ShowHistoryIndicators = GetSettingValueOrDefault(settingCategory, SettingsDefinition.ShowHistoryIndicatorsSetting),
-            ShowRegions = GetSettingValueOrDefault(settingCategory, SettingsDefinition.ShowRegionsSetting),
             UpdateWhileTyping = GetSettingValueOrDefault(settingCategory, SettingsDefinition.UpdateWhileTypingSetting),
         };
     }
@@ -42,7 +41,6 @@ public static class SettingsHelper
             AutoLoadLineThreshold = settingsSnapshot.AutoLoadLineThresholdSetting.ValueOrDefault(SettingsDefinition.AutoLoadLineThresholdSetting.DefaultValue),
             ShowFilterToolbar = settingsSnapshot.ShowFilterToolbarSetting.ValueOrDefault(SettingsDefinition.ShowFilterToolbarSetting.DefaultValue),
             ShowHistoryIndicators = settingsSnapshot.ShowHistoryIndicatorsSetting.ValueOrDefault(SettingsDefinition.ShowHistoryIndicatorsSetting.DefaultValue),
-            ShowRegions = settingsSnapshot.ShowRegionsSetting.ValueOrDefault(SettingsDefinition.ShowRegionsSetting.DefaultValue),
             UpdateWhileTyping = settingsSnapshot.UpdateWhileTypingSetting.ValueOrDefault(SettingsDefinition.UpdateWhileTypingSetting.DefaultValue),
         };
 
@@ -59,7 +57,6 @@ public static class SettingsHelper
                     batch.WriteSetting(SettingsDefinition.AutoLoadLineThresholdSetting, settings.AutoLoadLineThreshold);
                     batch.WriteSetting(SettingsDefinition.ShowFilterToolbarSetting, settings.ShowFilterToolbar);
                     batch.WriteSetting(SettingsDefinition.ShowHistoryIndicatorsSetting, settings.ShowHistoryIndicators);
-                    batch.WriteSetting(SettingsDefinition.ShowRegionsSetting, settings.ShowRegions);
                     batch.WriteSetting(SettingsDefinition.UpdateWhileTypingSetting, settings.UpdateWhileTyping);
                 },
                 description: "Settings saved via CodeNav dialog",

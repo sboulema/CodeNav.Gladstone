@@ -10,11 +10,11 @@ namespace CodeNav.Languages.CSharp.Mappers;
 
 public static class InterfaceMapper
 {
-    public static bool IsPartOfImplementedInterface(IEnumerable<CodeImplementedInterfaceItem> implementedInterfaces,
+    public static bool IsPartOfImplementedInterface(
+        IEnumerable<CodeImplementedInterfaceItem> implementedInterfaces,
         CodeItem item)
-    {
-        return item != null && implementedInterfaces.SelectMany(i => i.Members.Select(m => m.Id)).Contains(item.Id);
-    }
+        => item != null &&
+           implementedInterfaces.SelectMany(i => i.Members.Select(m => m.Id)).Contains(item.Id);
 
     public static List<CodeImplementedInterfaceItem> MapImplementedInterfaces(SyntaxNode member,
         SemanticModel semanticModel, SyntaxTree tree, CodeDocumentViewModel codeDocumentViewModel)
@@ -39,7 +39,7 @@ public static class InterfaceMapper
         var interfacesList = new List<INamedTypeSymbol>();
         GetInterfaces(interfacesList, classSymbol.Interfaces);
 
-        foreach (INamedTypeSymbol implementedInterface in interfacesList.Distinct())
+        foreach (var implementedInterface in interfacesList.Distinct(SymbolEqualityComparer.Default).Cast<INamedTypeSymbol>())
         {
             implementedInterfaces.Add(MapImplementedInterface(implementedInterface.Name,
                 implementedInterface.GetMembers(), classSymbol, member, semanticModel, tree, codeDocumentViewModel));
@@ -72,6 +72,7 @@ public static class InterfaceMapper
             Name = name,
             FullName = name,
             Id = name,
+            Tooltip = name,
             Kind = CodeItemKindEnum.ImplementedInterface,
             IsExpanded = true
         };
@@ -85,7 +86,7 @@ public static class InterfaceMapper
             }
 
             // Ignore interface members not directly implemented in the current class
-            if (!implementation.ContainingSymbol.Equals(implementingClass))
+            if (!implementation.ContainingSymbol.Equals(implementingClass, SymbolEqualityComparer.Default))
             {
                 continue;
             }
@@ -118,8 +119,10 @@ public static class InterfaceMapper
 
         if (item.Members.Any())
         {
-            item.StartLine = item.Members.Min(i => i.StartLine);
-            item.EndLine = item.Members.Max(i => i.EndLine);
+            var start = item.Members.Min(codeItem => codeItem.Span.Start);
+            var end = item.Members.Max(codeItem => codeItem.Span.End);
+
+            item.Span = new(start, end - start);
         }
 
         return item;

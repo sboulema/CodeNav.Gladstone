@@ -12,12 +12,6 @@ public class SettingsDialogData
     public bool ShowFilterToolbar { get; set; } = true;
 
     /// <summary>
-    /// Setting if regions should be shown
-    /// </summary>
-    [DataMember]
-    public bool ShowRegions { get; set; } = true;
-
-    /// <summary>
     /// Setting if history/edit indicators should be shown
     /// </summary>
     [DataMember]

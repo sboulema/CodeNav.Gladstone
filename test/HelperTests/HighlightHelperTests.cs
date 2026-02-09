@@ -10,12 +10,12 @@ internal class HighlightHelperTests : BaseTest
     {
         var document = await MapToCodeDocumentViewModel("TestProperties.cs");
 
-        HighlightHelper.HighlightCurrentItem(document, 13);
+        HighlightHelper.HighlightCurrentItem(document, 263); // linenumber 13
 
-        var highlightedClass = (document.CodeDocument.First() as IMembers).Members.First() as CodeClassItem;
-        var highlightedItem = highlightedClass.Members[2];
+        var highlightedClass = (document.CodeDocument.First() as IMembers)?.Members.First() as CodeClassItem;
+        var highlightedItem = highlightedClass?.Members[2];
 
-        Assert.That(highlightedItem.IsHighlighted, Is.True);
+        Assert.That(highlightedItem?.IsHighlighted, Is.True);
     }
 
     [Test]
@@ -23,9 +23,9 @@ internal class HighlightHelperTests : BaseTest
     {
         var document = await MapToCodeDocumentViewModel("TestProperties.cs");
 
-        HighlightHelper.HighlightCurrentItem(document, 15);
+        HighlightHelper.HighlightCurrentItem(document, 296); // linenumber 15
 
-        HighlightHelper.HighlightCurrentItem(document, 20);
+        HighlightHelper.HighlightCurrentItem(document, 369); // linenumber 20
 
 
         var highlightedItems = new List<CodeItem>();
@@ -44,9 +44,9 @@ internal class HighlightHelperTests : BaseTest
                 found.Add(item);
             }
 
-            if (item is IMembers)
+            if (item is IMembers membersCodeItem)
             {
-                FindHighlightedItems(found, (item as IMembers).Members);
+                FindHighlightedItems(found, membersCodeItem.Members);
             }
         }
     }

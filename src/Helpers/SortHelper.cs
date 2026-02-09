@@ -1,4 +1,5 @@
 ﻿using CodeNav.Constants;
+using CodeNav.Interfaces;
 using CodeNav.ViewModels;
 using Microsoft.VisualStudio.Extensibility.UI;
 
@@ -19,17 +20,13 @@ public static class SortHelper
 
     private static ObservableList<CodeItem> SortByName(ObservableList<CodeItem> document)
     {
-        document = [.. document.OrderBy(c => c.Name)];
+        document = [.. document.OrderBy(codeItem => codeItem.Name)];
 
         foreach (var item in document)
         {
-            if (item is CodeClassItem codeClassItem)
+            if (item is IMembers membersItem)
             {
-                codeClassItem.Members = SortByName(codeClassItem.Members);
-            }
-            if (item is CodeNamespaceItem codeNamespaceItem)
-            {
-                codeNamespaceItem.Members = SortByName(codeNamespaceItem.Members);
+                membersItem.Members = SortByName(membersItem.Members);
             }
         }
 
@@ -38,17 +35,13 @@ public static class SortHelper
 
     private static ObservableList<CodeItem> SortByFile(ObservableList<CodeItem> document)
     {
-        document = [.. document.OrderBy(c => c.StartLine)];
+        document = [.. document.OrderBy(codeItem => codeItem.Span.Start)];
 
         foreach (var item in document)
         {
-            if (item is CodeClassItem codeClassItem)
+            if (item is IMembers membersItem)
             {
-                codeClassItem.Members = SortByFile(codeClassItem.Members);
-            }
-            if (item is CodeNamespaceItem codeNamespaceItem)
-            {
-                codeNamespaceItem.Members = SortByFile(codeNamespaceItem.Members);
+                membersItem.Members = SortByFile(membersItem.Members);
             }
         }
 
