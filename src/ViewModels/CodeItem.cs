@@ -154,7 +154,7 @@ public class CodeItem : NotifyPropertyChangedObject
     [DataMember]
     public AsyncCommand ClearHistoryCommand { get; }
     public async Task ClearHistory(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
-        => await HistoryHelper.ClearHistory(this, cancellationToken);
+        => HistoryHelper.ClearHistory(CodeDocumentViewModel);
 
     [DataMember]
     public AsyncCommand GoToEndCommand { get; }

@@ -57,6 +57,11 @@ public class HistoryHelper
             return;
         }
 
+        if (!model.CodeDocumentService.SettingsDialogData.ShowHistoryIndicators)
+        {
+            return;
+        }
+
         // Remove all entries with item id to prevent duplicates
         model.HistoryItemIds
             .RemoveAll(id => id == item.Id);
@@ -146,15 +151,15 @@ public class HistoryHelper
     /// Delete all history item indicators
     /// </summary>
     /// <param name="item">Code item on which the context menu was invoked</param>
-    public static async Task ClearHistory(CodeItem item, CancellationToken cancellationToken)
+    public static void ClearHistory(CodeDocumentViewModel? codeDocumentViewModel)
     {
-        if (item.CodeDocumentViewModel == null)
+        if (codeDocumentViewModel == null)
         {
             return;
         }
 
-        item.CodeDocumentViewModel.HistoryItemIds.Clear();
+        codeDocumentViewModel.HistoryItemIds.Clear();
 
-        ApplyHistoryIndicator(item.CodeDocumentViewModel);
+        ApplyHistoryIndicator(codeDocumentViewModel);
     }
 }

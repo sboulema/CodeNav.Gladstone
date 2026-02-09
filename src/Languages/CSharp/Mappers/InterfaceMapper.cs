@@ -1,12 +1,10 @@
 ﻿using CodeNav.Constants;
 using CodeNav.Mappers;
-using CodeNav.Models;
 using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Extensibility;
 using System.Collections.Immutable;
-using System.Windows.Media;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 

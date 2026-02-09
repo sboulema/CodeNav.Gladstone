@@ -1,19 +1,10 @@
-﻿using Microsoft.VisualStudio.Extensibility;
-using Microsoft.VisualStudio.Extensibility.UI;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace CodeNav.Dialogs.SettingsDialog;
 
 [DataContract]
 public class SettingsDialogData
 {
-    public SettingsDialogData()
-    {
-        OkCommand = new(Ok);
-
-        // TODO: Load settings
-    }
-
     /// <summary>
     /// Setting if the filter toolbar should be shown
     /// </summary>
@@ -49,13 +40,4 @@ public class SettingsDialogData
     /// </summary>
     [DataMember]
     public int AutoLoadLineThreshold { get; set; } = 0;
-
-    #region Commands
-    [DataMember]
-    public AsyncCommand OkCommand { get; }
-    public async Task Ok(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
-    {
-        // TODO: Save settings
-    }
-    #endregion
 }

@@ -65,7 +65,7 @@ internal static class SettingsDefinition
     };
 
     [VisualStudioContribution]
-    internal static Setting.Integer AutoLoadLineThreshold { get; } = new(
+    internal static Setting.Integer AutoLoadLineThresholdSetting { get; } = new(
         "autoLoadLineThreshold",
         "%CodeNav.Settings.AutoLoadLineThreshold.DisplayName%",
         CodeNavSettingsCategory,

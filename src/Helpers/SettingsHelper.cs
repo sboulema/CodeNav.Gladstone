@@ -27,8 +27,24 @@ public static class SettingsHelper
         return new()
         {
             AutoHighlight = GetSettingValueOrDefault(settingCategory, SettingsDefinition.AutoHighlightSetting),
+            AutoLoadLineThreshold = GetSettingValueOrDefault(settingCategory, SettingsDefinition.AutoLoadLineThresholdSetting),
+            ShowFilterToolbar = GetSettingValueOrDefault(settingCategory, SettingsDefinition.ShowFilterToolbarSetting),
+            ShowHistoryIndicators = GetSettingValueOrDefault(settingCategory, SettingsDefinition.ShowHistoryIndicatorsSetting),
+            ShowRegions = GetSettingValueOrDefault(settingCategory, SettingsDefinition.ShowRegionsSetting),
+            UpdateWhileTyping = GetSettingValueOrDefault(settingCategory, SettingsDefinition.UpdateWhileTypingSetting),
         };
     }
+
+    public static SettingsDialogData GetSettings(CodeNavSettingsCategorySnapshot settingsSnapshot)
+        => new()
+        {
+            AutoHighlight = settingsSnapshot.AutoHighlightSetting.ValueOrDefault(SettingsDefinition.AutoHighlightSetting.DefaultValue),
+            AutoLoadLineThreshold = settingsSnapshot.AutoLoadLineThresholdSetting.ValueOrDefault(SettingsDefinition.AutoLoadLineThresholdSetting.DefaultValue),
+            ShowFilterToolbar = settingsSnapshot.ShowFilterToolbarSetting.ValueOrDefault(SettingsDefinition.ShowFilterToolbarSetting.DefaultValue),
+            ShowHistoryIndicators = settingsSnapshot.ShowHistoryIndicatorsSetting.ValueOrDefault(SettingsDefinition.ShowHistoryIndicatorsSetting.DefaultValue),
+            ShowRegions = settingsSnapshot.ShowRegionsSetting.ValueOrDefault(SettingsDefinition.ShowRegionsSetting.DefaultValue),
+            UpdateWhileTyping = settingsSnapshot.UpdateWhileTypingSetting.ValueOrDefault(SettingsDefinition.UpdateWhileTypingSetting.DefaultValue),
+        };
 
     public static async Task<SettingsWriteResponse> SaveSettings(
         VisualStudioExtensibility extensibility,
@@ -40,10 +56,11 @@ public static class SettingsHelper
                 batch =>
                 {
                     batch.WriteSetting(SettingsDefinition.AutoHighlightSetting, settings.AutoHighlight);
-                    batch.WriteSetting(SettingsDefinition.AutoLoadLineThreshold, settings.AutoLoadLineThreshold);
+                    batch.WriteSetting(SettingsDefinition.AutoLoadLineThresholdSetting, settings.AutoLoadLineThreshold);
                     batch.WriteSetting(SettingsDefinition.ShowFilterToolbarSetting, settings.ShowFilterToolbar);
-                    batch.WriteSetting(SettingsDefinition.ShowRegionsSetting, settings.ShowRegions);
                     batch.WriteSetting(SettingsDefinition.ShowHistoryIndicatorsSetting, settings.ShowHistoryIndicators);
+                    batch.WriteSetting(SettingsDefinition.ShowRegionsSetting, settings.ShowRegions);
+                    batch.WriteSetting(SettingsDefinition.UpdateWhileTypingSetting, settings.UpdateWhileTyping);
                 },
                 description: "Settings saved via CodeNav dialog",
                 cancellationToken);
@@ -85,10 +102,21 @@ public static class SettingsHelper
         }
 
         return settingValues[setting.FullId].ValueOrDefault(setting.DefaultValue);
+    }
 
-        return settingValues
-            .FirstOrDefault(settingValue => settingValue.Key == setting.FullId)
-            .Value
-            .ValueOrDefault(setting.DefaultValue);
+    /// <summary>
+    /// Get the value of a setting based on its full id and a list of current setting values. 
+    /// </summary>
+    /// <param name="settingValues">Dictionary of setting key value pairs</param>
+    /// <param name="setting">Int setting definition</param>
+    /// <returns></returns>
+    private static int GetSettingValueOrDefault(SettingValues? settingValues, Setting.Integer setting)
+    {
+        if (settingValues == null)
+        {
+            return setting.DefaultValue;
+        }
+
+        return settingValues[setting.FullId].ValueOrDefault(setting.DefaultValue);
     }
 }

@@ -1,4 +1,5 @@
-﻿using CodeNav.Helpers;
+﻿using CodeNav.Dialogs.SettingsDialog;
+using CodeNav.Helpers;
 using CodeNav.Languages.CSharp.Mappers;
 using CodeNav.Settings.Settings;
 using CodeNav.ViewModels;
@@ -21,11 +22,20 @@ public class CodeDocumentService
     /// </summary>
     public CodeDocumentViewModel CodeDocumentViewModel { get; set; } = new();
 
+    /// <summary>
+    /// DataContext for the settings dialog.
+    /// </summary>
+    public SettingsDialogData SettingsDialogData { get; set; } = new();
+
     public async Task<CodeDocumentViewModel> UpdateCodeDocumentViewModel(
         VisualStudioExtensibility extensibility,
         ITextViewSnapshot textView,
         CancellationToken cancellationToken)
     {
+        // Show loading item while we process the document
+        CodeDocumentViewModel.CodeDocument.Clear();
+        CodeDocumentViewModel.CodeDocument.AddRange(PlaceholderHelper.CreateLoadingItem());
+
         var codeItems = await DocumentMapper.MapDocument(textView.Document, CodeDocumentViewModel, cancellationToken);
 
         // Update the DataContext for the tool window.
@@ -54,11 +64,23 @@ public class CodeDocumentService
 
     private Task SettingsObserver_ChangedAsync(CodeNavSettingsCategorySnapshot settingsSnapshot)
     {
+        SettingsDialogData = SettingsHelper.GetSettings(settingsSnapshot);
+
         CodeDocumentViewModel.ShowFilterToolbarVisibility =
             SettingsHelper.GetShowFilterToolbarVisibility(settingsSnapshot);
 
         CodeDocumentViewModel.SortOrder =
             SettingsHelper.GetSortOrder(settingsSnapshot);
+
+        if (SettingsDialogData.ShowHistoryIndicators == false)
+        {
+            HistoryHelper.ClearHistory(CodeDocumentViewModel);
+        }
+
+        if (SettingsDialogData.AutoHighlight == false)
+        {
+            HighlightHelper.UnHighlight(CodeDocumentViewModel);
+        }
 
         return Task.CompletedTask;
     }

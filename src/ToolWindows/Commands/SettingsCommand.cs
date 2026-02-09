@@ -1,5 +1,6 @@
 ﻿using CodeNav.Dialogs.SettingsDialog;
 using CodeNav.Helpers;
+using CodeNav.Services;
 using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Commands;
 using Microsoft.VisualStudio.RpcContracts.Notifications;
@@ -7,7 +8,9 @@ using Microsoft.VisualStudio.RpcContracts.Notifications;
 namespace CodeNav.ToolWindows.Commands;
 
 [VisualStudioContribution]
-internal class SettingsCommand(VisualStudioExtensibility extensibility)
+internal class SettingsCommand(
+    VisualStudioExtensibility extensibility,
+    CodeDocumentService codeDocumentService)
     : Command(extensibility)
 {
     /// <inheritdoc />
@@ -19,10 +22,10 @@ internal class SettingsCommand(VisualStudioExtensibility extensibility)
     /// <inheritdoc />
     public override async Task ExecuteCommandAsync(IClientContext clientContext, CancellationToken cancellationToken)
     {
-        var settingsDialogData = await SettingsHelper.GetSettings(Extensibility, cancellationToken);
+        codeDocumentService.SettingsDialogData = await SettingsHelper.GetSettings(Extensibility, cancellationToken);
 
         var dialogResult = await Extensibility.Shell().ShowDialogAsync(
-            content: new SettingsDialogControl(settingsDialogData),
+            content: new SettingsDialogControl(codeDocumentService.SettingsDialogData),
             title: "CodeNav Settings",
             options: new(DialogButton.OKCancel, DialogResult.OK),
             cancellationToken);
@@ -32,6 +35,6 @@ internal class SettingsCommand(VisualStudioExtensibility extensibility)
             return;
         }
 
-        await SettingsHelper.SaveSettings(Extensibility, settingsDialogData, cancellationToken);
+        await SettingsHelper.SaveSettings(Extensibility, codeDocumentService.SettingsDialogData, cancellationToken);
     }
 }

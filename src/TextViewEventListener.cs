@@ -35,25 +35,43 @@ internal class TextViewEventListener(
     };
 
     /// <inheritdoc />
-    public Task TextViewChangedAsync(TextViewChangedArgs args, CancellationToken cancellationToken)
+    public async Task TextViewChangedAsync(TextViewChangedArgs args, CancellationToken cancellationToken)
     {
-        // Document changed - Update CodeNav view
-        if (args.Edits.Any())
+        // if the document is too large, skip processing to avoid performance issues
+        if (args.AfterTextView.Document.Lines.Count >= codeDocumentService.SettingsDialogData.AutoLoadLineThreshold &&
+            codeDocumentService.SettingsDialogData.AutoLoadLineThreshold > 0)
+        {
+            // Show the "line threshold passed" placeholder if the document exceeds the line threshold for auto-loading
+            codeDocumentService.CodeDocumentViewModel.CodeDocument.Clear();
+            codeDocumentService.CodeDocumentViewModel.HistoryItemIds.Clear();
+            codeDocumentService.CodeDocumentViewModel.CodeDocument.AddRange(PlaceholderHelper.CreateLineThresholdPassedItem());
+
+            return;
+        }
+
+        // Document changed - Update code items list
+        if (args.Edits.Any() &&
+            codeDocumentService.SettingsDialogData.UpdateWhileTyping)
+        {
+            await codeDocumentService.UpdateCodeDocumentViewModel(Extensibility, args.AfterTextView, cancellationToken);
+        }
+
+        // Document changed - Update history indicators
+        if (args.Edits.Any() &&
+            codeDocumentService.SettingsDialogData.ShowHistoryIndicators)
         {
             HistoryHelper.AddItemToHistory(codeDocumentService.CodeDocumentViewModel, args.Edits);
-            return codeDocumentService.UpdateCodeDocumentViewModel(extensibility, args.AfterTextView, cancellationToken);
         }
 
         // Selection changed - Update highlights
         if (args.BeforeTextView.Selection.ActivePosition.GetContainingLine().LineNumber !=
-            args.AfterTextView.Selection.ActivePosition.GetContainingLine().LineNumber)
+            args.AfterTextView.Selection.ActivePosition.GetContainingLine().LineNumber &&
+            codeDocumentService.SettingsDialogData.AutoHighlight)
         {
             HighlightHelper.HighlightCurrentItem(
                 codeDocumentService.CodeDocumentViewModel,
                 args.AfterTextView.Selection.ActivePosition.GetContainingLine().LineNumber);
         }
-
-        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
@@ -64,5 +82,18 @@ internal class TextViewEventListener(
 
     /// <inheritdoc />
     public Task TextViewOpenedAsync(ITextViewSnapshot textViewSnapshot, CancellationToken cancellationToken)
-        => codeDocumentService.UpdateCodeDocumentViewModel(extensibility, textViewSnapshot, cancellationToken);
+    {
+        if (textViewSnapshot.Document.Lines.Count >= codeDocumentService.SettingsDialogData.AutoLoadLineThreshold &&
+            codeDocumentService.SettingsDialogData.AutoLoadLineThreshold > 0)
+        {
+            // Show the "line threshold passed" placeholder if the document exceeds the line threshold for auto-loading
+            codeDocumentService.CodeDocumentViewModel.CodeDocument.Clear();
+            codeDocumentService.CodeDocumentViewModel.HistoryItemIds.Clear();
+            codeDocumentService.CodeDocumentViewModel.CodeDocument.AddRange(PlaceholderHelper.CreateLineThresholdPassedItem());
+
+            return Task.CompletedTask;
+        }
+
+        return codeDocumentService.UpdateCodeDocumentViewModel(Extensibility, textViewSnapshot, cancellationToken);
+    }
 }

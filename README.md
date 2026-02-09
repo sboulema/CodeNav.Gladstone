@@ -15,12 +15,12 @@ Visual Studio extension to show the code structure of your current document
 - Dark theme support
 - Collapse/Expand all ranges
 - History/edit indicators
-- Regions
 
 ## Features broken
 - Sort by file order or by name 
-- Filter items by kind (method, property), access (public, private), name and bookmark
-- Synced collapsing/expanding regions
+- Filter items by kind (method, property), access (public, private), name
+- Synced collapsing/expanding ranges
+- Regions
 
 ## Features dropped
 - Top Margin
@@ -29,7 +29,7 @@ Visual Studio extension to show the code structure of your current document
 - Visual studio 2017, 2019 support
 - Customizable fonts
 - Set code item opacity through filter window
-- Colored Bookmarks
+- Bookmarks
 
 ## Language support
 - C#
@@ -65,19 +65,17 @@ Visual Studio extension to show the code structure of your current document
 ![Bookmarks](https://i.imgur.com/SqLgsXw.png) ![Bookmark styles](https://raw.githubusercontent.com/sboulema/CodeNav/main/Resources/Bookmark%20styles.png)
 
 # Links
-DataTriggers in a XAML ItemsControl
-https://github.com/microsoft/VSExtensibility/issues/456
 
-Splitting up the tool window XAML in resource dictionaries
-https://github.com/MicrosoftDocs/visualstudio-docs/blob/main/docs/extensibility/visualstudio.extensibility/inside-the-sdk/advanced-remote-ui.md#user-xaml-resource-dictionaries
+[DataTriggers in a XAML ItemsControl](https://github.com/microsoft/VSExtensibility/issues/456)
 
-Getting a clientContext in an AsyncCommand bound to a XAML Command property
-https://github.com/microsoft/VSExtensibility/issues/520
+[Splitting up the tool window XAML in resource dictionaries](https://github.com/MicrosoftDocs/visualstudio-docs/blob/main/docs/extensibility/visualstudio.extensibility/inside-the-sdk/advanced-remote-ui.md#user-xaml-resource-dictionaries)
 
-Settings Sample
-https://github.com/microsoft/VSExtensibility/blob/2f74457eb241552cd725c8ca544fd99797ef546e/New_Extensibility_Model/Samples/SettingsSample/README.md
+[Getting a clientContext in an AsyncCommand bound to a XAML Command property](https://github.com/microsoft/VSExtensibility/issues/520)
 
-https://github.com/MicrosoftDocs/visualstudio-docs/blob/c70d685e945ff6cea8dd0f7bbb54f780ef67170e/docs/extensibility/visualstudio.extensibility/settings/settings.md?plain=1#L201
+[Settings Sample](https://github.com/microsoft/VSExtensibility/blob/2f74457eb241552cd725c8ca544fd99797ef546e/New_Extensibility_Model/Samples/SettingsSample/README.md)
 
-Fix having multiple projects
-https://github.com/microsoft/VSExtensibility/issues/388
+[Settings Sample 2](https://github.com/MicrosoftDocs/visualstudio-docs/blob/c70d685e945ff6cea8dd0f7bbb54f780ef67170e/docs/extensibility/visualstudio.extensibility/settings/settings.md?plain=1#L201)
+
+[Fix having multiple projects](https://github.com/microsoft/VSExtensibility/issues/388)
+
+[Making a WPF TextBox binding fire on each new character](https://stackoverflow.com/questions/10619596/making-a-wpf-textbox-binding-fire-on-each-new-character)
