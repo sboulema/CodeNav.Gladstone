@@ -3,7 +3,6 @@ using CodeNav.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace CodeNav.Languages.CSharp.Mappers;
 
@@ -54,18 +53,6 @@ public static class BaseMapper
             return string.Empty;
         }
     }
-
-    private static LinePosition GetStartLinePosition(SyntaxNode source)
-        => source.SyntaxTree.GetLineSpan(source.Span).StartLinePosition;
-
-    private static int GetStartLine(SyntaxNode source)
-        => GetStartLinePosition(source).Line + 1;
-
-    public static LinePosition GetStartLinePosition(SyntaxToken identifier)
-        => identifier.SyntaxTree.GetLineSpan(identifier.Span).StartLinePosition;
-
-    public static int GetStartLine(SyntaxToken identifier)
-        => GetStartLinePosition(identifier).Line + 1;
 
     private static CodeItemAccessEnum MapAccess(SyntaxTokenList modifiers, SyntaxNode source)
     {

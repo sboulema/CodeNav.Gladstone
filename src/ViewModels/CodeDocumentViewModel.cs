@@ -12,14 +12,9 @@ namespace CodeNav.ViewModels;
 [DataContract]
 public class CodeDocumentViewModel : NotifyPropertyChangedObject
 {
-    public CodeDocumentViewModel()
-    {
-        SortCommand = Sort();
-    }
+    public VisualStudioExtensibility? Extensibility { get; set; }
 
-    public VisualStudioExtensibility Extensibility { get; set; }
-
-    public CodeDocumentService CodeDocumentService { get; set; }
+    public CodeDocumentService? CodeDocumentService { get; set; }
 
     public SortOrderEnum SortOrder;
 
@@ -58,26 +53,6 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
             SetProperty(ref _filterText, value);
             VisibilityHelper.SetCodeItemVisibility(this);
         }
-    }
-
-    [DataMember]
-    public AsyncCommand SortCommand { get; }
-    public AsyncCommand Sort()
-    {
-        return new AsyncCommand(async (parameter, cancellationToken) =>
-        {
-            if (parameter is not SortOrderEnum sortOrder)
-            {
-                return;
-            }
-
-            // TODO: How are we going to sort, custom toolbar or default toolbar?
-            //Configuration.SortOrder = sortOrder;
-            SortOrder = sortOrder;
-            SortHelper.Sort(this);
-
-            //await ConfigurationHelper.SaveConfiguration(Configuration, cancellationToken);
-        });
     }
 
     #endregion

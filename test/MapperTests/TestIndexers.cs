@@ -14,11 +14,11 @@ internal class TestIndexers : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // Inner item should be a class
-        var innerClass = (codeItems.First() as CodeNamespaceItem).Members.First() as CodeClassItem;
+        var innerClass = (codeItems.First() as CodeNamespaceItem)?.Members.First() as CodeClassItem;
 
         // Class should have an indexer
-        var indexer = innerClass.Members.First() as CodeFunctionItem;
+        var indexer = innerClass?.Members.First() as CodeFunctionItem;
 
-        Assert.That(indexer.Kind, Is.EqualTo(CodeItemKindEnum.Indexer));
+        Assert.That(indexer?.Kind, Is.EqualTo(CodeItemKindEnum.Indexer));
     }
 }

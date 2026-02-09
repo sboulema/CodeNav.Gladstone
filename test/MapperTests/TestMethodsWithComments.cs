@@ -14,26 +14,26 @@ internal class TestMethodsWithComments : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // Inner item should be a class
-        var innerClass = (codeItems.First() as CodeNamespaceItem).Members.First() as CodeClassItem;
+        var innerClass = (codeItems.First() as CodeNamespaceItem)?.Members.First() as CodeClassItem;
 
         // Class should have a method
-        var methodWithComment = innerClass.Members.First() as CodeFunctionItem;
+        var methodWithComment = innerClass?.Members.First() as CodeFunctionItem;
 
-        Assert.That(methodWithComment.Tooltip, Is.EqualTo("Super important summary"));
-
-        // Class should have a method
-        var methodWithoutComment = innerClass.Members[1] as CodeFunctionItem;
-
-        Assert.That(methodWithoutComment.Tooltip, Is.EqualTo("Public MethodWithoutComment ()"));
+        Assert.That(methodWithComment?.Tooltip, Is.EqualTo("Super important summary"));
 
         // Class should have a method
-        var methodWithMultipleComment = innerClass.Members[2] as CodeFunctionItem;
+        var methodWithoutComment = innerClass?.Members[1] as CodeFunctionItem;
 
-        Assert.That(methodWithMultipleComment.Tooltip, Is.EqualTo("Multiple comment - summary"));
+        Assert.That(methodWithoutComment?.Tooltip, Is.EqualTo("Public MethodWithoutComment ()"));
 
         // Class should have a method
-        var methodWithReorderedComment = innerClass.Members[3] as CodeFunctionItem;
+        var methodWithMultipleComment = innerClass?.Members[2] as CodeFunctionItem;
 
-        Assert.That(methodWithReorderedComment.Tooltip, Is.EqualTo("Multiple comment - summary"));
+        Assert.That(methodWithMultipleComment?.Tooltip, Is.EqualTo("Multiple comment - summary"));
+
+        // Class should have a method
+        var methodWithReorderedComment = innerClass?.Members[3] as CodeFunctionItem;
+
+        Assert.That(methodWithReorderedComment?.Tooltip, Is.EqualTo("Multiple comment - summary"));
     }
 }

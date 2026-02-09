@@ -62,6 +62,20 @@ public static class SettingsHelper
                 description: "Settings saved via CodeNav dialog",
                 cancellationToken);
 
+    public static async Task<SettingsWriteResponse> SaveSortOrder(
+        VisualStudioExtensibility extensibility,
+        SortOrderEnum sortOrder,
+        CancellationToken cancellationToken)
+        => await extensibility
+            .Settings()
+            .WriteAsync(
+                batch =>
+                {
+                    batch.WriteSetting(SettingsDefinition.SortOrderSetting, sortOrder.ToString());
+                },
+                description: "Sort order saved via toolbar button",
+                cancellationToken);
+
     public static Visibility GetShowFilterToolbarVisibility(CodeNavSettingsCategorySnapshot settingsSnapshot)
     {
         if (settingsSnapshot.ShowFilterToolbarSetting == null)

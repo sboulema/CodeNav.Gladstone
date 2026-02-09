@@ -128,9 +128,14 @@ public static class InterfaceMapper
         return item;
     }
 
-    public static CodeInterfaceItem MapInterface(InterfaceDeclarationSyntax? member,
+    public static CodeInterfaceItem? MapInterface(InterfaceDeclarationSyntax? member,
         SemanticModel semanticModel, SyntaxTree tree, CodeDocumentViewModel codeDocumentViewModel)
     {
+        if (member == null)
+        {
+            return null;
+        }
+
         var item = BaseMapper.MapBase<CodeInterfaceItem>(member, member.Identifier,
             member.Modifiers, semanticModel, codeDocumentViewModel);
 

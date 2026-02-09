@@ -14,6 +14,6 @@ internal class TestEmptyInterface : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // Namespace item should not have members
-        Assert.That((codeItems.First() as IMembers).Members, Has.Count.EqualTo(0));
+        Assert.That((codeItems.First() as IMembers)?.Members, Has.Count.EqualTo(0));
     }
 }

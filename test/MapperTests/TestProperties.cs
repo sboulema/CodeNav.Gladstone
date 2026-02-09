@@ -14,22 +14,22 @@ internal class TestProperties : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // Namespace item should have 1 member
-        Assert.That((codeItems.First() as IMembers).Members.Count, Is.EqualTo(1));
+        Assert.That((codeItems.First() as IMembers)?.Members.Count, Is.EqualTo(1));
 
         // Inner item should be a class
-        var innerClass = (codeItems.First() as IMembers).Members.First() as CodeClassItem;
+        var innerClass = (codeItems.First() as IMembers)?.Members.First() as CodeClassItem;
 
         // Inheriting class should have properties
-        var propertyGetSet = innerClass.Members.First() as CodeFunctionItem;
-        Assert.That(propertyGetSet.Parameters, Is.EqualTo(" {get,set}"));
+        var propertyGetSet = innerClass?.Members.First() as CodeFunctionItem;
+        Assert.That(propertyGetSet?.Parameters, Is.EqualTo(" {get,set}"));
 
-        var propertyGet = innerClass.Members[1] as CodeFunctionItem;
-        Assert.That(propertyGet.Parameters, Is.EqualTo(" {get}"));
+        var propertyGet = innerClass?.Members[1] as CodeFunctionItem;
+        Assert.That(propertyGet?.Parameters, Is.EqualTo(" {get}"));
 
-        var propertySet = innerClass.Members[2] as CodeFunctionItem;
-        Assert.That(propertySet.Parameters, Is.EqualTo(" {set}"));
+        var propertySet = innerClass?.Members[2] as CodeFunctionItem;
+        Assert.That(propertySet?.Parameters, Is.EqualTo(" {set}"));
 
-        var property = innerClass.Members.Last() as CodeFunctionItem;
-        Assert.That(property.Parameters, Is.Empty);
+        var property = innerClass?.Members.Last() as CodeFunctionItem;
+        Assert.That(property?.Parameters, Is.Empty);
     }
 }

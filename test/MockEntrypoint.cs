@@ -5,5 +5,5 @@ namespace CodeNav.Test;
 [VisualStudioContribution]
 internal class MockEntrypoint : Extension
 {
-    public override ExtensionConfiguration ExtensionConfiguration => null;
+    public override ExtensionConfiguration ExtensionConfiguration => null!;
 }

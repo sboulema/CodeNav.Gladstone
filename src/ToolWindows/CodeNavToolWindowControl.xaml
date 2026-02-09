@@ -244,7 +244,7 @@
                             <DataTemplate>
                                 <StackPanel>
                                     <Expander
-                                        IsExpanded="{Binding IsExpanded}"
+                                        IsExpanded="True"
                                         ToolTip="{Binding Tooltip}"
                                         HorizontalAlignment="Stretch">
                                         <Expander.Header>
@@ -295,7 +295,7 @@
                             <DataTemplate>
                                 <StackPanel>
                                     <Expander
-                                        IsExpanded="{Binding IsExpanded}"
+                                        IsExpanded="True"
                                         ToolTip="{Binding Tooltip}"
                                         HorizontalAlignment="Stretch">
                                         <Expander.Header>
@@ -344,7 +344,7 @@
                         <Setter.Value>
                             <DataTemplate>
                                 <Expander
-                                    IsExpanded="{Binding IsExpanded}"
+                                    IsExpanded="True"
                                     ToolTip="{Binding Tooltip}"
                                     HorizontalAlignment="Stretch"
                                     Margin="0,3">

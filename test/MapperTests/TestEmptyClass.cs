@@ -16,11 +16,11 @@ internal class TestEmptyClass : BaseTest
         Assert.That(codeItems.First().Kind, Is.EqualTo(CodeItemKindEnum.Namespace));
 
         // Namespace item should have members
-        Assert.That((codeItems.First() as IMembers).Members.Any(), Is.True);
+        Assert.That((codeItems.First() as IMembers)?.Members.Any(), Is.True);
 
         // Inner item should be a class
-        var innerClass = (codeItems.First() as IMembers).Members.First() as CodeClassItem;
-        Assert.That(innerClass.Kind, Is.EqualTo(CodeItemKindEnum.Class));
+        var innerClass = (codeItems.First() as IMembers)?.Members.First() as CodeClassItem;
+        Assert.That(innerClass?.Kind, Is.EqualTo(CodeItemKindEnum.Class));
         Assert.That(innerClass.Name, Is.EqualTo("CodeNavTestEmptyClass"));
 
         // Class should be visible

@@ -27,8 +27,8 @@ internal class VisibilityHelperTests : BaseTest
 
         VisibilityHelper.SetCodeItemVisibility(codeDocumentViewModel);
 
-        var firstClass = (codeDocumentViewModel.CodeDocument.First() as IMembers).Members.First() as CodeClassItem;          
+        var firstClass = (codeDocumentViewModel.CodeDocument.First() as IMembers)?.Members.First() as CodeClassItem;          
 
-        Assert.That(firstClass.Visibility, Is.EqualTo(expectedVisibility));
+        Assert.That(firstClass?.Visibility, Is.EqualTo(expectedVisibility));
     }
 }

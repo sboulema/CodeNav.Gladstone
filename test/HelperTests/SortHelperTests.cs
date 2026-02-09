@@ -13,9 +13,9 @@ internal class SortHelperTests : BaseTest
 
         document.CodeDocument = SortHelper.Sort(document);
 
-        var sortingClass = (document.CodeDocument.First() as IMembers).Members.First() as CodeClassItem;
+        var sortingClass = (document.CodeDocument.First() as IMembers)?.Members.First() as CodeClassItem;
 
-        Assert.That(sortingClass.Members.First().Name, Is.EqualTo(methodNames[0]));
+        Assert.That(sortingClass?.Members.First().Name, Is.EqualTo(methodNames[0]));
         Assert.That(sortingClass.Members[1].Name, Is.EqualTo(methodNames[1]));
         Assert.That(sortingClass.Members.Last().Name, Is.EqualTo(methodNames[2]));
 

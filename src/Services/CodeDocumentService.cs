@@ -28,10 +28,16 @@ public class CodeDocumentService
     public SettingsDialogData SettingsDialogData { get; set; } = new();
 
     public async Task<CodeDocumentViewModel> UpdateCodeDocumentViewModel(
-        VisualStudioExtensibility extensibility,
-        ITextViewSnapshot textView,
+        VisualStudioExtensibility? extensibility,
+        ITextViewSnapshot? textView,
         CancellationToken cancellationToken)
     {
+        if (extensibility == null ||
+            textView == null)
+        {
+            return CodeDocumentViewModel;
+        }
+
         // Show loading item while we process the document
         CodeDocumentViewModel.CodeDocument.Clear();
         CodeDocumentViewModel.CodeDocument.AddRange(PlaceholderHelper.CreateLoadingItem());
@@ -56,9 +62,6 @@ public class CodeDocumentService
         // Apply history items
         HistoryHelper.ApplyHistoryIndicator(CodeDocumentViewModel);
 
-        // TODO: Until we implement syncing collapse to text editor better to expand all
-        OutliningHelper.ExpandAll(CodeDocumentViewModel);
-
         return CodeDocumentViewModel;
     }
 
@@ -69,8 +72,14 @@ public class CodeDocumentService
         CodeDocumentViewModel.ShowFilterToolbarVisibility =
             SettingsHelper.GetShowFilterToolbarVisibility(settingsSnapshot);
 
-        CodeDocumentViewModel.SortOrder =
-            SettingsHelper.GetSortOrder(settingsSnapshot);
+        var sortOrder = SettingsHelper.GetSortOrder(settingsSnapshot);
+        if (sortOrder != CodeDocumentViewModel.SortOrder)
+        {
+            CodeDocumentViewModel.SortOrder = sortOrder;
+            var sorted = SortHelper.Sort(CodeDocumentViewModel);
+            CodeDocumentViewModel.CodeDocument.Clear();
+            CodeDocumentViewModel.CodeDocument.AddRange(sorted);
+        }
 
         if (SettingsDialogData.ShowHistoryIndicators == false)
         {
