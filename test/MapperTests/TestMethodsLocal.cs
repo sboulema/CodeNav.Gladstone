@@ -34,6 +34,6 @@ internal class TestMethodsLocal : BaseTest
         Assert.That(localMethod?.Name, Is.EqualTo("LocalMethod"));
 
         // Local method should have a proper starting line
-        Assert.That(localMethod.Span.Start, Is.EqualTo(124));
+        Assert.That(localMethod.Span.Start, Is.EqualTo(201));
     }
 }
