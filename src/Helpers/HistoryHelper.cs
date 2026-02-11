@@ -57,7 +57,7 @@ public class HistoryHelper
             return;
         }
 
-        if (!model.CodeDocumentService.SettingsDialogData.ShowHistoryIndicators)
+        if (model.CodeDocumentService?.SettingsDialogData.ShowHistoryIndicators == false)
         {
             return;
         }

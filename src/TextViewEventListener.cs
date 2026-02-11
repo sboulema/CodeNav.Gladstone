@@ -1,6 +1,5 @@
 ﻿using CodeNav.Helpers;
 using CodeNav.Services;
-using CodeNav.ViewModels;
 using Microsoft;
 using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Editor;
@@ -49,9 +48,13 @@ internal class TextViewEventListener(
             return;
         }
 
-        // Document changed - Update code items list
-        if (args.Edits.Any() &&
-            codeDocumentService.SettingsDialogData.UpdateWhileTyping)
+        // Document changed:
+        // - File path changed
+        // - Edits made in the document
+        // Action:
+        // - Update code items list
+        if ((args.Edits.Any() && codeDocumentService.SettingsDialogData.UpdateWhileTyping) ||
+            args.AfterTextView.FilePath != codeDocumentService.CodeDocumentViewModel.FilePath)
         {
             await codeDocumentService.UpdateCodeDocumentViewModel(Extensibility, args.AfterTextView, cancellationToken);
         }

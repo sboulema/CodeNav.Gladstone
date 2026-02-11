@@ -22,6 +22,8 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
 
     public List<FilterRule> FilterRules = [];
 
+    public string FilePath { get; set; } = string.Empty;
+
     #region Dependency properties
 
     [DataMember]

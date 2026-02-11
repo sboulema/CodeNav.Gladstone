@@ -49,6 +49,7 @@ public class CodeDocumentService
         CodeDocumentViewModel.CodeDocument.AddRange(codeItems);
         CodeDocumentViewModel.Extensibility = extensibility;
         CodeDocumentViewModel.CodeDocumentService = this;
+        CodeDocumentViewModel.FilePath = textView.FilePath ?? string.Empty;
 
         // Sort items
         SortHelper.Sort(CodeDocumentViewModel);

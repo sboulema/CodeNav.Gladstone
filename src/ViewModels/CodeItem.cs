@@ -142,7 +142,10 @@ public class CodeItem : NotifyPropertyChangedObject
     public async Task ClickItem(object? commandParameter, IClientContext clientContext, CancellationToken cancellationToken)
     {
         HistoryHelper.AddItemToHistory(this);
-        await ScrollToLine(Span.Start, clientContext, cancellationToken);
+
+        var spanStart = ((CodeFunctionItem)this)?.IdentifierSpan.Start ?? Span.Start;
+
+        await ScrollToLine(spanStart, clientContext, cancellationToken);
     }
 
     [DataMember]
