@@ -5,13 +5,12 @@
               xmlns:colors="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0">
 
     <DataTemplate.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource {x:Static styles:VsResourceKeys.ButtonStyleKey}}" />
-        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Static styles:VsResourceKeys.TextBoxStyleKey}}" />
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static styles:VsBrushes.WindowTextKey}}" />
-        </Style>
-        <Style TargetType="CheckBox">
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Static styles:VsResourceKeys.ThemedDialogTextBoxStyleKey}}" />
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Static styles:VsResourceKeys.ThemedDialogCheckBoxStyleKey}}">
             <Setter Property="Margin" Value="0,5" />
+        </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource {x:Static styles:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+            <Setter Property="Margin" Value="-5,0,0,0" />
         </Style>
     </DataTemplate.Resources>
 
@@ -45,9 +44,9 @@
                 </CheckBox>
 
                 <StackPanel>
-                    <TextBlock Padding="0,2">
+                    <Label>
                     Do not auto load CodeNav for files with more than X lines
-                    </TextBlock>
+                    </Label>
                     <TextBox
                         HorizontalAlignment="Left"
                         Text="{Binding AutoLoadLineThreshold, Mode=TwoWay}"

@@ -1,22 +1,19 @@
-﻿using System;
+﻿namespace CodeNav.Test.Files;
 
-namespace CodeNav.Tests.Files
+class TestSorting
 {
-    class TestSorting
+    void C()
     {
-        void C()
-        {
 
-        }
+    }
 
-        void B()
-        {
+    void B()
+    {
 
-        }
+    }
 
-        void A()
-        {
+    void A()
+    {
 
-        }
     }
 }

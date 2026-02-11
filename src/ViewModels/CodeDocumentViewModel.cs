@@ -16,7 +16,7 @@ public class CodeDocumentViewModel : NotifyPropertyChangedObject
 
     public CodeDocumentService? CodeDocumentService { get; set; }
 
-    public SortOrderEnum SortOrder;
+    public SortOrderEnum SortOrder = SortOrderEnum.SortByFile;
 
     public List<string> HistoryItemIds = [];
 
